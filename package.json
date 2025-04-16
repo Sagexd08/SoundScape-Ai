@@ -1,0 +1,13 @@
+{
+  "name": "soundscape-ai-root",
+  "version": "1.0.0",
+  "private": true,
+  "workspaces": [
+    "Frontend"
+  ],
+  "scripts": {
+    "dev": "cd Frontend && npm run dev",
+    "build": "cd Frontend && npm run build",
+    "start": "cd Frontend && npm run start"
+  }
+}
