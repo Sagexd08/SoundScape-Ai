@@ -1,0 +1,25 @@
+{
+  "name": "soundscape-backend",
+  "version": "1.0.0",
+  "private": true,
+  "workspaces": [
+    "shared",
+    "api-gateway",
+    "auth-service",
+    "user-service",
+    "storage-service",
+    "notification-service"
+  ],
+  "scripts": {
+    "build": "npm run build --workspaces",
+    "test": "npm run test --workspaces",
+    "dev": "npm run dev --workspaces --parallel"
+  },
+  "devDependencies": {
+    "@types/node": "^18.16.0",
+    "@types/jest": "^29.5.1",
+    "typescript": "^5.0.4",
+    "ts-jest": "^29.1.0",
+    "nodemon": "^2.0.22"
+  }
+}

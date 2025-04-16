@@ -1,0 +1,188 @@
+version: '3.8'
+
+services:
+  # API Gateway
+  api-gateway:
+    build:
+      context: ./api-gateway
+      dockerfile: Dockerfile
+    ports:
+      - "8000:3000"
+    environment:
+      - NODE_ENV=development
+      - PORT=3000
+      - AUTH_SERVICE_URL=http://auth-service:4000
+      - USER_SERVICE_URL=http://user-service:4001
+      - AUDIO_PROCESSOR_URL=http://audio-processor:8000
+      - RECOMMENDATION_ENGINE_URL=http://recommendation-engine:5000
+      - STORAGE_SERVICE_URL=http://storage-service:5001
+      - JWT_SECRET=${JWT_SECRET:-your_jwt_secret_for_custom_tokens}
+      - SUPABASE_URL=${SUPABASE_URL}
+      - SUPABASE_ANON_KEY=${SUPABASE_ANON_KEY}
+    depends_on:
+      - auth-service
+      - user-service
+      - audio-processor
+      - recommendation-engine
+      - storage-service
+    networks:
+      - soundscape-network
+    volumes:
+      - ./api-gateway:/app
+    restart: unless-stopped
+    entrypoint: ["node", "src/index.js"]
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Authentication Service
+  auth-service:
+    build:
+      context: ./auth-service
+      dockerfile: Dockerfile
+    environment:
+      - NODE_ENV=development
+      - PORT=4000
+      - JWT_SECRET=${JWT_SECRET:-your_jwt_secret_for_custom_tokens}
+      - JWT_EXPIRATION=${JWT_EXPIRY:-1d}
+      - SUPABASE_URL=${SUPABASE_URL}
+      - SUPABASE_ANON_KEY=${SUPABASE_ANON_KEY}
+    networks:
+      - soundscape-network
+    volumes:
+      - ./auth-service:/app
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:4000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # User Service
+  user-service:
+    build:
+      context: ./user-service
+      dockerfile: Dockerfile
+    environment:
+      - NODE_ENV=development
+      - PORT=4001
+      - JWT_SECRET=${JWT_SECRET:-your_jwt_secret_for_custom_tokens}
+      - SUPABASE_URL=${SUPABASE_URL}
+      - SUPABASE_ANON_KEY=${SUPABASE_ANON_KEY}
+    networks:
+      - soundscape-network
+    volumes:
+      - ./user-service:/app
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:4001/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Audio Processor Service
+  audio-processor:
+    build:
+      context: ./audio-processor
+      dockerfile: Dockerfile
+    environment:
+      - PYTHONUNBUFFERED=1
+      - SOUNDSCAPE_GROK_API_KEY=${SOUNDSCAPE_GROK_API_KEY}
+      - SUPABASE_URL=${SUPABASE_URL}
+      - SUPABASE_ANON_KEY=${SUPABASE_ANON_KEY}
+    volumes:
+      - ./audio-processor:/app
+    networks:
+      - soundscape-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Recommendation Engine
+  recommendation-engine:
+    build:
+      context: ./recommendation-engine
+      dockerfile: Dockerfile
+    environment:
+      - PYTHONUNBUFFERED=1
+      - SUPABASE_URL=${SUPABASE_URL}
+      - SUPABASE_ANON_KEY=${SUPABASE_ANON_KEY}
+    networks:
+      - soundscape-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Storage Service
+  storage-service:
+    build:
+      context: ./storage-service
+      dockerfile: Dockerfile
+    environment:
+      - NODE_ENV=development
+      - PORT=5001
+      - SUPABASE_URL=${SUPABASE_URL}
+      - SUPABASE_ANON_KEY=${SUPABASE_ANON_KEY}
+    volumes:
+      - ./storage-service:/app
+      - storage-data:/data/storage
+    networks:
+      - soundscape-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:5001/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Analytics Service
+  analytics-service:
+    build:
+      context: ./analytics-service
+      dockerfile: Dockerfile
+    environment:
+      - NODE_ENV=development
+      - PORT=5002
+      - REDIS_URL=redis://redis:6379
+      - SUPABASE_URL=${SUPABASE_URL}
+      - SUPABASE_ANON_KEY=${SUPABASE_ANON_KEY}
+    depends_on:
+      - redis
+    networks:
+      - soundscape-network
+    restart: unless-stopped
+    volumes:
+      - ./analytics-service:/app
+
+
+  # Redis for caching and message queuing
+  redis:
+    image: redis:alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    networks:
+      - soundscape-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+networks:
+  soundscape-network:
+    driver: bridge
+
+volumes:
+  redis-data:
+  storage-data:

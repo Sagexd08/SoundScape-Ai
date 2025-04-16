@@ -3,14 +3,14 @@ import type { Metadata } from "next"
 import { Inter } from "next/font/google"
 import "./globals.css"
 import { ThemeProvider } from "@/components/theme-provider"
+import { AuthProvider } from "@/components/auth/auth-provider"
+import { Toaster } from "@/components/ui/toaster"
 
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "SoundScape - AI-Powered Audio Environments",
-  description:
-    "SoundScape analyzes your surroundings and mood to generate personalized real-time audio environments using Groq's ultra-fast multimodal AI technology.",
-    generator: 'v0.dev'
+  title: "SoundScape AI",
+  description: "AI-powered audio processing and music generation platform"
 }
 
 export default function RootLayout({
@@ -22,12 +22,12 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body className={inter.className}>
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false} disableTransitionOnChange>
-          {children}
+          <AuthProvider>
+            {children}
+            <Toaster />
+          </AuthProvider>
         </ThemeProvider>
       </body>
     </html>
   )
 }
-
-
-import './globals.css'

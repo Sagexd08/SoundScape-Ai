@@ -1,0 +1,659 @@
+# SoundScape-AI GraphQL Schema
+
+scalar DateTime
+scalar Upload
+scalar JSON
+
+# Enums
+enum UserRole {
+  USER
+  CREATOR
+  ADMIN
+}
+
+enum VisibilityType {
+  PUBLIC
+  PRIVATE
+  UNLISTED
+}
+
+enum AudioFormat {
+  MP3
+  WAV
+  FLAC
+  AAC
+  OGG
+}
+
+enum NotificationType {
+  NEW_FOLLOWER
+  TRACK_LIKE
+  TRACK_COMMENT
+  PLAYLIST_FOLLOW
+  ARTIST_UPDATE
+  SYSTEM_ALERT
+}
+
+enum SortDirection {
+  ASC
+  DESC
+}
+
+# Input Types
+input PaginationInput {
+  page: Int = 1
+  limit: Int = 20
+}
+
+input AudioFilterInput {
+  search: String
+  genres: [String!]
+  duration: MinMaxInput
+  createdAt: DateRangeInput
+  visibility: VisibilityType
+  userId: ID
+  isLiked: Boolean
+}
+
+input UserFilterInput {
+  search: String
+  role: UserRole
+  createdAt: DateRangeInput
+}
+
+input MinMaxInput {
+  min: Float
+  max: Float
+}
+
+input DateRangeInput {
+  from: DateTime
+  to: DateTime
+}
+
+input AudioSortInput {
+  field: String = "createdAt"
+  direction: SortDirection = DESC
+}
+
+input UserSortInput {
+  field: String = "createdAt"
+  direction: SortDirection = DESC
+}
+
+input AudioAnalysisOptionsInput {
+  extractGenre: Boolean = true
+  extractEmotion: Boolean = true
+  generateFingerprint: Boolean = true
+  generateEmbedding: Boolean = true
+}
+
+input ProfileUpdateInput {
+  displayName: String
+  bio: String
+  location: String
+  website: String
+  socialLinks: SocialLinksInput
+}
+
+input SocialLinksInput {
+  twitter: String
+  instagram: String
+  soundcloud: String
+  spotify: String
+  youtube: String
+}
+
+input NotificationPreferencesInput {
+  emailNotifications: Boolean
+  pushNotifications: Boolean
+  disabledTypes: [NotificationType!]
+}
+
+# Object Types
+type User {
+  id: ID!
+  email: String!
+  username: String
+  name: String
+  role: UserRole!
+  isVerified: Boolean!
+  profile: UserProfile
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  followersCount: Int!
+  followingCount: Int!
+  tracksCount: Int!
+  followers(pagination: PaginationInput): UserConnection!
+  following(pagination: PaginationInput): UserConnection!
+  tracks(
+    filter: AudioFilterInput
+    sort: AudioSortInput
+    pagination: PaginationInput
+  ): AudioConnection!
+  playlists(
+    filter: VisibilityType
+    pagination: PaginationInput
+  ): PlaylistConnection!
+  likedTracks(pagination: PaginationInput): AudioConnection!
+  stats: UserStats!
+  isFollowedByMe: Boolean!
+}
+
+type UserProfile {
+  userId: ID!
+  displayName: String
+  bio: String
+  profilePicture: String
+  headerImage: String
+  location: String
+  website: String
+  socialLinks: SocialLinks
+  badges: [String!]
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type SocialLinks {
+  twitter: String
+  instagram: String
+  soundcloud: String
+  spotify: String
+  youtube: String
+}
+
+type UserStats {
+  tracksCount: Int!
+  playlistsCount: Int!
+  followersCount: Int!
+  followingCount: Int!
+  totalPlays: Int!
+  averageTrackDuration: Float!
+  topGenres: [GenreCount!]!
+}
+
+type GenreCount {
+  genre: String!
+  count: Int!
+}
+
+type AudioTrack {
+  id: ID!
+  title: String!
+  description: String
+  user: User!
+  duration: Float!
+  fileUrl: String
+  waveformUrl: String
+  coverArtUrl: String
+  fileFormat: AudioFormat!
+  fileSize: Int!
+  visibility: VisibilityType!
+  allowDownloads: Boolean!
+  license: String!
+  bpm: Float
+  key: String
+  genres: [String!]!
+  tags: [String!]!
+  likeCount: Int!
+  playCount: Int!
+  commentCount: Int!
+  waveformData: [Float!]
+  isLiked: Boolean!
+  audioFeatures: AudioFeatures
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  comments(pagination: PaginationInput): CommentConnection!
+  similarTracks(limit: Int = 5): [AudioTrack!]!
+}
+
+type AudioFeatures {
+  duration: Float!
+  sampleRate: Int!
+  channels: Int!
+  rmsEnergy: Float!
+  zeroCrossingRate: Float!
+  spectralCentroid: Float!
+  spectralBandwidth: Float!
+  spectralRolloff: Float!
+  tempo: Float!
+  mfccs: [Float!]!
+  chromaFeatures: [Float!]!
+  emotionPrediction: EmotionPrediction
+  genrePrediction: GenrePrediction
+  audioFingerprint: JSON
+}
+
+type EmotionPrediction {
+  dominantEmotion: String!
+  confidence: Float!
+  emotions: JSON!
+}
+
+type GenrePrediction {
+  topGenres: [GenreConfidence!]!
+  allGenres: JSON!
+}
+
+type GenreConfidence {
+  genre: String!
+  confidence: Float!
+}
+
+type Playlist {
+  id: ID!
+  title: String!
+  description: String
+  user: User!
+  coverArtUrl: String
+  visibility: VisibilityType!
+  isCollaborative: Boolean!
+  trackCount: Int!
+  duration: Float!
+  followerCount: Int!
+  isFollowed: Boolean!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  tracks(pagination: PaginationInput): PlaylistTrackConnection!
+}
+
+type PlaylistTrack {
+  id: ID!
+  track: AudioTrack!
+  position: Int!
+  addedAt: DateTime!
+  addedBy: User!
+}
+
+type Comment {
+  id: ID!
+  user: User!
+  track: AudioTrack!
+  content: String!
+  timestampSeconds: Float
+  parent: Comment
+  replies(pagination: PaginationInput): CommentConnection!
+  likeCount: Int!
+  isLiked: Boolean!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type Notification {
+  id: ID!
+  type: NotificationType!
+  title: String!
+  message: String!
+  data: JSON
+  read: Boolean!
+  readAt: DateTime
+  createdAt: DateTime!
+}
+
+type NotificationPreferences {
+  emailNotifications: Boolean!
+  pushNotifications: Boolean!
+  disabledTypes: [NotificationType!]!
+}
+
+# Connection Types
+type UserConnection {
+  edges: [UserEdge!]!
+  pageInfo: PageInfo!
+  totalCount: Int!
+}
+
+type UserEdge {
+  cursor: String!
+  node: User!
+}
+
+type AudioConnection {
+  edges: [AudioEdge!]!
+  pageInfo: PageInfo!
+  totalCount: Int!
+}
+
+type AudioEdge {
+  cursor: String!
+  node: AudioTrack!
+}
+
+type PlaylistConnection {
+  edges: [PlaylistEdge!]!
+  pageInfo: PageInfo!
+  totalCount: Int!
+}
+
+type PlaylistEdge {
+  cursor: String!
+  node: Playlist!
+}
+
+type PlaylistTrackConnection {
+  edges: [PlaylistTrackEdge!]!
+  pageInfo: PageInfo!
+  totalCount: Int!
+}
+
+type PlaylistTrackEdge {
+  cursor: String!
+  node: PlaylistTrack!
+}
+
+type CommentConnection {
+  edges: [CommentEdge!]!
+  pageInfo: PageInfo!
+  totalCount: Int!
+}
+
+type CommentEdge {
+  cursor: String!
+  node: Comment!
+}
+
+type NotificationConnection {
+  edges: [NotificationEdge!]!
+  pageInfo: PageInfo!
+  totalCount: Int!
+  unreadCount: Int!
+}
+
+type NotificationEdge {
+  cursor: String!
+  node: Notification!
+}
+
+type PageInfo {
+  hasNextPage: Boolean!
+  hasPreviousPage: Boolean!
+  startCursor: String
+  endCursor: String
+}
+
+# Analytics Types
+type UserActivity {
+  date: DateTime!
+  trackPlays: Int!
+  tracksUploaded: Int!
+  commentsPosted: Int!
+  likesGiven: Int!
+}
+
+type AudioAnalysisResult {
+  audioId: ID!
+  features: AudioFeatures!
+  processingTime: Float!
+}
+
+type AudioComparisonResult {
+  similarities: JSON!
+  matchType: String!
+}
+
+type RecommendationResult {
+  tracks: [AudioTrack!]!
+  recommendationType: String!
+}
+
+# Auth Types
+type AuthResult {
+  user: User!
+  token: String!
+  refreshToken: String!
+  expiresAt: DateTime!
+}
+
+type PasswordResetResult {
+  success: Boolean!
+  message: String!
+}
+
+# Query Root
+type Query {
+  # User Queries
+  me: User
+  user(id: ID!): User
+  users(
+    filter: UserFilterInput
+    sort: UserSortInput
+    pagination: PaginationInput
+  ): UserConnection!
+  searchUsers(query: String!, limit: Int = 10): [User!]!
+  
+  # Audio Queries
+  track(id: ID!): AudioTrack
+  tracks(
+    filter: AudioFilterInput
+    sort: AudioSortInput
+    pagination: PaginationInput
+  ): AudioConnection!
+  trendingTracks(
+    timeRange: String = "week"
+    genres: [String!]
+    limit: Int = 10
+  ): [AudioTrack!]!
+  searchTracks(query: String!, limit: Int = 10): [AudioTrack!]!
+  
+  # Playlist Queries
+  playlist(id: ID!): Playlist
+  playlists(
+    userId: ID
+    filter: VisibilityType
+    pagination: PaginationInput
+  ): PlaylistConnection!
+  
+  # Comment Queries
+  comments(trackId: ID!, pagination: PaginationInput): CommentConnection!
+  
+  # Notification Queries
+  notifications(
+    unreadOnly: Boolean = false
+    pagination: PaginationInput
+  ): NotificationConnection!
+  notificationPreferences: NotificationPreferences!
+  
+  # Recommendation Queries
+  recommendedTracks(limit: Int = 10): [AudioTrack!]!
+  similarTracks(trackId: ID!, limit: Int = 10): [AudioTrack!]!
+  
+  # Analytics Queries
+  userActivity(
+    userId: ID, 
+    period: String = "30d"
+  ): [UserActivity!]!
+  
+  # Utility Queries
+  genres: [String!]!
+  healthCheck: Boolean!
+}
+
+# Mutation Root
+type Mutation {
+  # Auth Mutations
+  register(
+    email: String!
+    password: String!
+    name: String!
+  ): AuthResult!
+  
+  login(
+    email: String!
+    password: String!
+  ): AuthResult!
+  
+  refreshToken(
+    refreshToken: String!
+  ): AuthResult!
+  
+  logout: Boolean!
+  
+  requestPasswordReset(
+    email: String!
+  ): PasswordResetResult!
+  
+  resetPassword(
+    token: String!
+    newPassword: String!
+  ): PasswordResetResult!
+  
+  # User Mutations
+  updateProfile(
+    input: ProfileUpdateInput!
+  ): UserProfile!
+  
+  uploadProfilePicture(
+    file: Upload!
+  ): UserProfile!
+  
+  followUser(
+    userId: ID!
+  ): User!
+  
+  unfollowUser(
+    userId: ID!
+  ): User!
+  
+  # Audio Mutations
+  uploadTrack(
+    title: String!
+    description: String
+    file: Upload!
+    coverArt: Upload
+    visibility: VisibilityType = PUBLIC
+    allowDownloads: Boolean = true
+    genres: [String!]
+    tags: [String!]
+  ): AudioTrack!
+  
+  updateTrack(
+    id: ID!
+    title: String
+    description: String
+    coverArt: Upload
+    visibility: VisibilityType
+    allowDownloads: Boolean
+    genres: [String!]
+    tags: [String!]
+  ): AudioTrack!
+  
+  deleteTrack(
+    id: ID!
+  ): Boolean!
+  
+  likeTrack(
+    id: ID!
+  ): AudioTrack!
+  
+  unlikeTrack(
+    id: ID!
+  ): AudioTrack!
+  
+  analyzeAudio(
+    file: Upload!
+    options: AudioAnalysisOptionsInput
+  ): AudioAnalysisResult!
+  
+  compareAudio(
+    file1: Upload!
+    file2: Upload!
+  ): AudioComparisonResult!
+  
+  # Playlist Mutations
+  createPlaylist(
+    title: String!
+    description: String
+    coverArt: Upload
+    visibility: VisibilityType = PUBLIC
+    isCollaborative: Boolean = false
+    trackIds: [ID!]
+  ): Playlist!
+  
+  updatePlaylist(
+    id: ID!
+    title: String
+    description: String
+    coverArt: Upload
+    visibility: VisibilityType
+    isCollaborative: Boolean
+  ): Playlist!
+  
+  deletePlaylist(
+    id: ID!
+  ): Boolean!
+  
+  addTrackToPlaylist(
+    playlistId: ID!
+    trackId: ID!
+    position: Int
+  ): PlaylistTrack!
+  
+  removeTrackFromPlaylist(
+    playlistId: ID!
+    trackId: ID!
+  ): Boolean!
+  
+  reorderPlaylistTracks(
+    playlistId: ID!
+    trackIds: [ID!]!
+  ): Playlist!
+  
+  followPlaylist(
+    id: ID!
+  ): Playlist!
+  
+  unfollowPlaylist(
+    id: ID!
+  ): Playlist!
+  
+  # Comment Mutations
+  addComment(
+    trackId: ID!
+    content: String!
+    timestampSeconds: Float
+    parentId: ID
+  ): Comment!
+  
+  updateComment(
+    id: ID!
+    content: String!
+  ): Comment!
+  
+  deleteComment(
+    id: ID!
+  ): Boolean!
+  
+  likeComment(
+    id: ID!
+  ): Comment!
+  
+  unlikeComment(
+    id: ID!
+  ): Comment!
+  
+  # Notification Mutations
+  markNotificationAsRead(
+    id: ID!
+  ): Notification!
+  
+  markAllNotificationsAsRead: Boolean!
+  
+  updateNotificationPreferences(
+    preferences: NotificationPreferencesInput!
+  ): NotificationPreferences!
+  
+  registerPushToken(
+    token: String!
+    platform: String!
+  ): Boolean!
+}
+
+# Subscription Root
+type Subscription {
+  trackLiked(userId: ID!): AudioTrack!
+  trackCommented(trackId: ID!): Comment!
+  userFollowed(userId: ID!): User!
+  notificationReceived: Notification!
+  playlistUpdated(playlistId: ID!): Playlist!
+  trackPlayed(trackId: ID!): Int!
+}
