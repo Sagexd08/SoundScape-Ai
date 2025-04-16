@@ -4,9 +4,18 @@ import { useState, useEffect } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { motion, AnimatePresence } from "framer-motion"
-import { Menu, X } from "lucide-react"
+import { Menu, X, User, LogOut } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
+import { useAuth } from "@/components/auth/auth-provider"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
 
 const navItems = [
   { name: "Home", path: "/" },
@@ -21,6 +30,7 @@ export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const pathname = usePathname()
+  const { user, signOut } = useAuth()
 
   useEffect(() => {
     const handleScroll = () => {
@@ -77,10 +87,52 @@ export default function Navbar() {
             ))}
           </nav>
 
-          <div className="hidden md:block">
-            <Link href="/download">
-              <Button className="bg-indigo-600 hover:bg-indigo-700">Download App</Button>
-            </Link>
+          <div className="hidden md:flex items-center space-x-4">
+            {user ? (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" className="relative h-10 w-10 rounded-full">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-indigo-600">
+                      <span className="text-sm font-medium text-white">
+                        {user.user_metadata?.display_name?.[0] || user.email?.[0] || 'U'}
+                      </span>
+                    </div>
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <Link href="/dashboard">
+                    <DropdownMenuItem>
+                      Dashboard
+                    </DropdownMenuItem>
+                  </Link>
+                  <Link href="/profile">
+                    <DropdownMenuItem>
+                      Profile
+                    </DropdownMenuItem>
+                  </Link>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={() => signOut()}>
+                    <LogOut className="mr-2 h-4 w-4" />
+                    <span>Log out</span>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            ) : (
+              <div className="space-x-2">
+                <Link href="/login">
+                  <Button variant="outline" className="border-indigo-600 text-indigo-400 hover:bg-indigo-950">
+                    Log in
+                  </Button>
+                </Link>
+                <Link href="/login?tab=register">
+                  <Button className="bg-indigo-600 hover:bg-indigo-700">
+                    Sign up
+                  </Button>
+                </Link>
+              </div>
+            )}
           </div>
 
           {/* Mobile Menu Button */}
@@ -121,10 +173,38 @@ export default function Navbar() {
                   {item.name}
                 </Link>
               ))}
-              <div className="pt-4 pb-2">
-                <Link href="/download" onClick={() => setMobileMenuOpen(false)}>
-                  <Button className="w-full bg-indigo-600 hover:bg-indigo-700">Download App</Button>
-                </Link>
+              <div className="pt-4 pb-2 space-y-2">
+                {user ? (
+                  <>
+                    <Link href="/dashboard" onClick={() => setMobileMenuOpen(false)}>
+                      <Button variant="outline" className="w-full border-indigo-600 text-indigo-400 hover:bg-indigo-950">
+                        Dashboard
+                      </Button>
+                    </Link>
+                    <Button
+                      onClick={() => {
+                        signOut();
+                        setMobileMenuOpen(false);
+                      }}
+                      className="w-full bg-indigo-600 hover:bg-indigo-700"
+                    >
+                      Log out
+                    </Button>
+                  </>
+                ) : (
+                  <>
+                    <Link href="/login" onClick={() => setMobileMenuOpen(false)}>
+                      <Button variant="outline" className="w-full border-indigo-600 text-indigo-400 hover:bg-indigo-950">
+                        Log in
+                      </Button>
+                    </Link>
+                    <Link href="/login?tab=register" onClick={() => setMobileMenuOpen(false)}>
+                      <Button className="w-full bg-indigo-600 hover:bg-indigo-700">
+                        Sign up
+                      </Button>
+                    </Link>
+                  </>
+                )}
               </div>
             </div>
           </motion.div>

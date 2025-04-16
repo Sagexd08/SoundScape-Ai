@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useAuth } from './auth-provider';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -15,16 +15,25 @@ interface FormData {
   displayName?: string;
 }
 
-export function AuthForm() {
-  const [activeTab, setActiveTab] = useState<'login' | 'register'>('login');
+interface AuthFormProps {
+  initialTab?: 'login' | 'register';
+}
+
+export function AuthForm({ initialTab = 'login' }: AuthFormProps) {
+  const [activeTab, setActiveTab] = useState<'login' | 'register'>(initialTab);
   const [formData, setFormData] = useState<FormData>({
     email: '',
     password: '',
     displayName: '',
   });
+
+  // Update active tab when initialTab prop changes
+  useEffect(() => {
+    setActiveTab(initialTab);
+  }, [initialTab]);
   const [isPasswordReset, setIsPasswordReset] = useState(false);
   const [resetSent, setResetSent] = useState(false);
-  
+
   const { signIn, signUp, resetPassword, error, isLoading } = useAuth();
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -34,14 +43,14 @@ export function AuthForm() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     // Handle password reset flow
     if (isPasswordReset) {
       await resetPassword(formData.email);
       setResetSent(true);
       return;
     }
-    
+
     // Handle login/register
     if (activeTab === 'login') {
       await signIn(formData.email, formData.password);
@@ -76,13 +85,13 @@ export function AuthForm() {
                 </AlertDescription>
               </Alert>
             )}
-            
+
             {error && (
               <Alert variant="destructive">
                 <AlertDescription>{error.message}</AlertDescription>
               </Alert>
             )}
-            
+
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
               <Input
