@@ -8,7 +8,7 @@ import { Switch } from "@/components/ui/switch"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 import Navbar from "@/components/navbar"
 import { cn } from "@/lib/utils"
-import HeroBackground from "@/components/three/HeroBackground"
+import SimpleHeroBackground from "@/components/three/SimpleHeroBackground"
 
 export default function PricingPage() {
   const [annual, setAnnual] = useState(true)
@@ -67,7 +67,7 @@ export default function PricingPage() {
     <main className="min-h-screen bg-black text-white overflow-hidden">
       {/* Global background */}
       <div className="fixed inset-0 z-0">
-        <HeroBackground />
+        <SimpleHeroBackground />
         <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-transparent to-black/50" />
       </div>
 

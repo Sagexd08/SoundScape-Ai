@@ -10,7 +10,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { Label } from "@/components/ui/label"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import Navbar from "@/components/navbar"
-import HeroBackground from "@/components/three/HeroBackground"
+import SimpleHeroBackground from "@/components/three/SimpleHeroBackground"
 
 export default function ContactPage() {
   const [formSubmitted, setFormSubmitted] = useState(false)
@@ -27,14 +27,14 @@ export default function ContactPage() {
     <main className="min-h-screen bg-black text-white overflow-hidden">
       {/* Global background */}
       <div className="fixed inset-0 z-0">
-        <HeroBackground />
+        <SimpleHeroBackground />
         <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-transparent to-black/50" />
       </div>
 
       {/* Content */}
       <div className="relative z-10">
         <Navbar />
-        
+
         {/* Hero Section */}
         <section className="pt-32 pb-20 px-4 relative">
           <div className="absolute inset-0 bg-gradient-radial from-indigo-900/20 to-transparent" />

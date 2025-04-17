@@ -17,7 +17,86 @@ interface UserProfile {
   email: string;
   display_name: string | null;
   avatar_url: string | null;
-  bio: string | null;
+  bio: string | null;// error-handler.ts
+import { Request, Response, NextFunction } from 'express';
+import { logger } from './logger';
+
+export interface ErrorResponse {
+  error: {
+    message: string;
+    status: number;
+    timestamp: string;
+  }
+}
+
+export class AppError extends Error {
+  constructor(
+    public message: string,
+    public statusCode: number = 500,
+    public name: string = 'AppError'
+  ) {
+    super(message);
+    Object.setPrototypeOf(this, new.target.prototype);
+  }
+}
+
+export const errorHandler = (
+  err: Error,
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  logger.error({
+    error: err,
+    path: req.path,
+    method: req.method,
+  });
+
+  // Default error response
+  let statusCode = 500;
+  let message = 'Internal Server Error';
+
+  // Handle known error types
+  if (err instanceof AppError) {
+    statusCode = err.statusCode;
+    message = err.message;
+  } else {
+    // Map common error types
+    switch (err.name) {
+      case 'ValidationError':
+        statusCode = 400;
+        message = 'Invalid request data';
+        break;
+      case 'UnauthorizedError':
+        statusCode = 401;
+        message = 'Authentication required';
+        break;
+      case 'ForbiddenError':
+        statusCode = 403;
+        message = 'Access denied';
+        break;
+      case 'NotFoundError':
+        statusCode = 404;
+        message = 'Resource not found';
+        break;
+      default:
+        // Don't expose internal error details in production
+        if (process.env.NODE_ENV === 'development') {
+          message = err.message;
+        }
+    }
+  }
+
+  const errorResponse: ErrorResponse = {
+    error: {
+      message,
+      status: statusCode,
+      timestamp: new Date().toISOString()
+    }
+  };
+
+  res.status(statusCode).json(errorResponse);
+};
   preferences: Record<string, any> | null;
 }
 
@@ -39,7 +118,7 @@ export function UserProfileComponent() {
   // Load user profile
   useEffect(() => {
     const fetchProfile = async () => {
-      if (!user?.id) {
+      if (!user) {
         setIsLoading(false);
         return;
       }
@@ -74,7 +153,7 @@ export function UserProfileComponent() {
     };
     
     fetchProfile();
-  }, [user?.id]); // Depend on user.id instead of the whole user object
+  }, [user]);
   
   const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {

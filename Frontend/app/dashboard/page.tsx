@@ -12,11 +12,15 @@ import Link from "next/link"
 export default function DashboardPage() {
   const { user, signOut } = useAuth()
 
+  // Check if user is authenticated
+  if (!user) {
+    return null; // This will be handled by the useEffect in auth-provider
+  }
+
   return (
-    <ProtectedRoute>
-      <div className="min-h-screen bg-black text-white">
-        <Navbar />
-      
+    <div className="min-h-screen bg-black text-white">
+      <Navbar />
+
       <div className="container mx-auto px-4 py-8">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8">
           <div>
@@ -25,14 +29,14 @@ export default function DashboardPage() {
             </h1>
             <p className="text-gray-400 mt-1">Welcome back, {user.user_metadata?.display_name || user.email}</p>
           </div>
-          
+
           <div className="mt-4 md:mt-0">
             <Button onClick={() => signOut()} variant="outline" className="border-indigo-600 text-indigo-400 hover:bg-indigo-950">
               Sign Out
             </Button>
           </div>
         </div>
-        
+
         <Tabs defaultValue="overview" className="w-full">
           <TabsList className="grid grid-cols-4 mb-8">
             <TabsTrigger value="overview">Overview</TabsTrigger>
@@ -40,7 +44,7 @@ export default function DashboardPage() {
             <TabsTrigger value="favorites">Favorites</TabsTrigger>
             <TabsTrigger value="settings">Settings</TabsTrigger>
           </TabsList>
-          
+
           <TabsContent value="overview" className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <Card className="bg-gray-900 border-gray-800">
@@ -59,7 +63,7 @@ export default function DashboardPage() {
                   </Button>
                 </CardFooter>
               </Card>
-              
+
               <Card className="bg-gray-900 border-gray-800">
                 <CardHeader>
                   <CardTitle className="flex items-center">
@@ -76,7 +80,7 @@ export default function DashboardPage() {
                   </Button>
                 </CardFooter>
               </Card>
-              
+
               <Card className="bg-gray-900 border-gray-800">
                 <CardHeader>
                   <CardTitle className="flex items-center">
@@ -96,7 +100,7 @@ export default function DashboardPage() {
                 </CardFooter>
               </Card>
             </div>
-            
+
             <Card className="bg-gray-900 border-gray-800">
               <CardHeader>
                 <CardTitle>Quick Actions</CardTitle>
@@ -120,7 +124,7 @@ export default function DashboardPage() {
               </CardContent>
             </Card>
           </TabsContent>
-          
+
           <TabsContent value="library" className="space-y-6">
             <Card className="bg-gray-900 border-gray-800">
               <CardHeader>
@@ -137,7 +141,7 @@ export default function DashboardPage() {
               </CardFooter>
             </Card>
           </TabsContent>
-          
+
           <TabsContent value="favorites" className="space-y-6">
             <Card className="bg-gray-900 border-gray-800">
               <CardHeader>
@@ -154,7 +158,7 @@ export default function DashboardPage() {
               </CardFooter>
             </Card>
           </TabsContent>
-          
+
           <TabsContent value="settings" className="space-y-6">
             <Card className="bg-gray-900 border-gray-800">
               <CardHeader>

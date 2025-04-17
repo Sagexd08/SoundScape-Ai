@@ -4,7 +4,7 @@ import { useState, useEffect } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { motion, AnimatePresence } from "framer-motion"
-import { Menu, X, User, LogOut } from "lucide-react"
+import { Menu, X, User, LogOut, Settings, UserPlus } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 import { useAuth } from "@/components/auth/auth-provider"
@@ -97,32 +97,68 @@ export default function Navbar() {
                       <span className="animate-pulse">...</span>
                     </Button>
                   ) : (
-                    <Button variant="ghost" className="relative h-10 w-10 rounded-full">
-                      <div className="flex h-10 w-10 items-center justify-center rounded-full bg-indigo-600">
-                        <span className="text-sm font-medium text-white">
-                          {user.user_metadata?.display_name?.[0] || user.email?.[0] || 'U'}
-                        </span>
+                    <Button variant="ghost" className="flex items-center gap-2 px-3 py-2 rounded-md hover:bg-gray-800">
+                      <div className="flex h-8 w-8 items-center justify-center rounded-full bg-indigo-600 overflow-hidden">
+                        {user.user_metadata?.avatar_url ? (
+                          <img
+                            src={user.user_metadata.avatar_url}
+                            alt={user.user_metadata?.display_name || user.email?.split('@')[0] || 'User'}
+                            className="h-full w-full object-cover"
+                          />
+                        ) : (
+                          <span className="text-sm font-medium text-white">
+                            {user.user_metadata?.display_name?.[0] || user.email?.[0] || 'U'}
+                          </span>
+                        )}
                       </div>
+                      <span className="text-sm font-medium hidden md:block max-w-[100px] truncate text-white">
+                        {user.user_metadata?.display_name || user.email?.split('@')[0] || 'User'}
+                      </span>
                     </Button>
                   )}
                 </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-56">
-                  <DropdownMenuLabel>My Account</DropdownMenuLabel>
-                  <DropdownMenuSeparator />
+                <DropdownMenuContent align="end" className="w-56 bg-gray-900 border border-gray-800">
+                  <DropdownMenuLabel className="text-gray-300">
+                    <div className="py-1">
+                      <p className="text-sm font-medium text-white">
+                        {user.user_metadata?.display_name || user.email?.split('@')[0] || 'User'}
+                      </p>
+                      <p className="text-xs text-gray-400 truncate">{user.email}</p>
+                    </div>
+                  </DropdownMenuLabel>
+                  <DropdownMenuSeparator className="bg-gray-800" />
                   <DropdownMenuItem asChild>
-                    <Link href="/dashboard" className="w-full flex items-center" prefetch={false}>
+                    <Link href="/dashboard" className="w-full flex items-center text-gray-300 focus:text-white focus:bg-gray-800" prefetch={false}>
                       <User className="mr-2 h-4 w-4" />
                       Dashboard
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
-                    <Link href="/profile" className="w-full flex items-center" prefetch={false}>
+                    <Link href="/profile" className="w-full flex items-center text-gray-300 focus:text-white focus:bg-gray-800" prefetch={false}>
                       <User className="mr-2 h-4 w-4" />
                       Profile
                     </Link>
                   </DropdownMenuItem>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem onClick={() => signOut()} className="text-red-500 focus:text-red-500">
+                  <DropdownMenuItem asChild>
+                    <Link href="/settings" className="w-full flex items-center text-gray-300 focus:text-white focus:bg-gray-800" prefetch={false}>
+                      <Settings className="mr-2 h-4 w-4" />
+                      Settings
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator className="bg-gray-800" />
+                  <DropdownMenuItem
+                    onClick={() => {
+                      signOut().then(() => {
+                        window.location.href = '/login';
+                      });
+                    }}
+                    className="text-gray-300 focus:text-white focus:bg-gray-800"
+                  >
+                    <UserPlus className="mr-2 h-4 w-4" />
+                    <span>Switch Account</span>
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator className="bg-gray-800" />
+                  <DropdownMenuItem onClick={() => signOut()} className="text-red-400 focus:text-red-300 focus:bg-gray-800">
                     <LogOut className="mr-2 h-4 w-4" />
                     <span>Log out</span>
                   </DropdownMenuItem>
@@ -135,7 +171,7 @@ export default function Navbar() {
                     Log in
                   </Button>
                 </Link>
-                <Link href="/login?tab=register" prefetch={false}>
+                <Link href="/register" prefetch={false}>
                   <Button className="bg-indigo-600 hover:bg-indigo-700">
                     Sign up
                   </Button>
@@ -186,11 +222,54 @@ export default function Navbar() {
               <div className="pt-4 pb-2 space-y-2">
                 {user ? (
                   <>
+                    <div className="flex items-center gap-3 px-3 py-2 mb-2">
+                      <div className="flex h-10 w-10 items-center justify-center rounded-full bg-indigo-600 overflow-hidden">
+                        {user.user_metadata?.avatar_url ? (
+                          <img
+                            src={user.user_metadata.avatar_url}
+                            alt={user.user_metadata?.display_name || user.email?.split('@')[0] || 'User'}
+                            className="h-full w-full object-cover"
+                          />
+                        ) : (
+                          <span className="text-sm font-medium text-white">
+                            {user.user_metadata?.display_name?.[0] || user.email?.[0] || 'U'}
+                          </span>
+                        )}
+                      </div>
+                      <div>
+                        <p className="text-sm font-medium text-white">
+                          {user.user_metadata?.display_name || user.email?.split('@')[0] || 'User'}
+                        </p>
+                        <p className="text-xs text-gray-400 truncate">{user.email}</p>
+                      </div>
+                    </div>
                     <Link href="/dashboard" onClick={() => setMobileMenuOpen(false)} prefetch={false}>
-                      <Button variant="outline" className="w-full border-indigo-600 text-indigo-400 hover:bg-indigo-950">
+                      <Button variant="outline" className="w-full border-indigo-600 text-indigo-400 hover:bg-indigo-950 mb-2">
                         Dashboard
                       </Button>
                     </Link>
+                    <Link href="/profile" onClick={() => setMobileMenuOpen(false)} prefetch={false}>
+                      <Button variant="outline" className="w-full border-indigo-600 text-indigo-400 hover:bg-indigo-950 mb-2">
+                        Profile
+                      </Button>
+                    </Link>
+                    <Link href="/settings" onClick={() => setMobileMenuOpen(false)} prefetch={false}>
+                      <Button variant="outline" className="w-full border-indigo-600 text-indigo-400 hover:bg-indigo-950 mb-2">
+                        Settings
+                      </Button>
+                    </Link>
+                    <Button
+                      onClick={() => {
+                        signOut().then(() => {
+                          window.location.href = '/login';
+                        });
+                        setMobileMenuOpen(false);
+                      }}
+                      variant="outline"
+                      className="w-full border-indigo-600 text-indigo-400 hover:bg-indigo-950 mb-2"
+                    >
+                      Switch Account
+                    </Button>
                     <Button
                       onClick={() => {
                         signOut();
@@ -208,7 +287,7 @@ export default function Navbar() {
                         Log in
                       </Button>
                     </Link>
-                    <Link href="/login?tab=register" onClick={() => setMobileMenuOpen(false)} prefetch={false}>
+                    <Link href="/register" onClick={() => setMobileMenuOpen(false)} prefetch={false}>
                       <Button className="w-full bg-indigo-600 hover:bg-indigo-700">
                         Sign up
                       </Button>

@@ -6,6 +6,7 @@ import { ThemeProvider } from '@/components/theme-provider'
 import { Toaster } from '@/components/ui/sonner'
 import { NetworkProvider } from '@/components/network-provider'
 import { ErrorBoundary } from '@/components/error-boundary'
+import { AuthProvider } from '@/components/auth/auth-provider'
 import { useEffect } from 'react'
 
 const inter = Inter({ subsets: ['latin'] })
@@ -42,8 +43,10 @@ export default function RootLayout({
             disableTransitionOnChange
           >
             <NetworkProvider>
-              {children}
-              <Toaster position="bottom-right" />
+              <AuthProvider>
+                {children}
+                <Toaster position="bottom-right" />
+              </AuthProvider>
             </NetworkProvider>
           </ThemeProvider>
         </ErrorBoundary>

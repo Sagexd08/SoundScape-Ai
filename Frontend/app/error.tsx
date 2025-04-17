@@ -20,6 +20,12 @@ export default function Error({
     <div className="flex flex-col items-center justify-center min-h-screen p-4 bg-background">
       <div className="max-w-md w-full p-6 bg-card rounded-lg shadow-lg">
         <h2 className="text-2xl font-bold mb-4 text-foreground">Something went wrong</h2>
+        <div className="mb-4 p-4 bg-destructive/10 rounded-md">
+          <p className="text-muted-foreground mb-2 font-medium">{error.message}</p>
+          {error.digest && (
+            <p className="text-xs text-muted-foreground">Error ID: {error.digest}</p>
+          )}
+        </div>
         <p className="text-muted-foreground mb-6">
           We're sorry, but we encountered an error while loading this page.
         </p>

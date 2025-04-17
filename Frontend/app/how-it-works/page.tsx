@@ -9,7 +9,7 @@ import AnimatedGradientText from "@/components/animated-gradient-text"
 import { Button } from "@/components/ui/button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { PlayCircle, Camera, Brain, Headphones, Code, Sparkles, Download, ChevronRight } from "lucide-react"
-import HeroBackground from "@/components/three/HeroBackground"
+import SimpleHeroBackground from "@/components/three/SimpleHeroBackground"
 
 export default function HowItWorksPage() {
   const [activeVideo, setActiveVideo] = useState<string | null>(null)
@@ -18,7 +18,7 @@ export default function HowItWorksPage() {
     <main className="min-h-screen bg-black text-white overflow-hidden">
       {/* Global background */}
       <div className="fixed inset-0 z-0">
-        <HeroBackground />
+        <SimpleHeroBackground />
         <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-transparent to-black/50" />
       </div>
 
