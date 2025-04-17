@@ -77,5 +77,8 @@
     "eslint": "^8.53.0",
     "eslint-config-next": "^14.0.3",
     "typescript": "^5.2.2"
+  },
+  "engines": {
+    "node": "18.17.0"
   }
 }
