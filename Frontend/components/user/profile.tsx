@@ -56,7 +56,12 @@ export function UserProfileComponent() {
         
         if (error) throw error;
         
-        setProfile(data);
+        setProfile({
+          ...data,
+          preferences: typeof data.preferences === 'string' 
+            ? JSON.parse(data.preferences)
+            : data.preferences
+        });
         setDisplayName(data.display_name || '');
         setBio(data.bio || '');
         
