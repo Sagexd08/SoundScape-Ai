@@ -8,6 +8,7 @@
   "scripts": {
     "dev": "cd Frontend && npm run dev",
     "build": "cd Frontend && npm run build",
-    "start": "cd Frontend && npm run start"
+    "start": "cd Frontend && npm run start",
+    "install-deps": "cd Frontend && npm install --legacy-peer-deps"
   }
 }

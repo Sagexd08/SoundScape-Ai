@@ -12,25 +12,25 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-        
+
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '18'
-          
+          node-version: '18.17.0'
+
       - name: Install dependencies
         run: |
           cd Frontend
-          npm install
-          
+          npm install --legacy-peer-deps
+
       - name: Build project
         run: |
           cd Frontend
-          npm run build
+          npm run build --legacy-peer-deps
         env:
           NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
           NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
-          
+
       - name: Deploy to Vercel
         uses: amondnet/vercel-action@v20
         with:

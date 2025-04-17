@@ -34,12 +34,14 @@ Visit the live application at [https://sound-scape-ai-psi.vercel.app/](https://s
    cd SoundScape-Ai
    ```
 
-2. Install dependencies:
+2. Install dependencies (using legacy-peer-deps to handle React compatibility issues):
    ```bash
    npm install
    cd Frontend
-   npm install
+   npm install --legacy-peer-deps
    ```
+
+   > **Note**: This project uses specific versions of React and related libraries to ensure compatibility. The `--legacy-peer-deps` flag is required to handle dependency conflicts.
 
 3. Create a `.env.local` file in the Frontend directory:
    ```

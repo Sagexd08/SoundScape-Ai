@@ -2,6 +2,29 @@ import { createClient, SupabaseClient } from '@supabase/supabase-js';
 import { supabaseConfig } from '../../config/supabase';
 import { logger } from '../../lib/utils/logger';
 
+interface FilterOperator {
+  operator: 'in' | 'gt' | 'gte' | 'lt' | 'lte' | 'like' | 'ilike' | 'eq';
+  value: any;
+}
+
+type FilterValue = string | number | boolean | null | FilterOperator;
+
+interface QueryOptions {
+  select?: string;
+  relationships?: Array<{
+    table: string;
+    fields: string;
+  }>;
+  pagination?: {
+    page: number;
+    limit: number;
+  };
+  sort?: {
+    column: string;
+    order: 'asc' | 'desc';
+  };
+}
+
 export class DatabaseService {
   private supabase: SupabaseClient;
   private static instance: DatabaseService;
@@ -31,7 +54,7 @@ export class DatabaseService {
   /**
    * Create a record in a table
    */
-  async create(table: string, data: any, options: any = {}): Promise<any> {
+  async create<T = any>(table: string, data: Partial<T>, options: QueryOptions = {}): Promise<T> {
     try {
       const { data: result, error } = await this.supabase
         .from(table)
@@ -44,7 +67,7 @@ export class DatabaseService {
         throw error;
       }
 
-      return result;
+      return result as T;
     } catch (error) {
       logger.error(`Error in create operation for ${table}:`, error);
       throw error;
@@ -54,27 +77,29 @@ export class DatabaseService {
   /**
    * Get a record by ID
    */
-  async getById(table: string, id: string, options: any = {}): Promise<any> {
+  async getById<T = any>(table: string, id: string, options: QueryOptions = {}): Promise<T> {
     try {
-      let query = this.supabase
-        .from(table)
-        .select(options.select || '*')
-        .eq('id', id);
-
-      if (options.relationships) {
-        for (const relation of options.relationships) {
-          query = query.select(relation.fields).from(`${table}.${relation.table}`);
-        }
+      let select = options.select || '*';
+      
+      if (options.relationships?.length) {
+        select = [
+          select,
+          ...options.relationships.map(r => `${r.table}(${r.fields})`)
+        ].join(', ');
       }
 
-      const { data, error } = await query.single();
+      const { data, error } = await this.supabase
+        .from(table)
+        .select(select)
+        .eq('id', id)
+        .single();
 
       if (error) {
         logger.error(`Error getting record from ${table}:`, error);
         throw error;
       }
 
-      return data;
+      return data as T;
     } catch (error) {
       logger.error(`Error in getById operation for ${table}:`, error);
       throw error;
@@ -84,41 +109,46 @@ export class DatabaseService {
   /**
    * Query records with filters
    */
-  async query(table: string, filters: any = {}, options: any = {}): Promise<any> {
+  async query<T = any>(
+    table: string, 
+    filters: Record<string, FilterValue> = {}, 
+    options: QueryOptions = {}
+  ): Promise<{ data: T[]; count: number }> {
     try {
       let query = this.supabase
         .from(table)
-        .select(options.select || '*');
+        .select(options.select || '*', { count: 'exact' });
 
       // Apply filters
       Object.entries(filters).forEach(([key, value]) => {
         if (value !== undefined && value !== null) {
-          if (typeof value === 'object' && value.operator) {
-            // Handle custom operators
-            switch (value.operator) {
+          if (typeof value === 'object' && 'operator' in value && value.operator) {
+            const filterOp = value as FilterOperator;
+            switch (filterOp.operator) {
               case 'in':
-                query = query.in(key, value.value);
+                query = query.in(key, filterOp.value);
                 break;
               case 'gt':
-                query = query.gt(key, value.value);
+                query = query.gt(key, filterOp.value);
                 break;
               case 'gte':
-                query = query.gte(key, value.value);
+                query = query.gte(key, filterOp.value);
                 break;
               case 'lt':
-                query = query.lt(key, value.value);
+                query = query.lt(key, filterOp.value);
                 break;
               case 'lte':
-                query = query.lte(key, value.value);
+                query = query.lte(key, filterOp.value);
                 break;
               case 'like':
-                query = query.like(key, value.value);
+                query = query.like(key, filterOp.value);
                 break;
               case 'ilike':
-                query = query.ilike(key, value.value);
+                query = query.ilike(key, filterOp.value);
                 break;
-              default:
-                query = query.eq(key, value.value);
+              case 'eq':
+                query = query.eq(key, filterOp.value);
+                break;
             }
           } else {
             // Default to equality
@@ -149,7 +179,7 @@ export class DatabaseService {
       }
 
       return {
-        data,
+        data: data as T[],
         count: count || data.length
       };
     } catch (error) {
@@ -161,7 +191,12 @@ export class DatabaseService {
   /**
    * Update a record
    */
-  async update(table: string, id: string, data: any, options: any = {}): Promise<any> {
+  async update<T = any>(
+    table: string, 
+    id: string, 
+    data: Partial<T>, 
+    options: QueryOptions = {}
+  ): Promise<T> {
     try {
       const { data: result, error } = await this.supabase
         .from(table)
@@ -175,7 +210,7 @@ export class DatabaseService {
         throw error;
       }
 
-      return result;
+      return result as T;
     } catch (error) {
       logger.error(`Error in update operation for ${table}:`, error);
       throw error;
@@ -205,7 +240,7 @@ export class DatabaseService {
   /**
    * Execute a raw SQL query
    */
-  async rawQuery(query: string, params: any[] = []): Promise<any> {
+  async rawQuery<T = any>(query: string, params: any[] = []): Promise<T[]> {
     try {
       const { data, error } = await this.supabase.rpc('execute_sql', {
         query_text: query,
@@ -217,7 +252,7 @@ export class DatabaseService {
         throw error;
       }
 
-      return data;
+      return data as T[];
     } catch (error) {
       logger.error('Error in rawQuery operation:', error);
       throw error;
@@ -234,7 +269,12 @@ export class DatabaseService {
   /**
    * Upload file to storage
    */
-  async uploadFile(bucketName: string, filePath: string, fileBody: any, options: any = {}): Promise<string> {
+  async uploadFile(
+    bucketName: string, 
+    filePath: string, 
+    fileBody: File | Blob | Buffer, 
+    options: { contentType?: string; cacheControl?: string; upsert?: boolean } = {}
+  ): Promise<string> {
     try {
       const { data, error } = await this.supabase
         .storage

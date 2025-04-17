@@ -15,6 +15,12 @@ if (!process.env.SUPABASE_API_KEY) {
 const supabaseUrl = process.env.SUPABASE_URL;
 const supabaseKey = process.env.SUPABASE_API_KEY;
 
+// Export config object
+export const supabaseConfig = {
+  url: supabaseUrl,
+  anonKey: supabaseKey
+};
+
 // Initialize Supabase client
 export const supabase = createClient(supabaseUrl, supabaseKey, {
   auth: {

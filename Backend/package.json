@@ -15,6 +15,10 @@
     "test": "npm run test --workspaces",
     "dev": "npm run dev --workspaces --parallel"
   },
+  "dependencies": {
+    "pino": "^8.11.0",
+    "pino-pretty": "^10.0.0"
+  },
   "devDependencies": {
     "@types/node": "^18.16.0",
     "@types/jest": "^29.5.1",
