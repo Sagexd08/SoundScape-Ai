@@ -39,7 +39,7 @@ export function UserProfileComponent() {
   // Load user profile
   useEffect(() => {
     const fetchProfile = async () => {
-      if (!user) {
+      if (!user?.id) {
         setIsLoading(false);
         return;
       }
@@ -74,7 +74,7 @@ export function UserProfileComponent() {
     };
     
     fetchProfile();
-  }, [user]);
+  }, [user?.id]); // Depend on user.id instead of the whole user object
   
   const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {

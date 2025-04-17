@@ -1,8 +1,9 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { useAuth } from "@/components/auth/auth-provider"
+import { ProtectedRoute } from "@/components/auth/protected-route"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
@@ -15,8 +16,7 @@ import Navbar from "@/components/navbar"
 import { supabase } from "@/lib/supabase"
 
 export default function ProfilePage() {
-  const { user, isLoading, updatePassword } = useAuth()
-  const router = useRouter()
+  const { user, updatePassword, isLoading } = useAuth()
   const [saving, setSaving] = useState(false)
   const [success, setSuccess] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -32,11 +32,13 @@ export default function ProfilePage() {
     confirm: "",
   })
 
+  const router = useRouter()
+
   // Redirect to login if not authenticated
   useEffect(() => {
-    if (!isLoading && !user) {
+    if (!user) {
       router.push("/login")
-    } else if (user) {
+    } else {
       // Load user profile data
       setProfileData({
         displayName: user.user_metadata?.display_name || "",
@@ -45,7 +47,7 @@ export default function ProfilePage() {
         location: user.user_metadata?.location || "",
       })
     }
-  }, [user, isLoading, router])
+  }, [user, router])
 
   // Show loading state while checking authentication
   if (isLoading || !user) {

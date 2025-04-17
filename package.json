@@ -9,8 +9,8 @@
     "dev": "cd Frontend && npm run dev",
     "build": "cd Frontend && npm run build",
     "start": "cd Frontend && npm run start",
-    "install-deps": "cd Frontend && npm install --legacy-peer-deps",
-    "vercel-build": "cd Frontend && npm install --legacy-peer-deps && npm run build"
+    "install-deps": "cd Frontend && npm install",
+    "vercel-build": "cd Frontend && npm install && npm run build"
   },
   "engines": {
     "node": "18.x"

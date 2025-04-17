@@ -4,13 +4,6 @@
 
 echo -e "\e[32mStarting SoundScape-AI Backend Deployment...\e[0m"
 
-# Load environment variables
-if [ -f .env ]; then
-    echo -e "\e[36mLoading environment variables from .env file...\e[0m"
-    export $(grep -v '^#' .env | xargs)
-fi
-
-# Build and start the Docker containers
 echo -e "\e[36mBuilding Docker containers...\e[0m"
 docker-compose build
 if [ $? -ne 0 ]; then

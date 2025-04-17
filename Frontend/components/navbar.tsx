@@ -30,7 +30,7 @@ export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const pathname = usePathname()
-  const { user, signOut } = useAuth()
+  const { user, signOut, isLoading } = useAuth()
 
   useEffect(() => {
     const handleScroll = () => {
@@ -91,29 +91,37 @@ export default function Navbar() {
             {user ? (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" className="relative h-10 w-10 rounded-full">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-indigo-600">
-                      <span className="text-sm font-medium text-white">
-                        {user.user_metadata?.display_name?.[0] || user.email?.[0] || 'U'}
-                      </span>
-                    </div>
-                  </Button>
+                  {isLoading ? (
+                    <Button variant="ghost" className="relative h-10 w-10 rounded-full" disabled>
+                      <span className="animate-pulse">...</span>
+                    </Button>
+                  ) : (
+                    <Button variant="ghost" className="relative h-10 w-10 rounded-full">
+                      <div className="flex h-10 w-10 items-center justify-center rounded-full bg-indigo-600">
+                        <span className="text-sm font-medium text-white">
+                          {user.user_metadata?.display_name?.[0] || user.email?.[0] || 'U'}
+                        </span>
+                      </div>
+                    </Button>
+                  )}
                 </DropdownMenuTrigger>
-                <DropdownMenuContent align="end">
+                <DropdownMenuContent align="end" className="w-56">
                   <DropdownMenuLabel>My Account</DropdownMenuLabel>
                   <DropdownMenuSeparator />
-                  <Link href="/dashboard">
-                    <DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link href="/dashboard" className="w-full flex items-center">
+                      <User className="mr-2 h-4 w-4" />
                       Dashboard
-                    </DropdownMenuItem>
-                  </Link>
-                  <Link href="/profile">
-                    <DropdownMenuItem>
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link href="/profile" className="w-full flex items-center">
+                      <User className="mr-2 h-4 w-4" />
                       Profile
-                    </DropdownMenuItem>
-                  </Link>
+                    </Link>
+                  </DropdownMenuItem>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem onClick={() => signOut()}>
+                  <DropdownMenuItem onClick={() => signOut()} className="text-red-500 focus:text-red-500">
                     <LogOut className="mr-2 h-4 w-4" />
                     <span>Log out</span>
                   </DropdownMenuItem>

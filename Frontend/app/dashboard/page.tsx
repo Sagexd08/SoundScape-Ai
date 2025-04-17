@@ -1,8 +1,7 @@
 "use client"
 
-import { useEffect } from "react"
-import { useRouter } from "next/navigation"
 import { useAuth } from "@/components/auth/auth-provider"
+import { ProtectedRoute } from "@/components/auth/protected-route"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
@@ -11,27 +10,12 @@ import Navbar from "@/components/navbar"
 import Link from "next/link"
 
 export default function DashboardPage() {
-  const { user, signOut, isLoading } = useAuth()
-  const router = useRouter()
-
-  // Redirect to login if not authenticated
-  useEffect(() => {
-    if (!isLoading && !user) {
-      router.push("/login")
-    }
-  }, [user, isLoading, router])
-
-  // Show loading state while checking authentication
-  if (isLoading || !user) {
-    return (
-      <div className="flex min-h-screen items-center justify-center bg-black text-white">
-        <div className="animate-pulse text-xl">Loading...</div>
-      </div>
-    )
-  }
+  const { user, signOut } = useAuth()
 
   return (
     <div className="min-h-screen bg-black text-white">
+      <ProtectedRoute>
+      <div className="min-h-screen bg-black text-white">
       <Navbar />
       
       <div className="container mx-auto px-4 py-8">
