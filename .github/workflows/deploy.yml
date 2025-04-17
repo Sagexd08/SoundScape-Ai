@@ -18,15 +18,21 @@ jobs:
         with:
           node-version: '18.17.0'
 
+      - name: Create .npmrc
+        run: |
+          echo "legacy-peer-deps=true" > .npmrc
+          echo "engine-strict=true" >> .npmrc
+
       - name: Install dependencies
         run: |
+          npm install --legacy-peer-deps
           cd Frontend
           npm install --legacy-peer-deps
 
       - name: Build project
         run: |
           cd Frontend
-          npm run build --legacy-peer-deps
+          npm run build
         env:
           NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
           NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}

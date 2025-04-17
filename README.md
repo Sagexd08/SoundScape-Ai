@@ -23,7 +23,8 @@ Visit the live application at [https://sound-scape-ai-psi.vercel.app/](https://s
 
 ### Prerequisites
 
-- Node.js 18+ and npm
+- Node.js 18.17.0 (important: this specific version is recommended)
+- npm 9+
 - A Supabase account and project
 
 ### Installation
@@ -53,6 +54,30 @@ Visit the live application at [https://sound-scape-ai-psi.vercel.app/](https://s
    ```bash
    cd Frontend
    npm run dev
+   ```
+
+### Troubleshooting Dependency Issues
+
+This project uses React 18 and has specific dependency requirements. If you encounter dependency conflicts, try the following:
+
+1. Use the provided build scripts:
+   ```bash
+   # On Linux/macOS
+   ./build.sh
+
+   # On Windows
+   ./build.ps1
+   ```
+
+2. If you still encounter issues, try clearing your npm cache:
+   ```bash
+   npm cache clean --force
+   ```
+
+3. Make sure you're using Node.js 18.17.0:
+   ```bash
+   node -v
+   # Should output v18.17.0
    ```
 
 5. Open [http://localhost:3000](http://localhost:3000) in your browser.
