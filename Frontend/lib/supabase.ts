@@ -1,16 +1,25 @@
-import { createClient } from "@supabase/supabase-js";
-import { Database } from "@/types/supabase";
+import { createClient as createSupabaseClient } from "@supabase/supabase-js";
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 
 // Initialize Supabase client with environment variables
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || "https://etymxhxrcgnfonibvbha.supabase.co";
 const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV0eW14aHhyY2duZm9uaWJ2YmhhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDM2OTc2ODUsImV4cCI6MjA1OTI3MzY4NX0.cGgqyqha6XLxZ2h9zcUN0opBvvRPJC7q9TjT5NeRbfg";
 
-export const supabase = createClient<Database>(supabaseUrl, supabaseKey, {
+// Create a Supabase client for server components
+export const supabase = createSupabaseClient(supabaseUrl, supabaseKey, {
   auth: {
     persistSession: true,
     autoRefreshToken: true,
   },
 });
+
+// Create a Supabase client for client components
+export const createBrowserClient = () => {
+  return createClientComponentClient({
+    supabaseUrl,
+    supabaseKey,
+  });
+};
 
 /**
  * Get a signed URL for a private file
