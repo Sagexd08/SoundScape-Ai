@@ -1,10 +1,10 @@
-const { createClient } = require('@supabase/supabase-js')
-require('dotenv').config()
+const { createClient } = require('@supabase/supabase-js');
+require('dotenv').config();
 
-const supabaseUrl = 'https://etymxhxrcgnfonibvbha.supabase.co'
-const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV0eW14aHhyY2duZm9uaWJ2YmhhIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc0MzY5NzY4NSwiZXhwIjoyMDU5MjczNjg1fQ.Rl8_hP-OE599Ys_WyNgiRJJxhG4Svq64WQQlEoVq0Zs'
+const supabaseUrl = 'https://etymxhxrcgnfonibvbha.supabase.co';
+const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY; // Updated to use environment variable
 
-const supabase = createClient(supabaseUrl, supabaseKey)
+const supabase = createClient(supabaseUrl, supabaseKey);
 
 async function createBuckets() {
   const buckets = [

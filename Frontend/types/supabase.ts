@@ -1,209 +1,234 @@
-export type Json =
-  | string
-  | number
-  | boolean
-  | null
-  | { [key: string]: Json | undefined }
-  | Json[]
+import { createClient } from "@supabase/supabase-js";
+import { Database } from "@/types/supabase";
+import { toast } from "sonner";
 
-export interface Database {
-  public: {
-    Tables: {
-      audio_files: {
-        Row: {
-          id: string
-          user_id: string
-          filename: string
-          title: string
-          description: string | null
-          duration: number | null
-          is_public: boolean
-          storage_path: string
-          waveform_path: string | null
-          metadata: Json | null
-          tags: string[] | null
-          created_at: string
-          updated_at: string
-        }
-        Insert: {
-          id?: string
-          user_id?: string
-          filename: string
-          title: string
-          description?: string | null
-          duration?: number | null
-          is_public?: boolean
-          storage_path: string
-          waveform_path?: string | null
-          metadata?: Json | null
-          tags?: string[] | null
-          created_at?: string
-          updated_at?: string
-        }
-        Update: {
-          id?: string
-          user_id?: string
-          filename?: string
-          title?: string
-          description?: string | null
-          duration?: number | null
-          is_public?: boolean
-          storage_path?: string
-          waveform_path?: string | null
-          metadata?: Json | null
-          tags?: string[] | null
-          created_at?: string
-          updated_at?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "audio_files_user_id_fkey"
-            columns: ["user_id"]
-            referencedRelation: "users"
-            referencedColumns: ["id"]
+// Initialize Supabase client with environment variables
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || "https://etymxhxrcgnfonibvbha.supabase.co";
+const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV0eW14aHhyY2duZm9uaWJ2YmhhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDM2OTc2ODUsImV4cCI6MjA1OTI3MzY4NX0.cGgqyqha6XLxZ2h9zcUN0opBvvRPJC7q9TjT5NeRbfg";
+
+// Create the basic Supabase client
+const basicClient = createClient<Database>(supabaseUrl, supabaseKey, {
+  auth: {
+    persistSession: true,
+    autoRefreshToken: true,
+    detectSessionInUrl: true, // Important for OAuth redirects
+  },
+  global: {
+    // Add retries for better network resilience
+    fetch: (...args) => {
+      return fetch(...args);
+    },
+  },
+});
+
+// Enhanced error handling for storage operations
+const enhancedStorageClient = {
+  from: (bucket: string) => {
+    const originalBucket = basicClient.storage.from(bucket);
+    
+    return {
+      ...originalBucket,
+      // Override upload with retry and better error handling
+      upload: async (path: string, fileBody: File | Blob, options?: {
+        cacheControl?: string;
+        upsert?: boolean;
+      }) => {
+        try {
+          const result = await originalBucket.upload(path, fileBody, options);
+          
+          if (result.error) {
+            console.error("Storage upload error:", result.error);
+            toast.error("Failed to upload file", {
+              description: result.error.message,
+            });
+            throw result.error;
           }
-        ]
-      }
-      playlist_items: {
-        Row: {
-          id: string
-          playlist_id: string
-          audio_file_id: string
-          position: number
-          created_at: string
+          
+          return result;
+        } catch (error) {
+          console.error("Storage upload exception:", error);
+          toast.error("Failed to upload file", {
+            description: error instanceof Error ? error.message : "Unknown error",
+          });
+          throw error;
         }
-        Insert: {
-          id?: string
-          playlist_id: string
-          audio_file_id: string
-          position: number
-          created_at?: string
-        }
-        Update: {
-          id?: string
-          playlist_id?: string
-          audio_file_id?: string
-          position?: number
-          created_at?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "playlist_items_audio_file_id_fkey"
-            columns: ["audio_file_id"]
-            referencedRelation: "audio_files"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "playlist_items_playlist_id_fkey"
-            columns: ["playlist_id"]
-            referencedRelation: "playlists"
-            referencedColumns: ["id"]
+      },
+      
+      // Enhanced createSignedUrl with better error handling
+      createSignedUrl: async (path: string, expiresIn: number) => {
+        try {
+          const result = await originalBucket.createSignedUrl(path, expiresIn);
+          
+          if (result.error) {
+            console.error("Signed URL creation error:", result.error);
+            throw result.error;
           }
-        ]
+          
+          return result;
+        } catch (error) {
+          console.error("Signed URL creation exception:", error);
+          throw error;
+        }
+      },
+      
+      // All other methods pass through to the original client
+      download: originalBucket.download.bind(originalBucket),
+      getPublicUrl: originalBucket.getPublicUrl.bind(originalBucket),
+      list: originalBucket.list.bind(originalBucket),
+      move: originalBucket.move.bind(originalBucket),
+      remove: originalBucket.remove.bind(originalBucket),
+      createSignedUrls: originalBucket.createSignedUrls.bind(originalBucket),
+    };
+  }
+};
+
+// Create an enhanced Supabase client with better error handling
+export const supabase = {
+  ...basicClient,
+  // Override storage with enhanced version
+  storage: enhancedStorageClient,
+  
+  // Override auth with better error handling
+  auth: {
+    ...basicClient.auth,
+    signUp: async (params) => {
+      try {
+        const result = await basicClient.auth.signUp(params);
+        
+        if (result.error) {
+          console.error("Sign up error:", result.error);
+          toast.error("Failed to sign up", {
+            description: result.error.message,
+          });
+          throw result.error;
+        }
+        
+        return result;
+      } catch (error) {
+        console.error("Sign up exception:", error);
+        toast.error("Failed to sign up", {
+          description: error instanceof Error ? error.message : "Unknown error",
+        });
+        throw error;
       }
-      playlists: {
-        Row: {
-          id: string
-          user_id: string
-          title: string
-          description: string | null
-          cover_image_url: string | null
-          is_public: boolean
-          created_at: string
-          updated_at: string
+    },
+    
+    signInWithPassword: async (params) => {
+      try {
+        const result = await basicClient.auth.signInWithPassword(params);
+        
+        if (result.error) {
+          console.error("Sign in error:", result.error);
+          toast.error("Failed to sign in", {
+            description: result.error.message,
+          });
+          throw result.error;
         }
-        Insert: {
-          id?: string
-          user_id?: string
-          title: string
-          description?: string | null
-          cover_image_url?: string | null
-          is_public?: boolean
-          created_at?: string
-          updated_at?: string
-        }
-        Update: {
-          id?: string
-          user_id?: string
-          title?: string
-          description?: string | null
-          cover_image_url?: string | null
-          is_public?: boolean
-          created_at?: string
-          updated_at?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "playlists_user_id_fkey"
-            columns: ["user_id"]
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          }
-        ]
+        
+        return result;
+      } catch (error) {
+        console.error("Sign in exception:", error);
+        toast.error("Failed to sign in", {
+          description: error instanceof Error ? error.message : "Unknown error",
+        });
+        throw error;
       }
-      users: {
-        Row: {
-          id: string
-          email: string
-          display_name: string | null
-          avatar_url: string | null
-          bio: string | null
-          preferences: Json | null
-          created_at: string
-          updated_at: string
-        }
-        Insert: {
-          id: string
-          email: string
-          display_name?: string | null
-          avatar_url?: string | null
-          bio?: string | null
-          preferences?: Json | null
-          created_at?: string
-          updated_at?: string
-        }
-        Update: {
-          id?: string
-          email?: string
-          display_name?: string | null
-          avatar_url?: string | null
-          bio?: string | null
-          preferences?: Json | null
-          created_at?: string
-          updated_at?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "users_id_fkey"
-            columns: ["id"]
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          }
-        ]
-      }
+    },
+    
+    // Add other auth methods as needed with similar error handling
+    signOut: basicClient.auth.signOut.bind(basicClient.auth),
+    getSession: basicClient.auth.getSession.bind(basicClient.auth),
+    getUser: basicClient.auth.getUser.bind(basicClient.auth),
+    refreshSession: basicClient.auth.refreshSession.bind(basicClient.auth),
+    setSession: basicClient.auth.setSession.bind(basicClient.auth),
+    onAuthStateChange: basicClient.auth.onAuthStateChange.bind(basicClient.auth),
+  },
+};
+
+// Export enhanced helper functions with better error handling
+
+/**
+ * Get a signed URL for a private file with improved error handling
+ */
+export async function getSignedUrl(
+  filePath: string,
+  bucket: string = "audio-files",
+  expiresIn: number = 3600
+) {
+  try {
+    const { data, error } = await supabase.storage
+      .from(bucket)
+      .createSignedUrl(filePath, expiresIn);
+
+    if (error) {
+      console.error("Error creating signed URL:", error.message);
+      throw error;
     }
-    Views: {
-      [_ in never]: never
-    }
-    Functions: {
-      current_database: {
-        Args: Record<PropertyKey, never>
-        Returns: string
-      }
-      handle_new_user: {
-        Args: Record<PropertyKey, never>
-        Returns: unknown
-      }
-      update_updated_at: {
-        Args: Record<PropertyKey, never>
-        Returns: unknown
-      }
-    }
-    Enums: {
-      [_ in never]: never
-    }
-    CompositeTypes: {
-      [_ in never]: never
-    }
+
+    return data?.signedUrl;
+  } catch (error) {
+    console.error("Failed to get signed URL:", error);
+    toast.error("Failed to access file", {
+      description: "Could not generate access link for this file",
+    });
+    throw error;
   }
 }
+
+/**
+ * Upload a file to Supabase storage with improved error handling
+ */
+export async function uploadFile(
+  file: File,
+  path: string,
+  bucket: string = "audio-files"
+) {
+  try {
+    const { data, error } = await supabase.storage.from(bucket).upload(path, file, {
+      cacheControl: "3600",
+      upsert: false,
+    });
+
+    if (error) {
+      console.error("Error uploading file:", error.message);
+      throw error;
+    }
+
+    // Get the public URL
+    const { data: publicUrlData } = supabase.storage
+      .from(bucket)
+      .getPublicUrl(data.path);
+
+    return {
+      ...data,
+      publicUrl: publicUrlData.publicUrl,
+    };
+  } catch (error) {
+    console.error("Failed to upload file:", error);
+    toast.error("Upload failed", {
+      description: "Could not upload the file. Please try again.",
+    });
+    throw error;
+  }
+}
+
+/**
+ * Get the current authenticated user with improved error handling
+ */
+export async function getCurrentUser() {
+  try {
+    const { data: { user }, error } = await supabase.auth.getUser();
+
+    if (error) {
+      console.error("Error getting current user:", error.message);
+      return null;
+    }
+
+    return user;
+  } catch (error) {
+    console.error("Failed to get current user:", error);
+    return null;
+  }
+}
+
+export default supabase;

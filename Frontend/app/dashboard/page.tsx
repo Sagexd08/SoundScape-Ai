@@ -13,10 +13,9 @@ export default function DashboardPage() {
   const { user, signOut } = useAuth()
 
   return (
-    <div className="min-h-screen bg-black text-white">
-      <ProtectedRoute>
+    <ProtectedRoute>
       <div className="min-h-screen bg-black text-white">
-      <Navbar />
+        <Navbar />
       
       <div className="container mx-auto px-4 py-8">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8">

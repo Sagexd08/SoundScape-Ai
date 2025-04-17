@@ -100,15 +100,20 @@ function ParticleCloud() {
     if (!particlesRef.current) return
     const time = state.clock.getElapsedTime()
     
-    // More dynamic rotation
-    particlesRef.current.rotation.y = time * 0.05
+    // Smoother rotation with delta time
+    const delta = Math.min(0.1, state.clock.getDelta())
+    particlesRef.current.rotation.y += delta * 0.05
     particlesRef.current.rotation.x = mouse.y * 0.03 + time * 0.01
     particlesRef.current.rotation.z = mouse.x * 0.03
     
-    // Pulse the particles
+    // More stable particle pulsing
     const material = particlesRef.current.material as any
-    material.size = (Math.sin(time * 0.3) * 0.02) + 0.08
-    material.opacity = MathUtils.lerp(material.opacity, 0.6 + Math.sin(time * 0.2) * 0.1, 0.1)
+    material.size = 0.08 + Math.sin(time * 0.3) * 0.02
+    material.opacity = MathUtils.lerp(
+      material.opacity, 
+      0.6 + Math.sin(time * 0.2) * 0.1, 
+      delta * 10
+    )
   })
 
   return (

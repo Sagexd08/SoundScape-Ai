@@ -50,7 +50,7 @@ export default function Navbar() {
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center">
-          <Link href="/" className="flex items-center space-x-2">
+          <Link href="/" className="flex items-center space-x-2" prefetch={false}>
             <motion.div
               initial={{ rotate: -10 }}
               animate={{ rotate: 10 }}
@@ -70,6 +70,7 @@ export default function Navbar() {
               <Link
                 key={item.path}
                 href={item.path}
+                prefetch={false}
                 className={cn(
                   "px-3 py-2 text-sm font-medium rounded-md transition-colors relative group",
                   pathname === item.path ? "text-indigo-400" : "text-gray-300 hover:text-indigo-300",
@@ -109,13 +110,13 @@ export default function Navbar() {
                   <DropdownMenuLabel>My Account</DropdownMenuLabel>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem asChild>
-                    <Link href="/dashboard" className="w-full flex items-center">
+                    <Link href="/dashboard" className="w-full flex items-center" prefetch={false}>
                       <User className="mr-2 h-4 w-4" />
                       Dashboard
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
-                    <Link href="/profile" className="w-full flex items-center">
+                    <Link href="/profile" className="w-full flex items-center" prefetch={false}>
                       <User className="mr-2 h-4 w-4" />
                       Profile
                     </Link>
@@ -129,12 +130,12 @@ export default function Navbar() {
               </DropdownMenu>
             ) : (
               <div className="space-x-2">
-                <Link href="/login">
+                <Link href="/login" prefetch={false}>
                   <Button variant="outline" className="border-indigo-600 text-indigo-400 hover:bg-indigo-950">
                     Log in
                   </Button>
                 </Link>
-                <Link href="/login?tab=register">
+                <Link href="/login?tab=register" prefetch={false}>
                   <Button className="bg-indigo-600 hover:bg-indigo-700">
                     Sign up
                   </Button>
@@ -172,6 +173,7 @@ export default function Navbar() {
                 <Link
                   key={item.path}
                   href={item.path}
+                  prefetch={false}
                   className={cn(
                     "block px-3 py-4 text-base font-medium border-b border-gray-800",
                     pathname === item.path ? "text-indigo-400" : "text-gray-300 hover:text-indigo-300",
@@ -184,7 +186,7 @@ export default function Navbar() {
               <div className="pt-4 pb-2 space-y-2">
                 {user ? (
                   <>
-                    <Link href="/dashboard" onClick={() => setMobileMenuOpen(false)}>
+                    <Link href="/dashboard" onClick={() => setMobileMenuOpen(false)} prefetch={false}>
                       <Button variant="outline" className="w-full border-indigo-600 text-indigo-400 hover:bg-indigo-950">
                         Dashboard
                       </Button>
@@ -201,12 +203,12 @@ export default function Navbar() {
                   </>
                 ) : (
                   <>
-                    <Link href="/login" onClick={() => setMobileMenuOpen(false)}>
+                    <Link href="/login" onClick={() => setMobileMenuOpen(false)} prefetch={false}>
                       <Button variant="outline" className="w-full border-indigo-600 text-indigo-400 hover:bg-indigo-950">
                         Log in
                       </Button>
                     </Link>
-                    <Link href="/login?tab=register" onClick={() => setMobileMenuOpen(false)}>
+                    <Link href="/login?tab=register" onClick={() => setMobileMenuOpen(false)} prefetch={false}>
                       <Button className="w-full bg-indigo-600 hover:bg-indigo-700">
                         Sign up
                       </Button>
