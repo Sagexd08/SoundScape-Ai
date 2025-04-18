@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Wand2, FileAudio, Sparkles, Music } from 'lucide-react';
 import AudioGenerator from '@/components/ai/AudioGenerator';
@@ -11,7 +11,12 @@ import { useSearchParams } from 'next/navigation';
 import Navbar from '@/components/navbar';
 import SimpleBackgroundLayout from '@/components/layouts/SimpleBackgroundLayout';
 
-export default function AIStudioPage() {
+// Simple loading component for Suspense fallback
+function LoadingFallback() {
+  return <div className="text-center text-gray-400">Loading...</div>;
+}
+
+function AIStudioContent() {
   const [activeTab, setActiveTab] = useState('generate');
   const searchParams = useSearchParams();
 
@@ -26,10 +31,7 @@ export default function AIStudioPage() {
   }, [searchParams]);
 
   return (
-    <SimpleBackgroundLayout>
-      <div className="min-h-screen">
-        <Navbar />
-        <div className="container mx-auto px-4 py-8">
+    <>
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -157,6 +159,19 @@ export default function AIStudioPage() {
           </motion.div>
         </div>
       </div>
+    </>
+  );
+}
+
+export default function AIStudioPage() {
+  return (
+    <SimpleBackgroundLayout>
+      <div className="min-h-screen">
+        <Navbar />
+        <div className="container mx-auto px-4 py-8">
+          <Suspense fallback={<LoadingFallback />}>
+            <AIStudioContent />
+          </Suspense>
         </div>
       </div>
     </SimpleBackgroundLayout>
