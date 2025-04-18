@@ -11,6 +11,13 @@
     "enabled": true,
     "silent": false
   },
+  "builds": [
+    {
+      "src": "package.json",
+      "use": "@vercel/next",
+      "config": { "nodeVersion": "18.x" }
+    }
+  ],
   "routes": [
     {
       "src": "/api/(.*)",

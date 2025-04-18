@@ -5,9 +5,10 @@ import { ProtectedRoute } from "@/components/auth/protected-route"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Music, Headphones, Settings, User, Heart, Clock, Plus } from "lucide-react"
+import { Music, Headphones, Settings, User, Heart, Clock, Plus, Wand2 } from "lucide-react"
 import Navbar from "@/components/navbar"
 import Link from "next/link"
+import BackgroundLayout from "@/components/layouts/BackgroundLayout"
 
 export default function DashboardPage() {
   const { user, signOut } = useAuth()
@@ -18,10 +19,11 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="min-h-screen bg-black text-white">
-      <Navbar />
+    <BackgroundLayout>
+      <div className="min-h-screen">
+        <Navbar />
 
-      <div className="container mx-auto px-4 py-8">
+        <div className="container mx-auto px-4 py-8">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8">
           <div>
             <h1 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 to-purple-600">
@@ -107,7 +109,13 @@ export default function DashboardPage() {
                 <CardDescription>Get started with SoundScape AI</CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                  <Link href="/ai-studio" className="w-full">
+                    <Button className="bg-indigo-600 hover:bg-indigo-700 h-auto py-4 flex flex-col items-center justify-center w-full">
+                      <Wand2 className="h-6 w-6 mb-2" />
+                      <span>AI Studio</span>
+                    </Button>
+                  </Link>
                   <Button className="bg-indigo-600 hover:bg-indigo-700 h-auto py-4 flex flex-col items-center justify-center">
                     <Music className="h-6 w-6 mb-2" />
                     <span>Create New Sound</span>
@@ -188,6 +196,8 @@ export default function DashboardPage() {
           </TabsContent>
         </Tabs>
       </div>
-    </div>
+        </div>
+      </div>
+    </BackgroundLayout>
   )
 }

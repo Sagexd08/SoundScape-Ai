@@ -7,19 +7,14 @@ import AudioWaveform from "@/components/audio-waveform"
 import AnimatedGradientText from "@/components/animated-gradient-text"
 import { Button } from "@/components/ui/button"
 import { Headphones, Camera, Heart, Activity, BookOpen, Ear, Cpu, Check, ArrowRight } from "lucide-react"
-import SimpleLandingScene from "@/components/three/SimpleLandingScene"
+import BackgroundLayout from "@/components/layouts/BackgroundLayout"
 
 export default function FeaturesPage() {
   return (
-    <main className="min-h-screen bg-black text-white overflow-hidden">
-      {/* Global background */}
-      <div className="fixed inset-0 z-0">
-        <SimpleLandingScene />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-transparent to-black/50" />
-      </div>
-
-      {/* Content */}
-      <div className="relative z-10">
+    <BackgroundLayout>
+      <main className="min-h-screen overflow-hidden">
+        {/* Content */}
+        <div className="relative z-10">
         <Navbar />
 
         {/* Hero Section */}
@@ -219,6 +214,7 @@ export default function FeaturesPage() {
 
         <Footer />
       </div>
-    </main>
+      </main>
+    </BackgroundLayout>
   )
 }

@@ -4,7 +4,7 @@ import { useState, useEffect } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { motion, AnimatePresence } from "framer-motion"
-import { Menu, X, User, LogOut, Settings, UserPlus } from "lucide-react"
+import { Menu, X, User, LogOut, Settings, UserPlus, Wand2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 import { useAuth } from "@/components/auth/auth-provider"
@@ -19,6 +19,7 @@ import {
 
 const navItems = [
   { name: "Home", path: "/" },
+  { name: "AI Studio", path: "/ai-studio", icon: <Wand2 className="h-4 w-4 mr-1" /> },
   { name: "Features", path: "/features" },
   { name: "How It Works", path: "/how-it-works" },
   { name: "Pricing", path: "/pricing" },
@@ -72,10 +73,11 @@ export default function Navbar() {
                 href={item.path}
                 prefetch={false}
                 className={cn(
-                  "px-3 py-2 text-sm font-medium rounded-md transition-colors relative group",
+                  "px-3 py-2 text-sm font-medium rounded-md transition-colors relative group flex items-center",
                   pathname === item.path ? "text-indigo-400" : "text-gray-300 hover:text-indigo-300",
                 )}
               >
+                {item.icon && item.icon}
                 {item.name}
                 {pathname === item.path && (
                   <motion.div
@@ -211,11 +213,12 @@ export default function Navbar() {
                   href={item.path}
                   prefetch={false}
                   className={cn(
-                    "block px-3 py-4 text-base font-medium border-b border-gray-800",
+                    "block px-3 py-4 text-base font-medium border-b border-gray-800 flex items-center",
                     pathname === item.path ? "text-indigo-400" : "text-gray-300 hover:text-indigo-300",
                   )}
                   onClick={() => setMobileMenuOpen(false)}
                 >
+                  {item.icon && item.icon}
                   {item.name}
                 </Link>
               ))}
