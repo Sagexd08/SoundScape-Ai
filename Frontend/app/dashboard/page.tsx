@@ -11,16 +11,15 @@ import Link from "next/link"
 import SimpleBackgroundLayout from "@/components/layouts/SimpleBackgroundLayout"
 
 export default function DashboardPage() {
-  const { user, signOut } = useAuth()
-
+  const { user, signOut } = useAuth();
   return (
     <ProtectedRoute>
       {user && (
         <SimpleBackgroundLayout>
-      <div className="min-h-screen">
-        <Navbar />
+          <div className="min-h-screen">
+            <Navbar />
 
-        <div className="container mx-auto px-4 py-8">
+            <div className="container mx-auto px-4 py-8">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8">
           <div>
             <h1 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 to-purple-600">
@@ -192,10 +191,9 @@ export default function DashboardPage() {
             </Card>
           </TabsContent>
         </Tabs>
-      </div>
-        </div>
-      </div>
-    </SimpleBackgroundLayout>
+            </div>
+          </div>
+        </SimpleBackgroundLayout>
       )}
     </ProtectedRoute>
   )
