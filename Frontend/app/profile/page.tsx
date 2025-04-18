@@ -537,6 +537,7 @@ function ProfilePage() {
                   </Button>
                 </CardFooter>
               </Card>
+            </motion.div>
             </TabsContent>
 
             <TabsContent value="preferences">
