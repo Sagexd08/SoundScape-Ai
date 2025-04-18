@@ -6,7 +6,7 @@ import { Wand2, FileAudio, Sparkles, Music } from 'lucide-react';
 import AudioGenerator from '@/components/ai/AudioGenerator';
 import AudioAnalyzer from '@/components/ai/AudioAnalyzer';
 import MusicGenerator from '@/components/ai/MusicGenerator';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion'; // Import AnimatePresence
 import { useSearchParams } from 'next/navigation';
 import Navbar from '@/components/navbar';
 import SimpleBackgroundLayout from '@/components/layouts/SimpleBackgroundLayout';
@@ -35,7 +35,7 @@ function AIStudioContent() {
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
+        transition={{ duration: 0.6, ease: "easeOut" }} // Smoother ease and slightly longer duration
         className="mb-8 text-center"
       >
         <h1 className="text-3xl md:text-4xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500">
@@ -56,48 +56,71 @@ function AIStudioContent() {
         >
           <div className="flex justify-center mb-6">
             <TabsList className="grid w-full max-w-md grid-cols-3">
-              <TabsTrigger value="generate" className="flex items-center gap-2">
-                <Wand2 className="h-4 w-4" />
-                <span>Generate Audio</span>
+              {/* Add hover/tap animations to TabsTrigger */}
+              <TabsTrigger value="generate" asChild>
+                <motion.button
+                  whileHover={{ scale: 1.05, backgroundColor: 'rgba(99, 102, 241, 0.1)' }}
+                  whileTap={{ scale: 0.95 }}
+                  className="flex items-center gap-2"
+                >
+                  <Wand2 className="h-4 w-4" />
+                  <span>Generate Audio</span>
+                </motion.button>
               </TabsTrigger>
-              <TabsTrigger value="music" className="flex items-center gap-2">
-                <Music className="h-4 w-4" />
-                <span>Generate Music</span>
+              <TabsTrigger value="music" asChild>
+                 <motion.button
+                  whileHover={{ scale: 1.05, backgroundColor: 'rgba(168, 85, 247, 0.1)' }}
+                  whileTap={{ scale: 0.95 }}
+                  className="flex items-center gap-2"
+                >
+                  <Music className="h-4 w-4" />
+                  <span>Generate Music</span>
+                 </motion.button>
               </TabsTrigger>
-              <TabsTrigger value="analyze" className="flex items-center gap-2">
-                <FileAudio className="h-4 w-4" />
-                <span>Analyze</span>
+              <TabsTrigger value="analyze" asChild>
+                 <motion.button
+                  whileHover={{ scale: 1.05, backgroundColor: 'rgba(236, 72, 153, 0.1)' }}
+                  whileTap={{ scale: 0.95 }}
+                  className="flex items-center gap-2"
+                >
+                  <FileAudio className="h-4 w-4" />
+                  <span>Analyze</span>
+                 </motion.button>
               </TabsTrigger>
             </TabsList>
           </div>
 
-          <motion.div
-            key={activeTab}
-            initial={{ opacity: 0, x: activeTab === 'generate' ? -20 : 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.3 }}
-          >
-            <TabsContent value="generate" className="mt-0">
-              <AudioGenerator />
-            </TabsContent>
+          {/* Use AnimatePresence for smoother tab transitions including exit animations */}
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={activeTab} // Key is crucial for AnimatePresence
+              initial={{ opacity: 0, y: 10 }} // Start slightly lower
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }} // Exit animation
+              transition={{ duration: 0.3, ease: "easeInOut" }} // Smoother easing
+            >
+              <TabsContent value="generate" className="mt-0" forceMount>
+                <AudioGenerator />
+              </TabsContent>
 
-            <TabsContent value="music" className="mt-0">
-              <MusicGenerator />
-            </TabsContent>
+              <TabsContent value="music" className="mt-0" forceMount>
+                <MusicGenerator />
+              </TabsContent>
 
-            <TabsContent value="analyze" className="mt-0">
-              <AudioAnalyzer />
-            </TabsContent>
-          </motion.div>
+              <TabsContent value="analyze" className="mt-0" forceMount>
+                <AudioAnalyzer />
+              </TabsContent>
+            </motion.div>
+          </AnimatePresence>
         </Tabs>
       </div>
 
       <div className="mt-16 max-w-4xl mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 30 }} // Slightly increased initial y offset
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
+            transition={{ duration: 0.6, ease: "easeOut", delay: 0.2 }} // Smoother ease
             className="bg-gray-900 border border-gray-800 rounded-lg p-6"
           >
             <div className="flex items-center gap-3 mb-4">
@@ -127,9 +150,9 @@ function AIStudioContent() {
           </motion.div>
 
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 30 }} // Slightly increased initial y offset
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.4 }}
+            transition={{ duration: 0.6, ease: "easeOut", delay: 0.4 }} // Smoother ease
             className="bg-gray-900 border border-gray-800 rounded-lg p-6"
           >
             <div className="flex items-center gap-3 mb-4">

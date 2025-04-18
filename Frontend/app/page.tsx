@@ -7,8 +7,34 @@ import Navbar from "@/components/navbar";
 import { motion } from "framer-motion";
 import { Wand2, FileAudio, Headphones, Brain, Sparkles, ArrowRight, Music } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
+import { useAuth } from "@/components/auth/auth-provider";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 export default function Home() {
+  const { user, isLoading } = useAuth();
+  const router = useRouter();
+  
+  // Redirect to login if not authenticated
+  useEffect(() => {
+    if (!isLoading && !user) {
+      router.push("/login");
+    }
+  }, [user, isLoading, router]);
+  
+  // Show loading state while checking authentication
+  if (isLoading) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-black text-white">
+        <div className="animate-pulse text-xl">Loading...</div>
+      </div>
+    );
+  }
+  
+  // Only render the home page if user is authenticated
+  if (!user) {
+    return null;
+  }
   return (
     <SimpleBackgroundLayout>
       <div className="flex min-h-screen flex-col items-center p-0 relative">

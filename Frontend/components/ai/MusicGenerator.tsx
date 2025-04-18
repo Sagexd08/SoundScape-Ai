@@ -17,7 +17,7 @@ import { Pause } from 'lucide-react';
 import { Volume2 } from 'lucide-react';
 import { VolumeX } from 'lucide-react';
 import { Clock } from 'lucide-react';
-import { Metronome } from 'lucide-react';
+import { Timer } from 'lucide-react'; // Replaced Metronome with Timer
 import { Guitar } from 'lucide-react';
 import { Smile } from 'lucide-react';
 import { Disc } from 'lucide-react';
@@ -311,7 +311,7 @@ export default function MusicGenerator() {
             
             <div className="space-y-2">
               <Label htmlFor="tempo" className="flex items-center gap-2">
-                <Metronome className="h-4 w-4 text-indigo-400" />
+                <Timer className="h-4 w-4 text-indigo-400" /> {/* Replaced Metronome with Timer */}
                 Tempo: {tempo} BPM
               </Label>
               <Slider

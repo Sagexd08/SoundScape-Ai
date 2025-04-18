@@ -63,7 +63,7 @@ function LoginForm() {
   return (
     <SimpleBackgroundLayout>
       <div className="min-h-screen">
-        <Navbar />
+        {/* Navbar removed */}
 
         <div className="container mx-auto px-4 py-16 flex flex-col items-center">
           <div className="max-w-md w-full">
