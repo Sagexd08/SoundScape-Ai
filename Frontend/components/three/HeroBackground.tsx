@@ -2,10 +2,11 @@
 
 import { Suspense, useRef, useState, useMemo, useEffect } from "react"
 import { Canvas, useFrame, useThree } from "@react-three/fiber"
-import { Environment, MeshDistortMaterial, Points, AdaptiveDpr, Preload } from "@react-three/drei"
+import { MeshDistortMaterial, AdaptiveDpr, Preload } from "@react-three/drei"
 import { Mesh, Color, Points as ThreePoints } from "three"
 import { useMouse } from "@/hooks/use-mouse"
 
+// Simplified AudioWave component without problematic dependencies
 function AudioWave({ position = [0, 0, 0], color = "#4f46e5" }) {
   const mesh = useRef<Mesh>(null)
   const [hovered, setHover] = useState(false)
@@ -64,6 +65,7 @@ function AudioWave({ position = [0, 0, 0], color = "#4f46e5" }) {
   )
 }
 
+// Simplified ParticleField component
 function ParticleField() {
   const particlesRef = useRef<ThreePoints>(null)
   const { mouse } = useMouse()
@@ -72,7 +74,7 @@ function ParticleField() {
   // Further reduce particle count for better performance
   const particleCount = useMemo(() => {
     const isMobile = size.width < 768
-    return isMobile ? 300 : 500 // Reduced from 500/800
+    return isMobile ? 200 : 400 // Further reduced for better performance
   }, [size.width])
 
   // Create particles once with memoization
@@ -147,8 +149,6 @@ function ParticleField() {
   )
 }
 
-
-
 // Device detection for conditional rendering
 function useDeviceOptimization() {
   const [isMobile, setIsMobile] = useState(false)
@@ -166,7 +166,7 @@ function useDeviceOptimization() {
   return isMobile
 }
 
-// Update Scene to use device optimization
+// Simplified Scene component without Environment
 function Scene() {
   const isMobile = useDeviceOptimization()
 
@@ -179,7 +179,6 @@ function Scene() {
       {/* Only render one additional wave on desktop for better performance */}
       {!isMobile && <AudioWave position={[-3, 1, -4]} color="#8b5cf6" />}
       <ParticleField />
-      <Environment preset="night" />
     </>
   )
 }
@@ -191,7 +190,6 @@ export default function HeroBackground() {
         <Canvas
           camera={{ position: [0, 0, 5], fov: 70 }} // Reduced FOV for better performance
           dpr={[0.6, 1.2]} // Further reduced DPR for better performance
-          performance={{ min: 0.2 }} // Even more aggressive performance scaling
           frameloop="demand" // Only render when needed for better performance
           gl={{
             antialias: false, // Disable antialiasing for performance
