@@ -8,10 +8,20 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Slider } from '@/components/ui/slider';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
-import { 
-  Wand2, Music, Loader2, Save, Play, Pause, Volume2, VolumeX, 
-  Clock, Metronome, Guitar, Smile, Disc, Download
-} from 'lucide-react';
+import { Wand2 } from 'lucide-react';
+import { Music } from 'lucide-react';
+import { Loader2 } from 'lucide-react';
+import { Save } from 'lucide-react';
+import { Play } from 'lucide-react';
+import { Pause } from 'lucide-react';
+import { Volume2 } from 'lucide-react';
+import { VolumeX } from 'lucide-react';
+import { Clock } from 'lucide-react';
+import { Metronome } from 'lucide-react';
+import { Guitar } from 'lucide-react';
+import { Smile } from 'lucide-react';
+import { Disc } from 'lucide-react';
+import { Download } from 'lucide-react';
 import { post } from '@/lib/fetch-wrapper';
 import { toast } from 'sonner';
 import { Badge } from '@/components/ui/badge';

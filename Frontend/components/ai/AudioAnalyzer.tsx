@@ -5,7 +5,12 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Label } from '@/components/ui/label';
-import { FileAudio, Upload, Loader2, BarChart3, Music, Waveform } from 'lucide-react';
+import { FileAudio } from 'lucide-react';
+import { Upload } from 'lucide-react';
+import { Loader2 } from 'lucide-react';
+import { BarChart3 } from 'lucide-react';
+import { Music } from 'lucide-react';
+import { Waveform } from 'lucide-react';
 import { post } from '@/lib/fetch-wrapper';
 import { toast } from 'sonner';
 
