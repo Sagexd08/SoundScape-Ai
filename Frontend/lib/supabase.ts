@@ -1,5 +1,5 @@
 import { createClient as createSupabaseClient } from "@supabase/supabase-js";
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { createClient } from "@supabase/supabase-js";
 
 // Initialize Supabase client with environment variables
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || "https://etymxhxrcgnfonibvbha.supabase.co";
@@ -15,9 +15,11 @@ export const supabase = createSupabaseClient(supabaseUrl, supabaseKey, {
 
 // Create a Supabase client for client components
 export const createBrowserClient = () => {
-  return createClientComponentClient({
-    supabaseUrl,
-    supabaseKey,
+  return createClient(supabaseUrl, supabaseKey, {
+    auth: {
+      persistSession: true,
+      autoRefreshToken: true,
+    },
   });
 };
 

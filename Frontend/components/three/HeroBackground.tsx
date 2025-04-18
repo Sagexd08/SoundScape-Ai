@@ -5,7 +5,6 @@ import { Canvas, useFrame, useThree } from "@react-three/fiber"
 import { Environment, MeshDistortMaterial, Points, AdaptiveDpr, Preload } from "@react-three/drei"
 import { Mesh, Color, Points as ThreePoints } from "three"
 import { useMouse } from "@/hooks/use-mouse"
-import { CustomBvh } from "./utils/CustomBvh"
 
 function AudioWave({ position = [0, 0, 0], color = "#4f46e5" }) {
   const mesh = useRef<Mesh>(null)
@@ -205,7 +204,6 @@ export default function HeroBackground() {
         >
           <AdaptiveDpr pixelated /> {/* Automatically adjust resolution based on device performance */}
           <Scene />
-          <CustomBvh />
           <Preload all />
         </Canvas>
       </Suspense>
