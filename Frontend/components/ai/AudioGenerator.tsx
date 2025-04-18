@@ -377,6 +377,7 @@ export default function AudioGenerator() {
               disabled={isGenerating}
             />
             <Label htmlFor="save-library">Save to my library</Label>
+          </div>
           <div className="flex items-center space-x-2 mt-4">
             <Switch
               id="enhanced-model"

@@ -16,7 +16,8 @@
       "use": "@vercel/next",
       "config": {
         "nodeVersion": "18.17.0",
-        "installCommand": "npm install --legacy-peer-deps"
+        "installCommand": "npm install --legacy-peer-deps",
+        "outputDirectory": ".next"
       }
     }
   ],
