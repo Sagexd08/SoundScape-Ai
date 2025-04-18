@@ -3,7 +3,7 @@
 import { useState, useEffect, Suspense } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Wand2, FileAudio, Sparkles, Music } from 'lucide-react';
-import AudioGenerator from '@/components/ai/AudioGenerator';
+import SimpleAudioGenerator from '@/components/ai/SimpleAudioGenerator';
 import AudioAnalyzer from '@/components/ai/AudioAnalyzer';
 import MusicGenerator from '@/components/ai/MusicGenerator';
 import { motion, AnimatePresence } from 'framer-motion'; // Import AnimatePresence
@@ -100,7 +100,7 @@ function AIStudioContent() {
               transition={{ duration: 0.3, ease: "easeInOut" }} // Smoother easing
             >
               <TabsContent value="generate" className="mt-0" forceMount>
-                <AudioGenerator />
+                <SimpleAudioGenerator />
               </TabsContent>
 
               <TabsContent value="music" className="mt-0" forceMount>

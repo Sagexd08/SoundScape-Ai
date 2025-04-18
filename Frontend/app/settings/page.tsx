@@ -11,12 +11,13 @@ import { Label } from "@/components/ui/label"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Separator } from "@/components/ui/separator"
-import { Settings as SettingsIcon, Bell, Moon, Sun, Laptop, Save, Palette } from "lucide-react"
+import { Settings as SettingsIcon, Bell, Moon, Sun, Laptop, Save, Palette, Heart, Wand2 } from "lucide-react"
 import Navbar from "@/components/navbar"
 import SimpleHeroBackground from "@/components/three/SimpleHeroBackground"
 import { motion } from "framer-motion"
 
-export default function SettingsPage() {
+// Original SettingsPage component
+function SettingsPage() {
   const { user, isLoading } = useAuth()
   const router = useRouter()
   const { theme, setTheme } = useTheme()
@@ -389,3 +390,6 @@ export default function SettingsPage() {
     </div>
   )
 }
+
+// Export the simplified page for now
+export { default } from './simple-page';

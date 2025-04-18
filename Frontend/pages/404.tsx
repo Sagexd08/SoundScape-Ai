@@ -1,14 +1,14 @@
 import { useEffect } from 'react'
-import { useRouter } from 'next/router'
+import { useRouter } from 'next/navigation'
 
 export default function Custom404() {
   const router = useRouter()
-  
+
   useEffect(() => {
     // Redirect to the app router's not-found page
     router.push('/not-found')
   }, [router])
-  
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-black text-white">
       <div className="text-center">

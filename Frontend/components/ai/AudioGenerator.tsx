@@ -377,27 +377,27 @@ export default function AudioGenerator() {
               disabled={isGenerating}
             />
             <Label htmlFor="save-library">Save to my library</Label>
-              <div className="flex items-center space-x-2 mt-4">
-                <Switch
-                  id="enhanced-model"
-                  checked={advancedOptions.useEnhancedModel}
-                  onCheckedChange={(checked) => setAdvancedOptions({...advancedOptions, useEnhancedModel: checked})}
-                  disabled={isGenerating}
-                />
-                <div className="flex items-center">
-                  <Label htmlFor="enhanced-model">Use enhanced model</Label>
-                  <TooltipProvider>
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <Info className="h-4 w-4 ml-1 text-gray-500 cursor-help" />
-                      </TooltipTrigger>
-                      <TooltipContent>
-                        <p className="w-[200px] text-xs">Enhanced models produce higher quality audio but may take longer to generate</p>
-                      </TooltipContent>
-                    </Tooltip>
-                  </TooltipProvider>
-                </div>
-              </div>
+          <div className="flex items-center space-x-2 mt-4">
+            <Switch
+              id="enhanced-model"
+              checked={advancedOptions.useEnhancedModel}
+              onCheckedChange={(checked) => setAdvancedOptions({...advancedOptions, useEnhancedModel: checked})}
+              disabled={isGenerating}
+            />
+            <div className="flex items-center">
+              <Label htmlFor="enhanced-model">Use enhanced model</Label>
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Info className="h-4 w-4 ml-1 text-gray-500 cursor-help" />
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p className="w-[200px] text-xs">Enhanced models produce higher quality audio but may take longer to generate</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+            </div>
+          </div>
             </motion.div>
           )}
         </AnimatePresence>

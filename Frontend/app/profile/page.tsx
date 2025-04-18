@@ -12,7 +12,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Textarea } from "@/components/ui/textarea"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"
-import { User, Mail, Key, Image, Save, Upload, Loader2, Globe, MapPin, Link as LinkIcon, Twitter, Instagram, Spotify, Music, Headphones, Shield, Bell, Camera, Trash2, CheckCircle2 } from "lucide-react"
+import { User, Mail, Key, Image, Save, Upload, Loader2, Globe, MapPin, Link as LinkIcon, Twitter, Instagram, Spotify, Music, Headphones, Shield, Bell, Camera, Trash2, CheckCircle2, Heart, Wand2 } from "lucide-react"
 import Navbar from "@/components/navbar"
 import { supabase } from "@/lib/supabase"
 import { toast } from "sonner"
@@ -23,7 +23,8 @@ import { Switch } from "@/components/ui/switch"
 import { Separator } from "@/components/ui/separator"
 import { Progress } from "@/components/ui/progress"
 
-export default function ProfilePage() {
+// Original ProfilePage component
+function ProfilePage() {
   const { user, updatePassword, isLoading } = useAuth()
   const [saving, setSaving] = useState(false)
   const [success, setSuccess] = useState(false)
@@ -729,3 +730,6 @@ export default function ProfilePage() {
     </div>
   )
 }
+
+// Export the simplified page for now
+export { default } from './simple-page';
