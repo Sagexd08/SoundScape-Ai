@@ -8,6 +8,7 @@ import { Menu, X, User, LogOut, Settings, UserPlus, Wand2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 import { useAuth } from "@/components/auth/auth-provider"
+import { ThemeToggle } from "@/components/theme-toggle"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -91,6 +92,7 @@ export default function Navbar() {
           </nav>
 
           <div className="hidden md:flex items-center space-x-4">
+            <ThemeToggle />
             {user ? (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
@@ -261,6 +263,9 @@ export default function Navbar() {
                         Settings
                       </Button>
                     </Link>
+                    <div className="flex justify-center mb-2">
+                      <ThemeToggle />
+                    </div>
                     <Button
                       onClick={() => {
                         signOut().then(() => {

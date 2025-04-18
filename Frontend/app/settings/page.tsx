@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { useAuth } from "@/components/auth/auth-provider"
+import { useTheme } from "next-themes"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Switch } from "@/components/ui/switch"
@@ -10,19 +11,22 @@ import { Label } from "@/components/ui/label"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Separator } from "@/components/ui/separator"
-import { Settings as SettingsIcon, Bell, Moon, Globe, Save } from "lucide-react"
+import { Settings as SettingsIcon, Bell, Moon, Sun, Laptop, Save, Palette } from "lucide-react"
 import Navbar from "@/components/navbar"
 import SimpleHeroBackground from "@/components/three/SimpleHeroBackground"
+import { motion } from "framer-motion"
 
 export default function SettingsPage() {
   const { user, isLoading } = useAuth()
   const router = useRouter()
+  const { theme, setTheme } = useTheme()
   const [saving, setSaving] = useState(false)
   const [success, setSuccess] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
   const [settings, setSettings] = useState({
-    darkMode: true,
+    themePreference: "dark",
+    themeColor: "indigo",
     notifications: {
       email: true,
       push: false,
@@ -34,6 +38,16 @@ export default function SettingsPage() {
       saveHistory: true
     }
   })
+
+  // Initialize theme preference from system
+  useEffect(() => {
+    if (theme) {
+      setSettings(prev => ({
+        ...prev,
+        themePreference: theme
+      }))
+    }
+  }, [theme])
 
   // Redirect if not logged in
   useEffect(() => {
@@ -57,7 +71,10 @@ export default function SettingsPage() {
       setSaving(true)
       setError(null)
 
-      // Simulate API call
+      // Apply theme changes
+      setTheme(settings.themePreference)
+
+      // Simulate API call to save other settings
       await new Promise(resolve => setTimeout(resolve, 1000))
 
       setSuccess(true)
@@ -115,36 +132,103 @@ export default function SettingsPage() {
               </TabsList>
 
               <TabsContent value="appearance">
-                <Card className="bg-gray-900/80 backdrop-blur-md border-gray-800">
-                  <CardHeader>
-                    <CardTitle className="flex items-center">
-                      <Moon className="mr-2 h-5 w-5 text-indigo-400" />
-                      Appearance Settings
-                    </CardTitle>
-                    <CardDescription>
-                      Customize how SoundScape looks
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent className="space-y-6">
-                    <div className="flex items-center justify-between">
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5 }}
+                >
+                  <Card className="bg-gray-900/80 backdrop-blur-md border-gray-800">
+                    <CardHeader>
+                      <CardTitle className="flex items-center">
+                        <Palette className="mr-2 h-5 w-5 text-indigo-400" />
+                        Appearance Settings
+                      </CardTitle>
+                      <CardDescription>
+                        Customize how SoundScape looks
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent className="space-y-6">
                       <div>
-                        <Label htmlFor="dark-mode" className="text-base">Dark Mode</Label>
-                        <p className="text-sm text-gray-400">Use dark theme throughout the application</p>
+                        <Label className="text-base mb-2 block">Theme Mode</Label>
+                        <div className="grid grid-cols-3 gap-4">
+                          <Button
+                            type="button"
+                            variant={settings.themePreference === "light" ? "default" : "outline"}
+                            className={`flex flex-col items-center justify-center h-24 ${settings.themePreference === "light" ? "bg-indigo-600" : "border-indigo-600/30 bg-gray-800/50"}`}
+                            onClick={() => setSettings(prev => ({ ...prev, themePreference: "light" }))}
+                          >
+                            <Sun className="h-8 w-8 mb-2" />
+                            <span>Light</span>
+                          </Button>
+
+                          <Button
+                            type="button"
+                            variant={settings.themePreference === "dark" ? "default" : "outline"}
+                            className={`flex flex-col items-center justify-center h-24 ${settings.themePreference === "dark" ? "bg-indigo-600" : "border-indigo-600/30 bg-gray-800/50"}`}
+                            onClick={() => setSettings(prev => ({ ...prev, themePreference: "dark" }))}
+                          >
+                            <Moon className="h-8 w-8 mb-2" />
+                            <span>Dark</span>
+                          </Button>
+
+                          <Button
+                            type="button"
+                            variant={settings.themePreference === "system" ? "default" : "outline"}
+                            className={`flex flex-col items-center justify-center h-24 ${settings.themePreference === "system" ? "bg-indigo-600" : "border-indigo-600/30 bg-gray-800/50"}`}
+                            onClick={() => setSettings(prev => ({ ...prev, themePreference: "system" }))}
+                          >
+                            <Laptop className="h-8 w-8 mb-2" />
+                            <span>System</span>
+                          </Button>
+                        </div>
                       </div>
-                      <Switch
-                        id="dark-mode"
-                        checked={settings.darkMode}
-                        onCheckedChange={() => setSettings(prev => ({ ...prev, darkMode: !prev.darkMode }))}
-                      />
-                    </div>
 
-                    <Separator className="bg-gray-800" />
+                      <Separator className="bg-gray-800" />
 
-                    <div>
-                      <p className="text-sm text-gray-400">
-                        More appearance settings coming soon...
-                      </p>
-                    </div>
+                      <div>
+                        <Label className="text-base mb-2 block">Theme Color</Label>
+                        <div className="grid grid-cols-4 gap-4">
+                          <Button
+                            type="button"
+                            variant={settings.themeColor === "indigo" ? "default" : "outline"}
+                            className={`flex items-center justify-center h-12 ${settings.themeColor === "indigo" ? "bg-indigo-600" : "border-indigo-600/30 bg-gray-800/50"}`}
+                            onClick={() => setSettings(prev => ({ ...prev, themeColor: "indigo" }))}
+                          >
+                            <div className="w-4 h-4 rounded-full bg-indigo-500 mr-2"></div>
+                            <span>Indigo</span>
+                          </Button>
+
+                          <Button
+                            type="button"
+                            variant={settings.themeColor === "purple" ? "default" : "outline"}
+                            className={`flex items-center justify-center h-12 ${settings.themeColor === "purple" ? "bg-purple-600" : "border-purple-600/30 bg-gray-800/50"}`}
+                            onClick={() => setSettings(prev => ({ ...prev, themeColor: "purple" }))}
+                          >
+                            <div className="w-4 h-4 rounded-full bg-purple-500 mr-2"></div>
+                            <span>Purple</span>
+                          </Button>
+
+                          <Button
+                            type="button"
+                            variant={settings.themeColor === "blue" ? "default" : "outline"}
+                            className={`flex items-center justify-center h-12 ${settings.themeColor === "blue" ? "bg-blue-600" : "border-blue-600/30 bg-gray-800/50"}`}
+                            onClick={() => setSettings(prev => ({ ...prev, themeColor: "blue" }))}
+                          >
+                            <div className="w-4 h-4 rounded-full bg-blue-500 mr-2"></div>
+                            <span>Blue</span>
+                          </Button>
+
+                          <Button
+                            type="button"
+                            variant={settings.themeColor === "teal" ? "default" : "outline"}
+                            className={`flex items-center justify-center h-12 ${settings.themeColor === "teal" ? "bg-teal-600" : "border-teal-600/30 bg-gray-800/50"}`}
+                            onClick={() => setSettings(prev => ({ ...prev, themeColor: "teal" }))}
+                          >
+                            <div className="w-4 h-4 rounded-full bg-teal-500 mr-2"></div>
+                            <span>Teal</span>
+                          </Button>
+                        </div>
+                      </div>
                   </CardContent>
                   <CardFooter>
                     <Button

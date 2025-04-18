@@ -45,9 +45,10 @@ export default function RootLayout({
         <ErrorBoundary>
           <ThemeProvider
             attribute="class"
-            defaultTheme="system"
+            defaultTheme="dark"
             enableSystem
             disableTransitionOnChange
+            storageKey="soundscape-theme"
           >
             <NetworkProvider>
               <AuthProvider>
