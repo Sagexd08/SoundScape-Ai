@@ -1,103 +1,51 @@
-"use client"
+'use client'
 
-import { Suspense } from "react"
-import { useEffect, useState } from "react"
-import { useRouter } from "next/navigation"
-import { supabase } from "@/lib/supabase"
+import { useEffect } from 'react'
+import { useRouter, useSearchParams } from 'next/navigation'
+import { useAuth } from '@/components/auth/auth-provider'
 
-// Main component that only returns Suspense wrapper
 export default function AuthCallbackPage() {
+  const router = useRouter()
+  const searchParams = useSearchParams()
+  const { session } = useAuth()
+  
+  useEffect(() => {
+    // If user is already logged in, redirect to dashboard
+    if (session) {
+      router.push('/dashboard')
+    }
+    
+    // Process OAuth callback
+    const handleCallback = async () => {
+      // Check for error in URL - this happens if user cancels OAuth flow
+      const error = searchParams.get('error')
+      const errorDescription = searchParams.get('error_description')
+      
+      if (error) {
+        console.error('OAuth error:', error, errorDescription)
+        router.push('/login?error=' + encodeURIComponent(errorDescription || 'Authentication failed'))
+        return
+      }
+      
+      try {
+        // No error, proceed with callback processing
+        // Authentication is handled by the auth provider, we just need to redirect the user
+        router.push('/dashboard')
+      } catch (error) {
+        console.error('Auth callback error:', error)
+        router.push('/login?error=Authentication failed')
+      }
+    }
+    
+    handleCallback()
+  }, [router, searchParams, session])
+  
   return (
-    <Suspense fallback={<LoadingFallback />}>
-      <AuthCallbackContent />
-    </Suspense>
-  )
-}
-
-// Loading fallback component
-function LoadingFallback() {
-  return (
-    <div className="min-h-screen bg-black flex flex-col items-center justify-center text-white p-4">
-      <div className="w-full max-w-md text-center">
-        <div className="w-16 h-16 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin mx-auto mb-6"></div>
-        <h1 className="text-2xl font-bold mb-4">Loading</h1>
-        <p>Please wait while we process your authentication...</p>
+    <div className="flex min-h-screen items-center justify-center bg-black">
+      <div className="text-center">
+        <div className="mb-4 text-2xl font-bold text-white">Completing login...</div>
+        <div className="mx-auto h-8 w-8 animate-spin rounded-full border-b-2 border-t-2 border-indigo-500"></div>
       </div>
     </div>
   )
-}
-
-// Component with the actual auth logic, wrapped in Suspense
-function AuthCallbackContent() {
-  const router = useRouter()
-  const [error, setError] = useState<string | null>(null)
-
-  // Use searchParams inside a client component that's wrapped in Suspense
-  const SearchParamsHandler = () => {
-    const searchParams = useSearchParams()
-
-    useEffect(() => {
-      // Extract the code from the URL
-      const code = searchParams.get("code")
-
-      // If there's no code, something went wrong
-      if (!code) {
-        setError("No code provided in the callback URL")
-        return
-      }
-
-      // Exchange the code for a session
-      const handleAuthCallback = async () => {
-        try {
-          // This will automatically handle the token exchange
-          const { error } = await supabase.auth.exchangeCodeForSession(code)
-
-          if (error) {
-            throw error
-          }
-
-          // Redirect to dashboard on success
-          router.push("/dashboard")
-        } catch (err: any) {
-          console.error("Error during auth callback:", err)
-          setError(err.message || "An error occurred during authentication")
-
-          // Redirect to login after a delay if there's an error
-          setTimeout(() => {
-            router.push("/login")
-          }, 3000)
-        }
-      }
-
-      handleAuthCallback()
-    }, [searchParams])
-
-    return null
-  }
-
-  // Render the SearchParamsHandler component to handle the URL parameters
-  return (
-    <>
-      <SearchParamsHandler />
-      <div className="min-h-screen bg-black flex flex-col items-center justify-center text-white p-4">
-        <div className="w-full max-w-md text-center">
-          {error ? (
-            <>
-              <h1 className="text-2xl font-bold text-red-500 mb-4">Authentication Error</h1>
-              <p className="mb-4">{error}</p>
-              <p>Redirecting you to the login page...</p>
-            </>
-          ) : (
-            <>
-              <div className="w-16 h-16 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin mx-auto mb-6"></div>
-              <h1 className="text-2xl font-bold mb-4">Completing Authentication</h1>
-              <p>Please wait while we sign you in...</p>
-            </>
-          )}
-        </div>
-      </div>
-    </>
-  )
-
-
 }
