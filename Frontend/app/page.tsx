@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
-import BackgroundLayout from "@/components/layouts/BackgroundLayout"
+import SimpleBackgroundLayout from "@/components/layouts/SimpleBackgroundLayout"
 import Navbar from "@/components/navbar"
 import { motion } from "framer-motion"
 import { Wand2, FileAudio, Headphones, Brain, Sparkles, ArrowRight, Music } from "lucide-react"
@@ -10,7 +10,7 @@ import { Card, CardContent } from "@/components/ui/card"
 
 export default function Home() {
   return (
-    <BackgroundLayout>
+    <SimpleBackgroundLayout>
       <div className="flex min-h-screen flex-col items-center p-0 relative">
         <Navbar />
         <div className="relative z-10 flex flex-col items-center justify-center min-h-screen p-8">
@@ -166,6 +166,6 @@ export default function Home() {
       </motion.div>
     </div>
       </div>
-    </BackgroundLayout>
+    </SimpleBackgroundLayout>
   );
 }

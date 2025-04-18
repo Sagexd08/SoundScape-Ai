@@ -12,7 +12,7 @@ import { Separator } from "@/components/ui/separator"
 import { GoogleButton } from "@/components/auth/google-button"
 import Link from "next/link"
 import Navbar from "@/components/navbar"
-import SimpleHeroBackground from "@/components/three/SimpleHeroBackground"
+import SimpleBackgroundLayout from "@/components/layouts/SimpleBackgroundLayout"
 
 interface FormData {
   email: string;
@@ -29,10 +29,10 @@ function LoginForm() {
   const [isPasswordReset, setIsPasswordReset] = useState(false)
   const [resetSent, setResetSent] = useState(false)
 
-  // Redirect to dashboard if already logged in
+  // Redirect to home page if already logged in
   useEffect(() => {
     if (user) {
-      router.push("/dashboard")
+      router.push("/")
     }
   }, [user, router])
 
@@ -61,15 +61,8 @@ function LoginForm() {
   }
 
   return (
-    <div className="min-h-screen bg-black text-white">
-      {/* Background */}
-      <div className="fixed inset-0 z-0">
-        <SimpleHeroBackground />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-transparent to-black/50" />
-      </div>
-
-      {/* Content */}
-      <div className="relative z-10">
+    <SimpleBackgroundLayout>
+      <div className="min-h-screen">
         <Navbar />
 
         <div className="container mx-auto px-4 py-16 flex flex-col items-center">
@@ -231,7 +224,7 @@ function LoginForm() {
           </div>
         </div>
       </div>
-    </div>
+    </SimpleBackgroundLayout>
   )
 }
 

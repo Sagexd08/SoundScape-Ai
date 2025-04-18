@@ -8,18 +8,15 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Music, Headphones, Settings, User, Heart, Clock, Plus, Wand2 } from "lucide-react"
 import Navbar from "@/components/navbar"
 import Link from "next/link"
-import BackgroundLayout from "@/components/layouts/BackgroundLayout"
+import SimpleBackgroundLayout from "@/components/layouts/SimpleBackgroundLayout"
 
 export default function DashboardPage() {
   const { user, signOut } = useAuth()
 
-  // Check if user is authenticated
-  if (!user) {
-    return null; // This will be handled by the useEffect in auth-provider
-  }
-
   return (
-    <BackgroundLayout>
+    <ProtectedRoute>
+      {user && (
+        <SimpleBackgroundLayout>
       <div className="min-h-screen">
         <Navbar />
 
@@ -198,6 +195,8 @@ export default function DashboardPage() {
       </div>
         </div>
       </div>
-    </BackgroundLayout>
+    </SimpleBackgroundLayout>
+      )}
+    </ProtectedRoute>
   )
 }

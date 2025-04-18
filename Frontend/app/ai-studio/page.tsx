@@ -9,7 +9,7 @@ import MusicGenerator from '@/components/ai/MusicGenerator';
 import { motion } from 'framer-motion';
 import { useSearchParams } from 'next/navigation';
 import Navbar from '@/components/navbar';
-import BackgroundLayout from '@/components/layouts/BackgroundLayout';
+import SimpleBackgroundLayout from '@/components/layouts/SimpleBackgroundLayout';
 
 export default function AIStudioPage() {
   const [activeTab, setActiveTab] = useState('generate');
@@ -26,7 +26,7 @@ export default function AIStudioPage() {
   }, [searchParams]);
 
   return (
-    <BackgroundLayout>
+    <SimpleBackgroundLayout>
       <div className="min-h-screen">
         <Navbar />
         <div className="container mx-auto px-4 py-8">
@@ -159,6 +159,6 @@ export default function AIStudioPage() {
       </div>
         </div>
       </div>
-    </BackgroundLayout>
+    </SimpleBackgroundLayout>
   );
 }

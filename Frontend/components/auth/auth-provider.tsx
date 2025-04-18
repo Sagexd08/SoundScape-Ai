@@ -9,6 +9,7 @@ import {
 } from 'react';
 import { Session, User, AuthError } from '@supabase/supabase-js';
 import { supabase } from '@/lib/supabase';
+import { useRouter } from 'next/navigation';
 
 interface AuthState {
   session: Session | null;
@@ -29,6 +30,7 @@ interface AuthContextType extends AuthState {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
+  const router = useRouter();
   const [authState, setAuthState] = useState<AuthState>({
     session: null,
     user: null,
@@ -63,10 +65,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         // Handle specific auth events
         switch (event) {
           case 'SIGNED_IN':
-            // Additional actions after sign in
+            // Redirect to home page after sign in
+            router.push('/');
             break;
           case 'SIGNED_OUT':
-            // Clear any user-specific data
+            // Redirect to home page after sign out
+            router.push('/');
             break;
           case 'USER_UPDATED':
             // Refresh user metadata
