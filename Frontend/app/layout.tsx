@@ -1,5 +1,3 @@
-'use client'
-
 // Root layout split into server and client components
 
 import './globals.css'
