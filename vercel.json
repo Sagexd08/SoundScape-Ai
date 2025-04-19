@@ -1,7 +1,7 @@
 {
   "version": 2,
   "name": "sound-scape-ai",
-  "alias": ["sound-scape-ai-sohomchatterjee07-gmailcoms-projects.vercel.app"],
+  "alias": ["soundscape-ai-project.vercel.app"],
   "buildCommand": "cd Frontend && npm install --legacy-peer-deps && npm run build",
   "installCommand": "npm install --legacy-peer-deps",
   "framework": "nextjs",
