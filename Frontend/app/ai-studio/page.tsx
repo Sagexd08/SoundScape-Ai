@@ -64,6 +64,15 @@ export default function AIStudioPage() {
     };
   }, [isPlaying]);
 
+  // Handle progress change
+  const handleProgressChange = (value: number[]) => {
+    const newTime = value[0];
+    setCurrentTime(newTime);
+    if (audioRef.current) {
+      audioRef.current.currentTime = newTime;
+    }
+  };
+
   // Handle audio generation
   const handleGenerateAudio = async () => {
     if (!prompt.trim() && !selectedEnvironment) {
@@ -172,92 +181,10 @@ export default function AIStudioPage() {
 
 
 
-  // Update progress bar
+  // Additional initialization if needed
   useEffect(() => {
-    if (isPlaying) {
-      progressIntervalRef.current = setInterval(() => {
-        if (audioRef.current) {
-          setCurrentTime(audioRef.current.currentTime);
-        }
-      }, 1000);
-    } else {
-      if (progressIntervalRef.current) {
-        clearInterval(progressIntervalRef.current);
-      }
-    }
-
-    return () => {
-      if (progressIntervalRef.current) {
-        clearInterval(progressIntervalRef.current);
-      }
-    };
-  }, [isPlaying]);
-
-  // This section uses the handleGenerateAudio function defined earlier
-  useEffect(() => {
-    // Additional initialization logic can go here if needed
+    // Any initialization logic can go here
   }, []);
-
-  // Reusing the handleGenerateAudio function defined above
-  // No duplicate declaration needed
-
-  // Helper function for audio simulation
-  const simulateAudioGeneration = () => {
-    // Simulate API call with a timeout
-    setTimeout(() => {
-      let audioUrl = FALLBACK_AUDIO;
-
-      // If environment and mood are selected, use the corresponding demo file
-      if (selectedEnvironment && selectedMood) {
-        const envFiles = DEMO_AUDIO_FILES[selectedEnvironment as keyof typeof DEMO_AUDIO_FILES];
-        if (envFiles) {
-          const moodFile = envFiles[selectedMood as keyof typeof envFiles];
-          if (moodFile) {
-            audioUrl = moodFile;
-          }
-        }
-      }
-
-      setGeneratedAudioUrl(audioUrl);
-      setIsGenerating(false);
-      toast.success('Audio generated successfully!');
-
-      // Auto-play the generated audio
-      if (audioRef.current) {
-        audioRef.current.src = audioUrl;
-        audioRef.current.volume = volume / 100;
-
-        // Set up event listeners
-        audioRef.current.onloadedmetadata = () => {
-          if (audioRef.current) {
-            setDuration(audioRef.current.duration);
-          }
-        };
-
-        audioRef.current.onended = () => {
-          setIsPlaying(false);
-        };
-
-        audioRef.current.play();
-        setIsPlaying(true);
-      }
-    }, 2000); // 2 second delay to simulate processing
-  };
-
-  // This section uses the togglePlayPause function defined earlier
-  // No duplicate declaration needed
-  
-  // Helper function for audio playback controls
-  const setupAudioControls = () => {
-    // Additional audio control setup can go here if needed
-  };
-
-  // This section uses the toggleMute function defined earlier
-  // No duplicate declaration needed
-
-  // This section uses the handleVolumeChange function defined earlier
-
-  // This section uses the handleProgressChange function defined earlier
 
   return (
     <SimpleBackgroundLayout>

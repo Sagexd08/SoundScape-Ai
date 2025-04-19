@@ -4,10 +4,20 @@ import { toast } from 'sonner';
 
 // Initialize OpenAI client with environment variable
 // IMPORTANT: Never hardcode API keys in your code
-const openai = new OpenAI({
-  apiKey: process.env.NEXT_PUBLIC_OPENAI_API_KEY,
-  dangerouslyAllowBrowser: true // Only for client-side usage in demo
-});
+let openai: OpenAI | null = null;
+
+// Only initialize OpenAI if we're in the browser and have an API key
+// This prevents build errors when the API key is not available
+if (typeof window !== 'undefined') {
+  try {
+    openai = new OpenAI({
+      apiKey: process.env.NEXT_PUBLIC_OPENAI_API_KEY || 'dummy-key-for-build-time',
+      dangerouslyAllowBrowser: true // Only for client-side usage in demo
+    });
+  } catch (error) {
+    console.warn('Failed to initialize OpenAI client:', error);
+  }
+}
 
 // Audio generation using OpenAI's Text-to-Speech API
 export async function generateAudio(prompt: string, voice: string = 'alloy') {
@@ -16,28 +26,41 @@ export async function generateAudio(prompt: string, voice: string = 'alloy') {
     if (!prompt || prompt.trim() === '') {
       throw new Error('Prompt is required');
     }
-    
-    // Check if API key is available
-    if (!process.env.NEXT_PUBLIC_OPENAI_API_KEY) {
-      console.warn('OpenAI API key not found. Using demo mode.');
+
+    // Check if we're in a browser environment
+    if (typeof window === 'undefined') {
+      console.warn('Not in browser environment. Using demo mode.');
       return getDemoAudioUrl(prompt);
     }
-    
+
+    // Check if API key is available and OpenAI client is initialized
+    if (!process.env.NEXT_PUBLIC_OPENAI_API_KEY || !openai) {
+      console.warn('OpenAI API key not found or client not initialized. Using demo mode.');
+      return getDemoAudioUrl(prompt);
+    }
+
     // Generate audio using OpenAI's TTS API
-    const response = await openai.audio.speech.create({
-      model: 'tts-1',
-      voice: voice,
-      input: prompt,
-    });
-    
-    // Convert the response to a blob URL that can be played in the browser
-    const blob = await response.blob();
-    const url = URL.createObjectURL(blob);
-    
-    return url;
+    try {
+      const response = await openai.audio.speech.create({
+        model: 'tts-1',
+        voice: voice,
+        input: prompt,
+      });
+
+      // Convert the response to a blob URL that can be played in the browser
+      const blob = await response.blob();
+      const url = URL.createObjectURL(blob);
+
+      return url;
+    } catch (apiError) {
+      console.error('OpenAI API error:', apiError);
+      return getDemoAudioUrl(prompt);
+    }
   } catch (error) {
     console.error('Error generating audio:', error);
-    toast.error('Failed to generate audio. Using demo audio instead.');
+    if (typeof window !== 'undefined') {
+      toast.error('Failed to generate audio. Using demo audio instead.');
+    }
     return getDemoAudioUrl(prompt);
   }
 }
@@ -51,7 +74,7 @@ export function generateAudioPrompt(environment: string, mood: string) {
     city: 'Create a city soundscape with distant traffic, occasional car horns, and the ambient hum of urban life.',
     cafe: 'Create a cafe soundscape with quiet conversations, the occasional clink of cups, and soft background music.'
   };
-  
+
   // Mood modifiers
   const moodModifiers: Record<string, string> = {
     relaxing: 'Make it peaceful and calming, with a slow tempo and gentle sounds.',
@@ -59,13 +82,13 @@ export function generateAudioPrompt(environment: string, mood: string) {
     focused: 'Make it minimal and non-distracting, perfect for concentration and deep work.',
     peaceful: 'Make it serene and tranquil, with harmonious sounds that blend together smoothly.'
   };
-  
+
   // Get the base prompt for the selected environment
   const basePrompt = environmentPrompts[environment] || 'Create an ambient soundscape with natural elements.';
-  
+
   // Add mood modifier if available
   const moodModifier = mood ? moodModifiers[mood] : '';
-  
+
   // Combine the prompts
   return `${basePrompt} ${moodModifier}`;
 }
@@ -80,13 +103,13 @@ function getDemoAudioUrl(prompt: string): string {
     cafe: 'https://cdn.pixabay.com/download/audio/2022/03/15/audio_1e1a0c5f92.mp3?filename=coffee-shop-ambience-6953.mp3',
     ambient: 'https://cdn.pixabay.com/download/audio/2022/03/10/audio_c8c8a73467.mp3?filename=ambient-piano-amp-strings-10711.mp3'
   };
-  
+
   // Determine which demo audio to use based on the prompt
   if (prompt.toLowerCase().includes('forest')) return demoAudio.forest;
   if (prompt.toLowerCase().includes('ocean') || prompt.toLowerCase().includes('sea') || prompt.toLowerCase().includes('wave')) return demoAudio.ocean;
   if (prompt.toLowerCase().includes('city') || prompt.toLowerCase().includes('urban')) return demoAudio.city;
   if (prompt.toLowerCase().includes('cafe') || prompt.toLowerCase().includes('coffee')) return demoAudio.cafe;
-  
+
   // Default to ambient if no match
   return demoAudio.ambient;
 }
