@@ -33,10 +33,9 @@ import {
   Trash2, 
   CheckCircle2, 
   Heart, 
-  Wand2 
+  Wand2,
+  Spotify
 } from "lucide-react"
-// Import Spotify separately since it might not be included in the barrel optimization
-import { Spotify } from "lucide-react"
 import Navbar from "@/components/navbar"
 import { supabase } from "@/lib/supabase"
 import { toast } from "sonner"
@@ -47,4 +46,21 @@ import { Switch } from "@/components/ui/switch"
 import { Separator } from "@/components/ui/separator"
 import { Progress } from "@/components/ui/progress"
 
-// Rest of the file remains the same...
+function ProfileContent() {
+  return (
+    <SimpleBackgroundLayout>
+      <div className="container mx-auto px-4 py-8">
+        <h1 className="text-3xl font-bold mb-6">Profile Page</h1>
+        <p>This is the profile page content.</p>
+      </div>
+    </SimpleBackgroundLayout>
+  )
+}
+
+export default function ProfilePage() {
+  return (
+    <ProtectedRoute>
+      <ProfileContent />
+    </ProtectedRoute>
+  )
+}
