@@ -144,12 +144,10 @@ export default function AIStudioPage() {
       setIsPlaying(!isPlaying);
     }
   };
-
-  // Toggle mute
   const toggleMute = () => {
+    setIsMuted(!isMuted);
     if (audioRef.current) {
       audioRef.current.muted = !isMuted;
-      setIsMuted(!isMuted);
     }
   };
 
@@ -159,15 +157,6 @@ export default function AIStudioPage() {
     setVolume(newVolume);
     if (audioRef.current) {
       audioRef.current.volume = newVolume / 100;
-    }
-  };
-
-  // Handle progress change
-  const handleProgressChange = (value: number[]) => {
-    const newTime = value[0];
-    setCurrentTime(newTime);
-    if (audioRef.current) {
-      audioRef.current.currentTime = newTime;
     }
   };
 
@@ -204,15 +193,16 @@ export default function AIStudioPage() {
     };
   }, [isPlaying]);
 
-  // Handle audio generation
-  const handleGenerateAudio = () => {
-    if (!prompt.trim() && !selectedEnvironment && !selectedMood) {
-      toast.error('Please enter a prompt or select environment and mood');
-      return;
-    }
+  // This section uses the handleGenerateAudio function defined earlier
+  useEffect(() => {
+    // Additional initialization logic can go here if needed
+  }, []);
 
-    setIsGenerating(true);
+  // Reusing the handleGenerateAudio function defined above
+  // No duplicate declaration needed
 
+  // Helper function for audio simulation
+  const simulateAudioGeneration = () => {
     // Simulate API call with a timeout
     setTimeout(() => {
       let audioUrl = FALLBACK_AUDIO;
@@ -254,43 +244,20 @@ export default function AIStudioPage() {
     }, 2000); // 2 second delay to simulate processing
   };
 
-  // Toggle play/pause
-  const togglePlayPause = () => {
-    if (audioRef.current) {
-      if (isPlaying) {
-        audioRef.current.pause();
-      } else {
-        audioRef.current.play();
-      }
-      setIsPlaying(!isPlaying);
-    }
+  // This section uses the togglePlayPause function defined earlier
+  // No duplicate declaration needed
+  
+  // Helper function for audio playback controls
+  const setupAudioControls = () => {
+    // Additional audio control setup can go here if needed
   };
 
-  // Toggle mute
-  const toggleMute = () => {
-    if (audioRef.current) {
-      audioRef.current.muted = !isMuted;
-      setIsMuted(!isMuted);
-    }
-  };
+  // This section uses the toggleMute function defined earlier
+  // No duplicate declaration needed
 
-  // Handle volume change
-  const handleVolumeChange = (value: number[]) => {
-    const newVolume = value[0];
-    setVolume(newVolume);
-    if (audioRef.current) {
-      audioRef.current.volume = newVolume / 100;
-    }
-  };
+  // This section uses the handleVolumeChange function defined earlier
 
-  // Handle progress change
-  const handleProgressChange = (value: number[]) => {
-    const newTime = value[0];
-    setCurrentTime(newTime);
-    if (audioRef.current) {
-      audioRef.current.currentTime = newTime;
-    }
-  };
+  // This section uses the handleProgressChange function defined earlier
 
   return (
     <SimpleBackgroundLayout>
