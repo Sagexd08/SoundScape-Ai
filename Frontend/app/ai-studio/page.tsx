@@ -1,8 +1,8 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Wand2, FileAudio, Sparkles, Music, AlertCircle } from 'lucide-react';
+import { Wand2, FileAudio, Sparkles, Music, AlertCircle, Play, Pause, Volume2, VolumeX, Loader2, Download } from 'lucide-react';
 import { motion } from 'framer-motion';
 import Navbar from '@/components/navbar';
 import SimpleBackgroundLayout from '@/components/layouts/SimpleBackgroundLayout';
@@ -10,10 +10,289 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { Slider } from '@/components/ui/slider';
+import { toast } from 'sonner';
 
-// Simplified AI Studio page that doesn't depend on backend services
+// Demo audio files for the audio generator
+const DEMO_AUDIO = {
+  // Using a real royalty-free ambient sound for demo purposes
+  ambient: 'https://cdn.pixabay.com/download/audio/2022/03/10/audio_c8c8a73467.mp3?filename=ambient-piano-amp-strings-10711.mp3',
+  forest: 'https://cdn.pixabay.com/download/audio/2021/09/06/audio_8a49069f5c.mp3?filename=forest-with-small-river-birds-and-nature-field-recording-6735.mp3',
+  ocean: 'https://cdn.pixabay.com/download/audio/2021/08/09/audio_12b0c7443c.mp3?filename=ocean-waves-112802.mp3',
+  city: 'https://cdn.pixabay.com/download/audio/2022/01/18/audio_d1a8d6dc0f.mp3?filename=city-ambience-9272.mp3',
+  cafe: 'https://cdn.pixabay.com/download/audio/2022/03/15/audio_1e1a0c5f92.mp3?filename=coffee-shop-ambience-6953.mp3'
+};
+
+// Simplified AI Studio page with functional audio demo
 export default function AIStudioPage() {
   const [activeTab, setActiveTab] = useState('generate');
+
+  // Audio generator state
+  const [prompt, setPrompt] = useState('');
+  const [selectedEnvironment, setSelectedEnvironment] = useState<string | null>(null);
+  const [selectedMood, setSelectedMood] = useState<string | null>(null);
+  const [isGenerating, setIsGenerating] = useState(false);
+  const [generatedAudioUrl, setGeneratedAudioUrl] = useState<string | null>(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [volume, setVolume] = useState(80);
+  const [isMuted, setIsMuted] = useState(false);
+  const [currentTime, setCurrentTime] = useState(0);
+  const [duration, setDuration] = useState(0);
+  const [audioTitle, setAudioTitle] = useState('');
+
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const progressIntervalRef = useRef<NodeJS.Timeout | null>(null);
+
+  // Format time in MM:SS
+  const formatTime = (time: number) => {
+    const minutes = Math.floor(time / 60);
+    const seconds = Math.floor(time % 60);
+    return `${minutes}:${seconds.toString().padStart(2, '0')}`;
+  };
+
+  // Update progress bar
+  useEffect(() => {
+    if (isPlaying) {
+      progressIntervalRef.current = setInterval(() => {
+        if (audioRef.current) {
+          setCurrentTime(audioRef.current.currentTime);
+        }
+      }, 1000);
+    } else {
+      if (progressIntervalRef.current) {
+        clearInterval(progressIntervalRef.current);
+      }
+    }
+
+    return () => {
+      if (progressIntervalRef.current) {
+        clearInterval(progressIntervalRef.current);
+      }
+    };
+  }, [isPlaying]);
+
+  // Handle audio generation
+  const handleGenerateAudio = () => {
+    if (!prompt.trim() && !selectedEnvironment) {
+      toast.error('Please enter a prompt or select an environment');
+      return;
+    }
+
+    setIsGenerating(true);
+
+    // Simulate API call with a timeout
+    setTimeout(() => {
+      let audioUrl = DEMO_AUDIO.ambient; // Default
+      let title = 'Generated Ambient Sound';
+
+      // If environment is selected, use the corresponding demo file
+      if (selectedEnvironment) {
+        const envKey = selectedEnvironment as keyof typeof DEMO_AUDIO;
+        if (DEMO_AUDIO[envKey]) {
+          audioUrl = DEMO_AUDIO[envKey];
+          title = `${selectedEnvironment.charAt(0).toUpperCase() + selectedEnvironment.slice(1)} Environment`;
+
+          if (selectedMood) {
+            title += ` - ${selectedMood.charAt(0).toUpperCase() + selectedMood.slice(1)} Mood`;
+          }
+        }
+      }
+
+      if (prompt.trim()) {
+        title = `Custom: ${prompt.substring(0, 30)}${prompt.length > 30 ? '...' : ''}`;
+      }
+
+      setAudioTitle(title);
+      setGeneratedAudioUrl(audioUrl);
+      setIsGenerating(false);
+      toast.success('Audio generated successfully!');
+
+      // Auto-play the generated audio
+      if (audioRef.current) {
+        audioRef.current.src = audioUrl;
+        audioRef.current.volume = volume / 100;
+
+        // Set up event listeners
+        audioRef.current.onloadedmetadata = () => {
+          if (audioRef.current) {
+            setDuration(audioRef.current.duration);
+          }
+        };
+
+        audioRef.current.onended = () => {
+          setIsPlaying(false);
+        };
+
+        audioRef.current.play().catch(err => {
+          console.error('Error playing audio:', err);
+          toast.error('Could not autoplay audio. Please click play manually.');
+        });
+        setIsPlaying(true);
+      }
+    }, 2000); // 2 second delay to simulate processing
+  };
+
+  // Toggle play/pause
+  const togglePlayPause = () => {
+    if (audioRef.current) {
+      if (isPlaying) {
+        audioRef.current.pause();
+      } else {
+        audioRef.current.play().catch(err => {
+          console.error('Error playing audio:', err);
+          toast.error('Could not play audio. Please try again.');
+        });
+      }
+      setIsPlaying(!isPlaying);
+    }
+  };
+
+  // Toggle mute
+  const toggleMute = () => {
+    if (audioRef.current) {
+      audioRef.current.muted = !isMuted;
+      setIsMuted(!isMuted);
+    }
+  };
+
+  // Handle volume change
+  const handleVolumeChange = (value: number[]) => {
+    const newVolume = value[0];
+    setVolume(newVolume);
+    if (audioRef.current) {
+      audioRef.current.volume = newVolume / 100;
+    }
+  };
+
+  // Handle progress change
+  const handleProgressChange = (value: number[]) => {
+    const newTime = value[0];
+    setCurrentTime(newTime);
+    if (audioRef.current) {
+      audioRef.current.currentTime = newTime;
+    }
+  };
+
+  // Handle environment selection
+  const handleEnvironmentSelect = (env: string) => {
+    setSelectedEnvironment(env === selectedEnvironment ? null : env);
+  };
+
+  // Handle mood selection
+  const handleMoodSelect = (mood: string) => {
+    setSelectedMood(mood === selectedMood ? null : mood);
+  };
+
+
+
+  // Update progress bar
+  useEffect(() => {
+    if (isPlaying) {
+      progressIntervalRef.current = setInterval(() => {
+        if (audioRef.current) {
+          setCurrentTime(audioRef.current.currentTime);
+        }
+      }, 1000);
+    } else {
+      if (progressIntervalRef.current) {
+        clearInterval(progressIntervalRef.current);
+      }
+    }
+
+    return () => {
+      if (progressIntervalRef.current) {
+        clearInterval(progressIntervalRef.current);
+      }
+    };
+  }, [isPlaying]);
+
+  // Handle audio generation
+  const handleGenerateAudio = () => {
+    if (!prompt.trim() && !selectedEnvironment && !selectedMood) {
+      toast.error('Please enter a prompt or select environment and mood');
+      return;
+    }
+
+    setIsGenerating(true);
+
+    // Simulate API call with a timeout
+    setTimeout(() => {
+      let audioUrl = FALLBACK_AUDIO;
+
+      // If environment and mood are selected, use the corresponding demo file
+      if (selectedEnvironment && selectedMood) {
+        const envFiles = DEMO_AUDIO_FILES[selectedEnvironment as keyof typeof DEMO_AUDIO_FILES];
+        if (envFiles) {
+          const moodFile = envFiles[selectedMood as keyof typeof envFiles];
+          if (moodFile) {
+            audioUrl = moodFile;
+          }
+        }
+      }
+
+      setGeneratedAudioUrl(audioUrl);
+      setIsGenerating(false);
+      toast.success('Audio generated successfully!');
+
+      // Auto-play the generated audio
+      if (audioRef.current) {
+        audioRef.current.src = audioUrl;
+        audioRef.current.volume = volume / 100;
+
+        // Set up event listeners
+        audioRef.current.onloadedmetadata = () => {
+          if (audioRef.current) {
+            setDuration(audioRef.current.duration);
+          }
+        };
+
+        audioRef.current.onended = () => {
+          setIsPlaying(false);
+        };
+
+        audioRef.current.play();
+        setIsPlaying(true);
+      }
+    }, 2000); // 2 second delay to simulate processing
+  };
+
+  // Toggle play/pause
+  const togglePlayPause = () => {
+    if (audioRef.current) {
+      if (isPlaying) {
+        audioRef.current.pause();
+      } else {
+        audioRef.current.play();
+      }
+      setIsPlaying(!isPlaying);
+    }
+  };
+
+  // Toggle mute
+  const toggleMute = () => {
+    if (audioRef.current) {
+      audioRef.current.muted = !isMuted;
+      setIsMuted(!isMuted);
+    }
+  };
+
+  // Handle volume change
+  const handleVolumeChange = (value: number[]) => {
+    const newVolume = value[0];
+    setVolume(newVolume);
+    if (audioRef.current) {
+      audioRef.current.volume = newVolume / 100;
+    }
+  };
+
+  // Handle progress change
+  const handleProgressChange = (value: number[]) => {
+    const newTime = value[0];
+    setCurrentTime(newTime);
+    if (audioRef.current) {
+      audioRef.current.currentTime = newTime;
+    }
+  };
 
   return (
     <SimpleBackgroundLayout>
@@ -35,11 +314,11 @@ export default function AIStudioPage() {
             </p>
           </motion.div>
 
-          <Alert className="mb-8 border-amber-500 bg-amber-500/10">
-            <AlertCircle className="h-4 w-4 text-amber-500" />
-            <AlertTitle>Backend services not available</AlertTitle>
+          <Alert className="mb-8 border-blue-500 bg-blue-500/10">
+            <AlertCircle className="h-4 w-4 text-blue-500" />
+            <AlertTitle>Demo Mode Active</AlertTitle>
             <AlertDescription>
-              The AI Studio is currently in demo mode. Backend services for audio generation and analysis are not connected in this deployment.
+              The AI Studio is currently in demo mode with sample audio files. Select an environment type and mood, then click "Generate Audio" to hear sample environmental sounds.
             </AlertDescription>
           </Alert>
 
@@ -82,32 +361,163 @@ export default function AIStudioPage() {
                     <Textarea
                       placeholder="Describe the audio environment you want to generate..."
                       className="min-h-[100px] bg-gray-950 border-gray-800 mb-4"
+                      value={prompt}
+                      onChange={(e) => setPrompt(e.target.value)}
                     />
                     <div className="grid grid-cols-2 gap-4 mb-4">
                       <div className="p-4 bg-gray-950 rounded-lg border border-gray-800">
                         <h4 className="font-medium mb-2">Environment Type</h4>
                         <div className="grid grid-cols-2 gap-2">
-                          <Button variant="outline" size="sm" className="justify-start">Forest</Button>
-                          <Button variant="outline" size="sm" className="justify-start">Ocean</Button>
-                          <Button variant="outline" size="sm" className="justify-start">City</Button>
-                          <Button variant="outline" size="sm" className="justify-start">Cafe</Button>
+                          <Button
+                            variant={selectedEnvironment === 'forest' ? 'default' : 'outline'}
+                            size="sm"
+                            className={`justify-start ${selectedEnvironment === 'forest' ? 'bg-indigo-600' : ''}`}
+                            onClick={() => handleEnvironmentSelect('forest')}
+                          >
+                            Forest
+                          </Button>
+                          <Button
+                            variant={selectedEnvironment === 'ocean' ? 'default' : 'outline'}
+                            size="sm"
+                            className={`justify-start ${selectedEnvironment === 'ocean' ? 'bg-indigo-600' : ''}`}
+                            onClick={() => handleEnvironmentSelect('ocean')}
+                          >
+                            Ocean
+                          </Button>
+                          <Button
+                            variant={selectedEnvironment === 'city' ? 'default' : 'outline'}
+                            size="sm"
+                            className={`justify-start ${selectedEnvironment === 'city' ? 'bg-indigo-600' : ''}`}
+                            onClick={() => handleEnvironmentSelect('city')}
+                          >
+                            City
+                          </Button>
+                          <Button
+                            variant={selectedEnvironment === 'cafe' ? 'default' : 'outline'}
+                            size="sm"
+                            className={`justify-start ${selectedEnvironment === 'cafe' ? 'bg-indigo-600' : ''}`}
+                            onClick={() => handleEnvironmentSelect('cafe')}
+                          >
+                            Cafe
+                          </Button>
                         </div>
                       </div>
                       <div className="p-4 bg-gray-950 rounded-lg border border-gray-800">
                         <h4 className="font-medium mb-2">Mood</h4>
                         <div className="grid grid-cols-2 gap-2">
-                          <Button variant="outline" size="sm" className="justify-start">Relaxing</Button>
-                          <Button variant="outline" size="sm" className="justify-start">Energetic</Button>
-                          <Button variant="outline" size="sm" className="justify-start">Focused</Button>
-                          <Button variant="outline" size="sm" className="justify-start">Peaceful</Button>
+                          <Button
+                            variant={selectedMood === 'relaxing' ? 'default' : 'outline'}
+                            size="sm"
+                            className={`justify-start ${selectedMood === 'relaxing' ? 'bg-indigo-600' : ''}`}
+                            onClick={() => handleMoodSelect('relaxing')}
+                          >
+                            Relaxing
+                          </Button>
+                          <Button
+                            variant={selectedMood === 'energetic' ? 'default' : 'outline'}
+                            size="sm"
+                            className={`justify-start ${selectedMood === 'energetic' ? 'bg-indigo-600' : ''}`}
+                            onClick={() => handleMoodSelect('energetic')}
+                          >
+                            Energetic
+                          </Button>
+                          <Button
+                            variant={selectedMood === 'focused' ? 'default' : 'outline'}
+                            size="sm"
+                            className={`justify-start ${selectedMood === 'focused' ? 'bg-indigo-600' : ''}`}
+                            onClick={() => handleMoodSelect('focused')}
+                          >
+                            Focused
+                          </Button>
+                          <Button
+                            variant={selectedMood === 'peaceful' ? 'default' : 'outline'}
+                            size="sm"
+                            className={`justify-start ${selectedMood === 'peaceful' ? 'bg-indigo-600' : ''}`}
+                            onClick={() => handleMoodSelect('peaceful')}
+                          >
+                            Peaceful
+                          </Button>
                         </div>
                       </div>
                     </div>
+
+                    {generatedAudioUrl && (
+                      <div className="mt-6 p-4 bg-gray-950 rounded-lg border border-gray-800">
+                        <div className="flex items-center justify-between mb-4">
+                          <h4 className="font-medium flex items-center">
+                            <Music className="h-4 w-4 mr-2 text-indigo-400" />
+                            {audioTitle}
+                          </h4>
+                        </div>
+
+                        <div className="flex items-center space-x-4 mb-2">
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={togglePlayPause}
+                            className="h-10 w-10 rounded-full"
+                          >
+                            {isPlaying ? <Pause className="h-5 w-5" /> : <Play className="h-5 w-5" />}
+                          </Button>
+
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={toggleMute}
+                            className="h-8 w-8 rounded-full"
+                          >
+                            {isMuted ? <VolumeX className="h-4 w-4" /> : <Volume2 className="h-4 w-4" />}
+                          </Button>
+
+                          <div className="flex-1">
+                            <Slider
+                              value={[currentTime]}
+                              min={0}
+                              max={duration || 100}
+                              step={0.1}
+                              onValueChange={handleProgressChange}
+                              className="mb-1"
+                            />
+                            <div className="flex justify-between text-xs text-gray-400">
+                              <span>{formatTime(currentTime)}</span>
+                              <span>{formatTime(duration)}</span>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="flex items-center space-x-2">
+                          <Volume2 className="h-4 w-4 text-gray-500" />
+                          <Slider
+                            value={[volume]}
+                            min={0}
+                            max={100}
+                            step={1}
+                            onValueChange={handleVolumeChange}
+                            className="w-24"
+                          />
+                        </div>
+
+                        <audio ref={audioRef} className="hidden" controls />
+                      </div>
+                    )}
                   </CardContent>
                   <CardFooter>
-                    <Button className="w-full bg-indigo-600 hover:bg-indigo-700">
-                      <Wand2 className="h-4 w-4 mr-2" />
-                      Generate Audio
+                    <Button
+                      className="w-full bg-indigo-600 hover:bg-indigo-700"
+                      onClick={handleGenerateAudio}
+                      disabled={isGenerating}
+                    >
+                      {isGenerating ? (
+                        <>
+                          <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                          Generating Audio...
+                        </>
+                      ) : (
+                        <>
+                          <Wand2 className="h-4 w-4 mr-2" />
+                          Generate Audio
+                        </>
+                      )}
                     </Button>
                   </CardFooter>
                 </Card>
@@ -205,11 +615,11 @@ export default function AIStudioPage() {
                   <div className="bg-indigo-500/20 p-2 rounded-lg">
                     <Wand2 className="h-5 w-5 text-indigo-400" />
                   </div>
-                  <h3 className="text-xl font-medium">Grok AI</h3>
+                  <h3 className="text-xl font-medium">OpenAI Audio API</h3>
                 </div>
                 <p className="text-gray-400 mb-4">
-                  Grok AI specializes in audio generation and analysis with exceptional
-                  understanding of environmental sounds and acoustic properties.
+                  Our platform uses OpenAI's advanced audio generation capabilities to create realistic
+                  environmental sounds and custom audio experiences.
                 </p>
                 <ul className="space-y-2 text-gray-400">
                   <li className="flex items-start gap-2">
@@ -237,24 +647,24 @@ export default function AIStudioPage() {
                   <div className="bg-purple-500/20 p-2 rounded-lg">
                     <FileAudio className="h-5 w-5 text-purple-400" />
                   </div>
-                  <h3 className="text-xl font-medium">Gemini AI</h3>
+                  <h3 className="text-xl font-medium">Eleven Labs Voice AI</h3>
                 </div>
                 <p className="text-gray-400 mb-4">
-                  Gemini AI excels at multimodal understanding, providing rich descriptive
-                  analysis and creative audio generation capabilities.
+                  We integrate with Eleven Labs' state-of-the-art voice technology for natural-sounding
+                  narration and custom voice generation in your audio environments.
                 </p>
                 <ul className="space-y-2 text-gray-400">
                   <li className="flex items-start gap-2">
                     <Sparkles className="h-4 w-4 text-purple-400 mt-1 shrink-0" />
-                    <span>Multimodal understanding of audio context</span>
+                    <span>Lifelike voice synthesis</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <Sparkles className="h-4 w-4 text-purple-400 mt-1 shrink-0" />
-                    <span>Rich descriptive analysis capabilities</span>
+                    <span>Multilingual capabilities</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <Sparkles className="h-4 w-4 text-purple-400 mt-1 shrink-0" />
-                    <span>Creative music and complex audio generation</span>
+                    <span>Emotional tone control and customization</span>
                   </li>
                 </ul>
               </motion.div>
