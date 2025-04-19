@@ -7,11 +7,11 @@ import AudioWaveform from "@/components/audio-waveform"
 import AnimatedGradientText from "@/components/animated-gradient-text"
 import { Button } from "@/components/ui/button"
 import { Headphones, Camera, Heart, Activity, BookOpen, Ear, Cpu, Check, ArrowRight } from "lucide-react"
-import BackgroundLayout from "@/components/layouts/BackgroundLayout"
+import SimpleBackgroundLayout from "@/components/layouts/SimpleBackgroundLayout"
 
 export default function FeaturesPage() {
   return (
-    <BackgroundLayout>
+    <SimpleBackgroundLayout>
       <main className="min-h-screen overflow-hidden">
         {/* Content */}
         <div className="relative z-10">
@@ -215,6 +215,6 @@ export default function FeaturesPage() {
         <Footer />
       </div>
       </main>
-    </BackgroundLayout>
+    </SimpleBackgroundLayout>
   )
 }

@@ -9,13 +9,13 @@ import AnimatedGradientText from "@/components/animated-gradient-text"
 import { Button } from "@/components/ui/button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { PlayCircle, Camera, Brain, Headphones, Code, Sparkles, Download, ChevronRight } from "lucide-react"
-import BackgroundLayout from "@/components/layouts/BackgroundLayout"
+import SimpleBackgroundLayout from "@/components/layouts/SimpleBackgroundLayout"
 
 export default function HowItWorksPage() {
   const [activeVideo, setActiveVideo] = useState<string | null>(null)
 
   return (
-    <BackgroundLayout>
+    <SimpleBackgroundLayout>
       <main className="min-h-screen overflow-hidden">
         {/* Content */}
         <div className="relative z-10">
@@ -393,6 +393,6 @@ export default function HowItWorksPage() {
         <Footer />
       </div>
       </main>
-    </BackgroundLayout>
+    </SimpleBackgroundLayout>
   )
 }
