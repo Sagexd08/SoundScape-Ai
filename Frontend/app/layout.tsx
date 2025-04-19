@@ -1,6 +1,7 @@
-// Root layout split into server and client componentsimport './globals.css'
+// Root layout split into server and client components
+import './globals.css'
 import { Inter, Montserrat } from 'next/font/google'
-import { Toaster } from '@/components/ui/sonner'
+// Toaster is used in client-layout.tsx
 import ClientLayout from './client-layout'
 
 const inter = Inter({ subsets: ['latin'] })

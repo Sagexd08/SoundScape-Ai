@@ -50,6 +50,9 @@
 body {
   @apply bg-background text-foreground font-montserrat;
   overflow-x: hidden;
+  min-height: 100vh;
+  background-color: #000;
+  background-image: linear-gradient(to bottom, #000, #1e1b4b);
 }
 
 html {
