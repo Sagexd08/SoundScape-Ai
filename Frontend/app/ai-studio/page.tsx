@@ -13,15 +13,8 @@ import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Slider } from '@/components/ui/slider';
 import { toast } from 'sonner';
 
-// Demo audio files for the audio generator
-const DEMO_AUDIO = {
-  // Using a real royalty-free ambient sound for demo purposes
-  ambient: 'https://cdn.pixabay.com/download/audio/2022/03/10/audio_c8c8a73467.mp3?filename=ambient-piano-amp-strings-10711.mp3',
-  forest: 'https://cdn.pixabay.com/download/audio/2021/09/06/audio_8a49069f5c.mp3?filename=forest-with-small-river-birds-and-nature-field-recording-6735.mp3',
-  ocean: 'https://cdn.pixabay.com/download/audio/2021/08/09/audio_12b0c7443c.mp3?filename=ocean-waves-112802.mp3',
-  city: 'https://cdn.pixabay.com/download/audio/2022/01/18/audio_d1a8d6dc0f.mp3?filename=city-ambience-9272.mp3',
-  cafe: 'https://cdn.pixabay.com/download/audio/2022/03/15/audio_1e1a0c5f92.mp3?filename=coffee-shop-ambience-6953.mp3'
-};
+// Import OpenAI utilities
+import { generateAudio, generateAudioPrompt } from '@/lib/openai';
 
 // Simplified AI Studio page with functional audio demo
 export default function AIStudioPage() {
@@ -72,7 +65,7 @@ export default function AIStudioPage() {
   }, [isPlaying]);
 
   // Handle audio generation
-  const handleGenerateAudio = () => {
+  const handleGenerateAudio = async () => {
     if (!prompt.trim() && !selectedEnvironment) {
       toast.error('Please enter a prompt or select an environment');
       return;
@@ -80,31 +73,31 @@ export default function AIStudioPage() {
 
     setIsGenerating(true);
 
-    // Simulate API call with a timeout
-    setTimeout(() => {
-      let audioUrl = DEMO_AUDIO.ambient; // Default
-      let title = 'Generated Ambient Sound';
+    try {
+      // Generate a prompt if user didn't provide one
+      let finalPrompt = prompt.trim();
+      let title = '';
 
-      // If environment is selected, use the corresponding demo file
-      if (selectedEnvironment) {
-        const envKey = selectedEnvironment as keyof typeof DEMO_AUDIO;
-        if (DEMO_AUDIO[envKey]) {
-          audioUrl = DEMO_AUDIO[envKey];
-          title = `${selectedEnvironment.charAt(0).toUpperCase() + selectedEnvironment.slice(1)} Environment`;
+      if (!finalPrompt && selectedEnvironment) {
+        // Generate a prompt based on selected environment and mood
+        finalPrompt = generateAudioPrompt(
+          selectedEnvironment,
+          selectedMood || 'relaxing'
+        );
 
-          if (selectedMood) {
-            title += ` - ${selectedMood.charAt(0).toUpperCase() + selectedMood.slice(1)} Mood`;
-          }
+        title = `${selectedEnvironment.charAt(0).toUpperCase() + selectedEnvironment.slice(1)} Environment`;
+        if (selectedMood) {
+          title += ` - ${selectedMood.charAt(0).toUpperCase() + selectedMood.slice(1)} Mood`;
         }
+      } else {
+        title = `Custom: ${finalPrompt.substring(0, 30)}${finalPrompt.length > 30 ? '...' : ''}`;
       }
 
-      if (prompt.trim()) {
-        title = `Custom: ${prompt.substring(0, 30)}${prompt.length > 30 ? '...' : ''}`;
-      }
+      // Generate audio using OpenAI
+      const audioUrl = await generateAudio(finalPrompt);
 
       setAudioTitle(title);
       setGeneratedAudioUrl(audioUrl);
-      setIsGenerating(false);
       toast.success('Audio generated successfully!');
 
       // Auto-play the generated audio
@@ -129,7 +122,12 @@ export default function AIStudioPage() {
         });
         setIsPlaying(true);
       }
-    }, 2000); // 2 second delay to simulate processing
+    } catch (error) {
+      console.error('Error in audio generation:', error);
+      toast.error('Failed to generate audio. Please try again.');
+    } finally {
+      setIsGenerating(false);
+    }
   };
 
   // Toggle play/pause
@@ -316,9 +314,9 @@ export default function AIStudioPage() {
 
           <Alert className="mb-8 border-blue-500 bg-blue-500/10">
             <AlertCircle className="h-4 w-4 text-blue-500" />
-            <AlertTitle>Demo Mode Active</AlertTitle>
+            <AlertTitle>OpenAI Integration Active</AlertTitle>
             <AlertDescription>
-              The AI Studio is currently in demo mode with sample audio files. Select an environment type and mood, then click "Generate Audio" to hear sample environmental sounds.
+              The AI Studio uses OpenAI's Text-to-Speech API to generate custom audio. Enter a prompt or select an environment type and mood, then click "Generate Audio". If no API key is provided, sample audio files will be used instead.
             </AlertDescription>
           </Alert>
 
