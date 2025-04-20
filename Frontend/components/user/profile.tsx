@@ -17,86 +17,7 @@ interface UserProfile {
   email: string;
   display_name: string | null;
   avatar_url: string | null;
-  bio: string | null;// error-handler.ts
-import { Request, Response, NextFunction } from 'express';
-import { logger } from './logger';
-
-export interface ErrorResponse {
-  error: {
-    message: string;
-    status: number;
-    timestamp: string;
-  }
-}
-
-export class AppError extends Error {
-  constructor(
-    public message: string,
-    public statusCode: number = 500,
-    public name: string = 'AppError'
-  ) {
-    super(message);
-    Object.setPrototypeOf(this, new.target.prototype);
-  }
-}
-
-export const errorHandler = (
-  err: Error,
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  logger.error({
-    error: err,
-    path: req.path,
-    method: req.method,
-  });
-
-  // Default error response
-  let statusCode = 500;
-  let message = 'Internal Server Error';
-
-  // Handle known error types
-  if (err instanceof AppError) {
-    statusCode = err.statusCode;
-    message = err.message;
-  } else {
-    // Map common error types
-    switch (err.name) {
-      case 'ValidationError':
-        statusCode = 400;
-        message = 'Invalid request data';
-        break;
-      case 'UnauthorizedError':
-        statusCode = 401;
-        message = 'Authentication required';
-        break;
-      case 'ForbiddenError':
-        statusCode = 403;
-        message = 'Access denied';
-        break;
-      case 'NotFoundError':
-        statusCode = 404;
-        message = 'Resource not found';
-        break;
-      default:
-        // Don't expose internal error details in production
-        if (process.env.NODE_ENV === 'development') {
-          message = err.message;
-        }
-    }
-  }
-
-  const errorResponse: ErrorResponse = {
-    error: {
-      message,
-      status: statusCode,
-      timestamp: new Date().toISOString()
-    }
-  };
-
-  res.status(statusCode).json(errorResponse);
-};
+  bio: string | null;
   preferences: Record<string, any> | null;
 }
 
@@ -108,13 +29,13 @@ export function UserProfileComponent() {
   const [isSaving, setIsSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
-  
+
   // Form state
   const [displayName, setDisplayName] = useState('');
   const [bio, setBio] = useState('');
   const [avatarFile, setAvatarFile] = useState<File | null>(null);
   const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
-  
+
   // Load user profile
   useEffect(() => {
     const fetchProfile = async () => {
@@ -122,28 +43,28 @@ export function UserProfileComponent() {
         setIsLoading(false);
         return;
       }
-      
+
       try {
         setIsLoading(true);
         setError(null);
-        
+
         const { data, error } = await supabase
           .from('users')
           .select('*')
           .eq('id', user.id)
           .single();
-        
+
         if (error) throw error;
-        
+
         setProfile({
           ...data,
-          preferences: typeof data.preferences === 'string' 
+          preferences: typeof data.preferences === 'string'
             ? JSON.parse(data.preferences)
             : data.preferences
         });
         setDisplayName(data.display_name || '');
         setBio(data.bio || '');
-        
+
       } catch (err) {
         console.error('Error fetching profile:', err);
         setError('Failed to load profile');
@@ -151,29 +72,29 @@ export function UserProfileComponent() {
         setIsLoading(false);
       }
     };
-    
+
     fetchProfile();
   }, [user]);
-  
+
   const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0];
-      
+
       // Check file size (max 2MB)
       if (file.size > 2 * 1024 * 1024) {
         setError('Avatar image must be less than 2MB');
         return;
       }
-      
+
       // Check file type
       if (!file.type.startsWith('image/')) {
         setError('Please select an image file');
         return;
       }
-      
+
       setAvatarFile(file);
       setError(null);
-      
+
       // Create preview
       const reader = new FileReader();
       reader.onloadend = () => {
@@ -182,35 +103,35 @@ export function UserProfileComponent() {
       reader.readAsDataURL(file);
     }
   };
-  
+
   const handleSaveProfile = async () => {
     if (!user || !profile) return;
-    
+
     try {
       setIsSaving(true);
       setError(null);
       setSuccess(false);
-      
+
       let avatarUrl = profile.avatar_url;
-      
+
       // Upload avatar if changed
       if (avatarFile) {
         const filename = `${user.id}-${Date.now()}.${avatarFile.name.split('.').pop()}`;
         const filePath = `avatars/${filename}`;
-        
+
         const { error: uploadError } = await supabase.storage
           .from('profile-images')
           .upload(filePath, avatarFile);
-        
+
         if (uploadError) throw uploadError;
-        
+
         const { data } = supabase.storage
           .from('profile-images')
           .getPublicUrl(filePath);
-          
+
         avatarUrl = data.publicUrl;
       }
-      
+
       // Update profile
       const { error: updateError } = await supabase
         .from('users')
@@ -221,9 +142,9 @@ export function UserProfileComponent() {
           updated_at: new Date().toISOString()
         })
         .eq('id', user.id);
-      
+
       if (updateError) throw updateError;
-      
+
       // Update profile state
       setProfile({
         ...profile,
@@ -231,15 +152,15 @@ export function UserProfileComponent() {
         bio,
         avatar_url: avatarUrl
       });
-      
+
       setSuccess(true);
       setIsEditing(false);
-      
+
       // Clear success message after 3 seconds
       setTimeout(() => {
         setSuccess(false);
       }, 3000);
-      
+
     } catch (err) {
       console.error('Error updating profile:', err);
       setError('Failed to update profile');
@@ -247,7 +168,7 @@ export function UserProfileComponent() {
       setIsSaving(false);
     }
   };
-  
+
   const getInitials = (name: string) => {
     return name
       .split(' ')
@@ -256,7 +177,7 @@ export function UserProfileComponent() {
       .toUpperCase()
       .substring(0, 2);
   };
-  
+
   if (isLoading) {
     return (
       <div className="flex justify-center items-center h-64">
@@ -264,7 +185,7 @@ export function UserProfileComponent() {
       </div>
     );
   }
-  
+
   if (!user || !profile) {
     return (
       <Alert>
@@ -274,7 +195,7 @@ export function UserProfileComponent() {
       </Alert>
     );
   }
-  
+
   return (
     <Card className="w-full max-w-2xl mx-auto">
       <CardHeader>
@@ -283,14 +204,14 @@ export function UserProfileComponent() {
           Manage your account information and preferences
         </CardDescription>
       </CardHeader>
-      
+
       <CardContent className="space-y-6">
         {error && (
           <Alert variant="destructive">
             <AlertDescription>{error}</AlertDescription>
           </Alert>
         )}
-        
+
         {success && (
           <Alert className="bg-green-50 border-green-200">
             <CheckCircle2 className="h-4 w-4 text-green-600" />
@@ -299,15 +220,15 @@ export function UserProfileComponent() {
             </AlertDescription>
           </Alert>
         )}
-        
+
         {/* Avatar */}
         <div className="flex justify-center">
           <div className="relative">
             <Avatar className="h-24 w-24">
               {(avatarPreview || profile.avatar_url) ? (
-                <AvatarImage 
-                  src={avatarPreview || profile.avatar_url || ''} 
-                  alt={profile.display_name || 'User'} 
+                <AvatarImage
+                  src={avatarPreview || profile.avatar_url || ''}
+                  alt={profile.display_name || 'User'}
                 />
               ) : (
                 <AvatarFallback>
@@ -315,7 +236,7 @@ export function UserProfileComponent() {
                 </AvatarFallback>
               )}
             </Avatar>
-            
+
             {isEditing && (
               <div className="absolute bottom-0 right-0">
                 <label htmlFor="avatar-upload" className="cursor-pointer">
@@ -335,7 +256,7 @@ export function UserProfileComponent() {
             )}
           </div>
         </div>
-        
+
         {/* Email */}
         <div className="space-y-2">
           <Label htmlFor="email">Email</Label>
@@ -346,7 +267,7 @@ export function UserProfileComponent() {
             disabled
           />
         </div>
-        
+
         {/* Display Name */}
         <div className="space-y-2">
           <Label htmlFor="display-name">Display Name</Label>
@@ -358,7 +279,7 @@ export function UserProfileComponent() {
             disabled={!isEditing || isSaving}
           />
         </div>
-        
+
         {/* Bio */}
         <div className="space-y-2">
           <Label htmlFor="bio">Bio</Label>
@@ -372,7 +293,7 @@ export function UserProfileComponent() {
           />
         </div>
       </CardContent>
-      
+
       <CardFooter className="flex justify-between">
         {isEditing ? (
           <>
@@ -390,8 +311,8 @@ export function UserProfileComponent() {
             >
               Cancel
             </Button>
-            
-            <Button 
+
+            <Button
               onClick={handleSaveProfile}
               disabled={isSaving}
             >
@@ -404,7 +325,7 @@ export function UserProfileComponent() {
             </Button>
           </>
         ) : (
-          <Button 
+          <Button
             onClick={() => setIsEditing(true)}
             className="ml-auto"
           >
