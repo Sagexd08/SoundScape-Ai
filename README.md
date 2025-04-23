@@ -89,6 +89,7 @@ Our platform serves content creators, meditation practitioners, productivity ent
 
 - **Live Demo:** [https://sound-scape-ai-psi.vercel.app/](https://sound-scape-ai-psi.vercel.app/)
 - **Demo Video Link:** [Coming Soon]
+- **Pitch Deck / PPT Link:** [Google Slides Presentation](https://docs.google.com/presentation/d/1VzCHzF8b_HBLjiXi-PNAnV-7aONFGm7xMzX2QirA0-g/edit?usp=sharing)
 - **GitHub Repository:** [https://github.com/Sagexd08/SoundScape-Ai](https://github.com/Sagexd08/SoundScape-Ai)
 
 <div align="center">
