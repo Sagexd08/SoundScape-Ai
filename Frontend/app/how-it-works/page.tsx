@@ -140,7 +140,7 @@ export default function HowItWorksPage() {
                   </div>
                   <div className="relative rounded-xl overflow-hidden border border-gray-800">
                     <img
-                      src="/placeholder.svg?height=450&width=600"
+                      src="https://res.cloudinary.com/dporz9gz6/image/upload/v1745176840/WhatsApp_Image_2025-04-21_at_00.41.51_faf79ae7_etnm3r.jpg?height=450&width=600"
                       alt="Vision Analysis System"
                       className="w-full h-auto"
                     />

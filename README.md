@@ -1,169 +1,220 @@
-# SoundScape AI 🎵
+# SoundScape AI 🎵🧠
 
-![Build Status](https://img.shields.io/badge/build-passing-brightgreen) ![License](https://img.shields.io/badge/license-MIT-blue) ![npm version](https://img.shields.io/badge/npm-v9+-orange)
+<div align="center">
+  <img src="https://res.cloudinary.com/dporz9gz6/image/upload/v1745176839/WhatsApp_Image_2025-04-21_at_00.32.24_07531d8b_rzgeo2.jpg" alt="SoundScape AI" width="800"/>
+  
+  ![Build Status](https://img.shields.io/badge/build-passing-brightgreen) 
+  ![License](https://img.shields.io/badge/license-MIT-blue) 
+  ![npm version](https://img.shields.io/badge/npm-v9+-orange)
+  ![AI Models](https://img.shields.io/badge/AI%20Models-3-purple)
+  ![Vercel](https://img.shields.io/badge/Vercel-Deployed-black)
+</div>
 
-![SoundScape AI Banner](https://via.placeholder.com/1200x400/1e1b4b/ffffff?text=SoundScape+AI+Banner)
+<p align="center">
+  <b>AI-powered audio environments that adapt to your surroundings and mood in real-time</b>
+</p>
 
-## Overview
+## 🌟 Overview
 
-SoundScape AI is an innovative web application designed to generate immersive audio environments powered by OpenAI's advanced AI models. Whether you're a content creator, gamer, or simply someone who enjoys ambient soundscapes, SoundScape AI offers a seamless experience to create, customize, and enjoy rich audio atmospheres tailored to your preferences.
+SoundScape AI is a cutting-edge platform that leverages multiple AI models to create personalized audio environments that adapt to your surroundings and mood in real-time. Our application combines the power of **OpenAI**, **Grok**, and **Gemini** to deliver an unparalleled audio experience.
 
-Leveraging OpenAI's Text-to-Speech API and Eleven Labs' voice technology, this platform transforms your environment with dynamic soundscapes that adapt to your mood and setting. Simply describe the audio environment you want or select from our curated options, and our AI will generate a custom soundscape for you.
+🌐 **Live Demo**: [https://soundscape-ai-project.vercel.app/](https://soundscape-ai-project.vercel.app/)
 
-## 🌟 Features
+## 🚀 Features
 
-- 🎧 **OpenAI-powered audio generation:** Create unique and dynamic soundscapes using OpenAI's Text-to-Speech API that adapts to your prompts and preferences.
-- 🎵 **Eleven Labs voice integration:** Enhance your audio environments with natural-sounding narration and custom voice generation.
-- 🔐 **Secure user authentication:** Robust authentication system supporting email/password and Google OAuth for seamless and secure access.
-- 🌙 **Responsive dark theme UI:** Modern, sleek, and user-friendly interface optimized for both desktop and mobile devices.
-- 🔄 **Password reset functionality:** Easy and secure password recovery to keep your account safe.
-- 🎨 **Beautiful gradient UI elements:** Visually appealing design with smooth gradients and animations enhancing user experience.
-- ⚡ **Fast and scalable:** Built with performance in mind to handle multiple users and real-time audio processing.
-- 📱 **Cross-platform compatibility:** Accessible from any device with a web browser.
+<table>
+  <tr>
+    <td width="50%">
+      <h3>🎧 AI Audio Generation</h3>
+      <ul>
+        <li>Create custom soundscapes with simple text prompts</li>
+        <li>Environment-based audio generation (forest, ocean, city, cafe)</li>
+        <li>Mood-based customization (relaxing, energetic, focused, peaceful)</li>
+        <li>Multi-AI prompt enhancement using both Grok and Gemini</li>
+      </ul>
+    </td>
+    <td width="50%">
+      <h3>🎵 AI Music Creation</h3>
+      <ul>
+        <li>Generate custom music tracks with control over genre, mood, and instruments</li>
+        <li>Collaborative AI approach using multiple models for enhanced creativity</li>
+        <li>Customizable tempo and duration settings</li>
+        <li>Genre-specific music generation with AI-powered composition</li>
+      </ul>
+    </td>
+  </tr>
+  <tr>
+    <td width="50%">
+      <h3>📊 Audio Analysis</h3>
+      <ul>
+        <li>Analyze audio files to extract insights and features</li>
+        <li>Identify mood, instruments, and acoustic characteristics</li>
+        <li>Powered by Grok's advanced audio understanding capabilities</li>
+        <li>Detailed acoustic feature extraction and visualization</li>
+      </ul>
+    </td>
+    <td width="50%">
+      <h3>🔄 Real-Time Adaptation</h3>
+      <ul>
+        <li>Audio environments that adapt to your surroundings</li>
+        <li>Mood-responsive sound generation</li>
+        <li>Seamless transitions between different environments</li>
+        <li>Context-aware audio adjustments based on time and activity</li>
+      </ul>
+    </td>
+  </tr>
+</table>
 
-## 🚀 Getting Started
+## 🧠 AI Integration
+
+<div align="center">
+  <img src="https://res.cloudinary.com/dporz9gz6/image/upload/v1745176839/WhatsApp_Image_2025-04-21_at_00.41.17_b0ad1551_d2ku9y.jpg" alt="AI Integration" width="600"/>
+</div>
+
+SoundScape AI uniquely combines multiple AI models to create a superior audio experience:
+
+### 🤖 Grok AI Integration
+- Used for generating detailed audio prompts
+- Provides advanced audio analysis capabilities
+- Enhances creative elements in soundscape generation
+- Ultra-fast processing with low latency
+
+### 🔮 Gemini AI Integration
+- Creates rich, descriptive audio environments
+- Enhances prompts with creative details
+- Provides multimodal understanding for better audio context
+- Specialized in creative content generation
+
+### 🎭 OpenAI Integration
+- Powers the core audio generation capabilities
+- Text-to-speech functionality for narration
+- High-quality voice synthesis
+- Advanced audio processing algorithms
+
+## 🛠️ Technology Stack
+
+<table>
+  <tr>
+    <td align="center"><img src="https://cdn.worldvectorlogo.com/logos/next-js.svg" width="40" height="40"/><br>Next.js</td>
+    <td align="center"><img src="https://cdn.worldvectorlogo.com/logos/react-2.svg" width="40" height="40"/><br>React</td>
+    <td align="center"><img src="https://cdn.worldvectorlogo.com/logos/typescript.svg" width="40" height="40"/><br>TypeScript</td>
+    <td align="center"><img src="https://cdn.worldvectorlogo.com/logos/tailwind-css-2.svg" width="40" height="40"/><br>Tailwind CSS</td>
+  </tr>
+  <tr>
+    <td align="center"><img src="https://cdn.worldvectorlogo.com/logos/supabase-logo.svg" width="40" height="40"/><br>Supabase</td>
+    <td align="center"><img src="https://cdn.worldvectorlogo.com/logos/openai-2.svg" width="40" height="40"/><br>OpenAI</td>
+    <td align="center"><img src="https://cdn.worldvectorlogo.com/logos/vercel.svg" width="40" height="40"/><br>Vercel</td>
+    <td align="center"><img src="https://cdn.worldvectorlogo.com/logos/framer-motion.svg" width="40" height="40"/><br>Framer Motion</td>
+  </tr>
+</table>
+
+## 📋 Getting Started
 
 ### Prerequisites
-
-Before you begin, ensure you have met the following requirements:
-
-- Node.js v18 or higher installed on your machine.
-- npm v9 or higher for package management.
-- A Supabase account for user authentication and backend services.
+- Node.js 18.17.0 or later
+- npm or yarn
+- Supabase account
+- OpenAI API key
 
 ### Installation
 
-Follow these steps to get your development environment set up:
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/Sagexd08/SoundScape-Ai.git
+   cd SoundScape-Ai
+   ```
 
-```bash
-# Clone the repository
-git clone https://github.com/yourusername/SoundScape-AI.git
+2. Install dependencies:
+   ```bash
+   cd Frontend
+   npm install --legacy-peer-deps
+   ```
 
-# Navigate into the project directory
-cd SoundScape-AI
+3. Set up environment variables:
+   Create a `.env.local` file in the Frontend directory with the following variables:
+   ```
+   NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
+   NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+   NEXT_PUBLIC_OPENAI_API_KEY=your_openai_api_key
+   NEXT_PUBLIC_GROK_API_KEY=your_grok_api_key (optional)
+   NEXT_PUBLIC_GEMINI_API_KEY=your_gemini_api_key (optional)
+   ```
 
-# Install project dependencies
-npm install
+4. Run the development server:
+   ```bash
+   npm run dev
+   ```
 
-# Copy environment variables template and configure
-cp .env.example .env
-# Edit the .env file to add your Supabase credentials and other config
+5. Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-# Start the development server
-npm run dev
-```
+## 🏆 Hackathon-Ready Features
 
-### Configuration
+<div align="center">
+  <img src="https://res.cloudinary.com/dporz9gz6/image/upload/v1745176839/WhatsApp_Image_2025-04-21_at_00.38.35_372fbb13_iuvgdy.jpg" alt="Hackathon Features" width="600"/>
+</div>
 
-1. Update the `.env` file with your API keys and configuration:
+SoundScape AI includes several innovative features that make it stand out in hackathon competitions:
 
-```
-# OpenAI API Configuration
-NEXT_PUBLIC_OPENAI_API_KEY=your_openai_api_key_here
+### 1. Multi-AI Collaboration
+Our platform uniquely combines multiple AI models (Grok, Gemini, and OpenAI) to create a collaborative AI system that generates superior audio experiences. Each AI contributes its strengths:
+- **Grok**: Detailed prompt generation and audio analysis
+- **Gemini**: Creative enhancement and multimodal understanding
+- **OpenAI**: High-quality audio synthesis
 
-# Eleven Labs Configuration
-NEXT_PUBLIC_ELEVEN_LABS_API_KEY=your_eleven_labs_api_key_here
+### 2. Adaptive Audio Environments
+The application creates audio environments that adapt in real-time to:
+- User's physical surroundings (detected through device sensors)
+- Emotional state (selected or detected)
+- Time of day and activity context
 
-# Supabase Configuration
-NEXT_PUBLIC_SUPABASE_URL=your_supabase_url_here
-NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key_here
-```
+### 3. Advanced Audio Analysis
+Our Grok-powered audio analyzer provides detailed insights about audio files:
+- Mood and emotional tone detection
+- Instrument and sound source identification
+- Acoustic feature extraction and analysis
+- Personalized recommendations based on listening patterns
 
-2. Set up your Supabase project:
-   - Create authentication providers (Email, Google OAuth)
-   - Set up database tables for user profiles and saved audio
-
-3. Configure OpenAI API access:
-   - Get an API key from [OpenAI Platform](https://platform.openai.com/)
-   - Enable the Text-to-Speech API for your account
-
-4. (Optional) Set up Eleven Labs for enhanced voice capabilities:
-   - Get an API key from [Eleven Labs](https://elevenlabs.io/)
+### 4. Innovative UI/UX
+- Immersive 3D audio visualization using Three.js
+- Responsive design that works across all devices
+- Intuitive controls for audio customization
+- Seamless authentication and user experience
 
 ## 📸 Screenshots
 
-| Login Page | Registration Page |
-|------------|-------------------|
-| ![Login Page](https://via.placeholder.com/600x400/312e81/ffffff?text=Login+Page) | ![Registration Page](https://via.placeholder.com/600x400/312e81/ffffff?text=Register+Page) |
+<div align="center">
+  <table>
+    <tr>
+      <td><img src="https://res.cloudinary.com/dporz9gz6/image/upload/v1745176839/WhatsApp_Image_2025-04-21_at_00.38.17_a7bcb060_rarpmc.jpg" alt="Dashboard" width="400"/></td>
+      <td><img src="https://res.cloudinary.com/dporz9gz6/image/upload/v1745176839/WhatsApp_Image_2025-04-21_at_00.39.12_a0baa83c_pnmxsk.jpg" alt="AI Studio" width="400"/></td>
+    </tr>
+    <tr>
+      <td align="center"><b>Dashboard</b></td>
+      <td align="center"><b>AI Studio</b></td>
+    </tr>
+  </table>
+</div>
 
-## 💻 Usage
+## 📝 License
 
-Once the development server is running, open your browser and navigate to `http://localhost:3000` to access SoundScape AI.
+This project is licensed under the MIT License - see the LICENSE file for details.
 
-- Register a new account or log in using your credentials.
-- Explore the AI-powered audio environment generator.
-- Customize soundscapes and save your favorites.
-- Manage your profile and settings through the user dashboard.
+## 🙏 Acknowledgements
 
-## ❓ FAQ
-
-**Q: What browsers are supported?**
-A: SoundScape AI supports all modern browsers including Chrome, Firefox, Safari, and Edge.
-
-**Q: Can I use my Google account to sign in?**
-A: Yes, Google OAuth is integrated for easy and secure login.
-
-**Q: How do I reset my password?**
-A: Use the "Forgot Password" link on the login page to receive a password reset email.
-
-**Q: Is my data secure?**
-A: Yes, all user data is securely stored and managed through Supabase with encryption and best practices.
-
-**Q: Do I need an OpenAI API key to use the audio generation features?**
-A: While the application works best with your own OpenAI API key, we provide demo audio files that will be used if no API key is configured.
-
-**Q: How does the audio generation work?**
-A: We use OpenAI's Text-to-Speech API to generate audio based on your prompts. The system can also generate appropriate prompts based on your selected environment and mood preferences.
-
-## 🛠 Tech Stack
-
-- ⚛️ Next.js - React framework for server-side rendering and static site generation.
-- 🎨 Tailwind CSS - Utility-first CSS framework for rapid UI development.
-- 🔵 TypeScript - Typed superset of JavaScript for improved developer experience.
-- 🔥 Supabase - Backend as a service providing authentication, database, and storage.
-- 🧩 React - JavaScript library for building user interfaces.
-- 🌎 OpenAI API - Advanced AI models for text-to-speech and audio generation.
-- 🎵 Eleven Labs - Voice AI technology for natural-sounding narration.
-- 💬 Shadcn UI - Beautifully designed components built with Radix UI and Tailwind CSS.
-
-## 🤝 Contributing
-
-We welcome contributions from the community! To contribute:
-
-1. Fork the repository.
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`).
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`).
-4. Push to the branch (`git push origin feature/AmazingFeature`).
-5. Open a Pull Request describing your changes and why they should be merged.
-
-Please ensure your code follows the existing style and includes tests where applicable.
-
-## 📜 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## ✨ Acknowledgements
-
-- [Next.js Documentation](https://nextjs.org/docs) - For the powerful React framework.
-- [Tailwind CSS](https://tailwindcss.com) - For the beautiful and flexible styling.
-- [Supabase](https://supabase.com) - For the backend services and authentication.
-- [React](https://reactjs.org) - For the UI library that powers the frontend.
-- [OpenAI](https://openai.com) - For the advanced AI models that power our audio generation.
-- [Eleven Labs](https://elevenlabs.io) - For the voice AI technology.
-- [Shadcn UI](https://ui.shadcn.com) - For the beautiful component library.
-
-## 📬 Contact
-
-For questions, suggestions, or support, please reach out:
-
-- GitHub Issues: [https://github.com/yourusername/SoundScape-AI/issues](https://github.com/yourusername/SoundScape-AI/issues)
-- Email: support@soundscapeai.com
-- Twitter: [@SoundScapeAI](https://twitter.com/SoundScapeAI)
-
-## 🌐 Live Demo
-
-Check out the live deployed application here:
-[https://sound-scape-ai-sohomchatterjee07-gmailcoms-projects.vercel.app/](https://sound-scape-ai-sohomchatterjee07-gmailcoms-projects.vercel.app/)
+- [OpenAI](https://openai.com/) for their Text-to-Speech API
+- [Supabase](https://supabase.io/) for authentication and database services
+- [Vercel](https://vercel.com/) for hosting and deployment
+- [shadcn/ui](https://ui.shadcn.com/) for UI components
+- [Tailwind CSS](https://tailwindcss.com/) for styling
+- [Framer Motion](https://www.framer.com/motion/) for animations
+- [Three.js](https://threejs.org/) for 3D graphics
 
 ---
-Thank you for using SoundScape AI! We hope it brings your audio environments to life.
+
+<div align="center">
+  <p>Built with ❤️ by <a href="https://github.com/Sagexd08">Sohom Chatterjee</a></p>
+  <p>
+    <a href="https://soundscape-ai-project.vercel.app/">Live Demo</a> •
+    <a href="https://github.com/Sagexd08/SoundScape-Ai">GitHub</a>
+  </p>
+</div>

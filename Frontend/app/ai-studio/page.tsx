@@ -13,8 +13,9 @@ import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Slider } from '@/components/ui/slider';
 import { toast } from 'sonner';
 
-// Import OpenAI utilities
-import { generateAudio, generateAudioPrompt } from '@/lib/openai';
+// Import AI utilities
+import { generateAudio } from '@/lib/openai';
+import { aiService, generateAudioPrompt } from '@/lib/ai-integration';
 
 // Simplified AI Studio page with functional audio demo
 export default function AIStudioPage() {
@@ -88,11 +89,26 @@ export default function AIStudioPage() {
       let title = '';
 
       if (!finalPrompt && selectedEnvironment) {
-        // Generate a prompt based on selected environment and mood
-        finalPrompt = generateAudioPrompt(
-          selectedEnvironment,
-          selectedMood || 'relaxing'
-        );
+        // Use our AI integration to generate an enhanced prompt
+        toast.info('Generating AI-enhanced prompt using Grok and Gemini...');
+
+        try {
+          // Generate a prompt based on selected environment and mood using both Grok and Gemini
+          finalPrompt = await aiService.generateEnhancedAudioPrompt({
+            environment: selectedEnvironment,
+            mood: selectedMood || 'relaxing'
+          });
+
+          toast.success('AI-enhanced prompt generated successfully!');
+        } catch (error) {
+          console.error('Error generating enhanced prompt:', error);
+          // Fallback to basic prompt generation
+          finalPrompt = generateAudioPrompt(
+            selectedEnvironment,
+            selectedMood || 'relaxing'
+          );
+          toast.error('Using basic prompt generation due to AI service error');
+        }
 
         title = `${selectedEnvironment.charAt(0).toUpperCase() + selectedEnvironment.slice(1)} Environment`;
         if (selectedMood) {
@@ -190,7 +206,7 @@ export default function AIStudioPage() {
     <SimpleBackgroundLayout>
       <div className="min-h-screen">
         <Navbar />
-        <div className="container mx-auto px-4 py-8">
+        <div className="container mx-auto px-4 pt-32 pb-16">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -466,10 +482,10 @@ export default function AIStudioPage() {
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2">
                       <FileAudio className="h-5 w-5 text-indigo-400" />
-                      AI Audio Analyzer
+                      AI Audio Analyzer (Powered by Grok)
                     </CardTitle>
                     <CardDescription>
-                      Analyze audio files to extract insights and features
+                      Analyze audio files to extract insights and features using Grok's advanced audio understanding
                     </CardDescription>
                   </CardHeader>
                   <CardContent>
@@ -483,11 +499,19 @@ export default function AIStudioPage() {
                         Select File
                       </Button>
                     </div>
+
+                    <Alert className="mb-4 border-blue-500 bg-blue-500/10">
+                      <AlertCircle className="h-4 w-4 text-blue-500" />
+                      <AlertTitle>Grok AI Integration</AlertTitle>
+                      <AlertDescription>
+                        Our audio analyzer uses Grok's advanced audio understanding capabilities to provide detailed insights about your audio files, including mood, instruments, tempo, and more.
+                      </AlertDescription>
+                    </Alert>
                   </CardContent>
                   <CardFooter>
                     <Button className="w-full bg-indigo-600 hover:bg-indigo-700" disabled>
                       <FileAudio className="h-4 w-4 mr-2" />
-                      Analyze Audio
+                      Analyze with Grok AI
                     </Button>
                   </CardFooter>
                 </Card>

@@ -52,7 +52,7 @@ export default function FeaturesPage() {
             description:
               "Our advanced vision system analyzes your surroundings and generates audio that perfectly complements what you see.",
             icon: <Camera className="h-8 w-8" />,
-            image: "/placeholder.svg?height=600&width=800",
+            image: "https://res.cloudinary.com/dporz9gz6/image/upload/v1745176839/WhatsApp_Image_2025-04-21_at_00.32.24_07531d8b_rzgeo2.jpg?height=600&width=800",
             features: [
               "Visual scene recognition and analysis",
               "Real-time environment adaptation",
@@ -66,7 +66,7 @@ export default function FeaturesPage() {
             description:
               "Tell SoundScape how you feel, and it will generate a personalized audio environment to enhance or transform your emotional state.",
             icon: <Heart className="h-8 w-8" />,
-            image: "/placeholder.svg?height=600&width=800",
+            image: "https://res.cloudinary.com/dporz9gz6/image/upload/v1745176839/WhatsApp_Image_2025-04-21_at_00.38.35_372fbb13_iuvgdy.jpg?height=600&width=800",
             features: [
               "Emotion detection through text input",
               "Customizable mood presets",
@@ -80,7 +80,7 @@ export default function FeaturesPage() {
             description:
               "As you move through your environment or your surroundings change, SoundScape automatically adjusts to provide a continuous, immersive experience.",
             icon: <Activity className="h-8 w-8" />,
-            image: "/placeholder.svg?height=600&width=800",
+            image: "https://res.cloudinary.com/dporz9gz6/image/upload/v1745176839/WhatsApp_Image_2025-04-21_at_00.38.17_a7bcb060_rarpmc.jpg?height=600&width=800",
             features: [
               "Motion-reactive audio",
               "Seamless transition between environments",
@@ -94,7 +94,7 @@ export default function FeaturesPage() {
             description:
               "Enhance your experience with optional storytelling or guided meditation that responds to your environment and mood.",
             icon: <BookOpen className="h-8 w-8" />,
-            image: "/placeholder.svg?height=600&width=800",
+            image: "https://res.cloudinary.com/dporz9gz6/image/upload/v1745176839/WhatsApp_Image_2025-04-21_at_00.39.12_a0baa83c_pnmxsk.jpg?height=600&width=800",
             features: [
               "Dynamic storytelling engine",
               "Guided meditation experiences",
@@ -108,7 +108,7 @@ export default function FeaturesPage() {
             description:
               "Block out distractions with advanced noise masking that creates a focused, productive atmosphere.",
             icon: <Ear className="h-8 w-8" />,
-            image: "/placeholder.svg?height=600&width=800",
+            image: "https://res.cloudinary.com/dporz9gz6/image/upload/v1745176839/WhatsApp_Image_2025-04-21_at_00.40.01_bc3862d6_pkss6w.jpg?height=600&width=800",
             features: [
               "Adaptive noise cancellation",
               "Distraction identification and masking",
@@ -122,7 +122,7 @@ export default function FeaturesPage() {
             description:
               "SoundScape leverages Groq's ultra-fast multimodal AI to process your environment in real-time, ensuring responsive and intelligent audio generation.",
             icon: <Cpu className="h-8 w-8" />,
-            image: "/placeholder.svg?height=600&width=800",
+            image: "https://res.cloudinary.com/dporz9gz6/image/upload/v1745176839/WhatsApp_Image_2025-04-21_at_00.41.17_b0ad1551_d2ku9y.jpg?height=600&width=800",
             features: [
               "Ultra-fast processing with low latency",
               "Multimodal AI capabilities",

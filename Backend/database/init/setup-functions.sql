@@ -1,3 +1,4 @@
+-- SQLBook: Code
 -- Function to execute SQL commands with proper permissions
 CREATE OR REPLACE FUNCTION execute_sql(sql_query TEXT)
 RETURNS JSONB
