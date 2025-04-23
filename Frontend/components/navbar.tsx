@@ -54,12 +54,16 @@ export default function Navbar() {
         <div className="flex justify-between items-center">
           <Link href="/" className="flex items-center space-x-2" prefetch={false}>
             <motion.div
-              initial={{ rotate: -10 }}
-              animate={{ rotate: 10 }}
+              initial={{ scale: 0.95 }}
+              animate={{ scale: 1 }}
               transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY, repeatType: "reverse" }}
-              className="w-10 h-10 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center"
+              className="w-10 h-10 rounded-full overflow-hidden flex items-center justify-center"
             >
-              <span className="text-white font-bold text-lg">S</span>
+              <img
+                src="https://res.cloudinary.com/dm9h4bawl/image/upload/v1745427929/Screenshot_2025-04-23_223435_ahljcf.png"
+                alt="SoundScape AI Logo"
+                className="w-full h-full object-cover"
+              />
             </motion.div>
             <span className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 to-purple-600">
               SoundScape
@@ -102,7 +106,14 @@ export default function Navbar() {
                     </Button>
                   ) : (
                     <Button variant="ghost" className="flex items-center gap-2 px-3 py-2 rounded-md hover:bg-gray-800">
-                      <div className="flex h-8 w-8 items-center justify-center rounded-full bg-indigo-600 overflow-hidden">
+                      <div className="flex h-8 w-8 items-center justify-center rounded-full overflow-hidden">
+                        {!user.user_metadata?.avatar_url && (
+                          <img
+                            src="https://res.cloudinary.com/dm9h4bawl/image/upload/v1745427929/Screenshot_2025-04-23_223435_ahljcf.png"
+                            alt="SoundScape AI Logo"
+                            className="w-full h-full object-cover"
+                          />
+                        )}
                         {user.user_metadata?.avatar_url ? (
                           <img
                             src={user.user_metadata.avatar_url}
@@ -228,7 +239,14 @@ export default function Navbar() {
                 {user ? (
                   <>
                     <div className="flex items-center gap-3 px-3 py-2 mb-2">
-                      <div className="flex h-10 w-10 items-center justify-center rounded-full bg-indigo-600 overflow-hidden">
+                      <div className="flex h-10 w-10 items-center justify-center rounded-full overflow-hidden">
+                        {!user.user_metadata?.avatar_url && (
+                          <img
+                            src="https://res.cloudinary.com/dm9h4bawl/image/upload/v1745427929/Screenshot_2025-04-23_223435_ahljcf.png"
+                            alt="SoundScape AI Logo"
+                            className="w-full h-full object-cover"
+                          />
+                        )}
                         {user.user_metadata?.avatar_url ? (
                           <img
                             src={user.user_metadata.avatar_url}

@@ -14,6 +14,11 @@ const montserrat = Montserrat({
 export const metadata = {
   title: 'SoundScape AI',
   description: 'AI-powered audio environments that adapt to your surroundings and mood in real-time',
+  icons: {
+    icon: 'https://res.cloudinary.com/dm9h4bawl/image/upload/v1745427929/Screenshot_2025-04-23_223435_ahljcf.png',
+    apple: 'https://res.cloudinary.com/dm9h4bawl/image/upload/v1745427929/Screenshot_2025-04-23_223435_ahljcf.png',
+    shortcut: 'https://res.cloudinary.com/dm9h4bawl/image/upload/v1745427929/Screenshot_2025-04-23_223435_ahljcf.png'
+  }
 }
 
 export const viewport = {
