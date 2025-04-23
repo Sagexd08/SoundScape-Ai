@@ -4,9 +4,9 @@
 
 <div align="center">
   <img src="https://res.cloudinary.com/dm9h4bawl/image/upload/v1745427929/Screenshot_2025-04-23_223435_ahljcf.png" alt="SoundScape AI Logo" width="150"/>
-  
-  ![Build Status](https://img.shields.io/badge/build-passing-brightgreen) 
-  ![License](https://img.shields.io/badge/license-MIT-blue) 
+
+  ![Build Status](https://img.shields.io/badge/build-passing-brightgreen)
+  ![License](https://img.shields.io/badge/license-MIT-blue)
   ![AI Models](https://img.shields.io/badge/AI%20Models-3-purple)
   ![Vercel](https://img.shields.io/badge/Vercel-Deployed-black)
 </div>
@@ -15,32 +15,32 @@
 
 ## 📌 Problem Statement
 
-**Problem Statement 12 – Revolutionize Audio Experiences with AI**
+**Problem Statement 1 – Weave AI Magic With Grok**
 
-Create innovative solutions that transform how we interact with and experience audio content through artificial intelligence.
+Build a creative and multimodal tool powered by Grok, leveraging its capabilities to create innovative solutions.
 
 ---
 
 ## 🎯 Objective
 
-SoundScape AI solves the problem of generic, static audio environments by creating personalized, adaptive soundscapes that respond to users' surroundings, activities, and emotional states in real-time.
+SoundScape AI transforms audio experiences by harnessing Grok's powerful AI capabilities to create personalized, adaptive soundscapes that respond to users' surroundings, activities, and emotional states in real-time.
 
-Our platform serves content creators, meditation practitioners, productivity enthusiasts, and anyone seeking immersive audio experiences. By combining multiple AI models (OpenAI, Grok, and Gemini), we deliver unparalleled audio environments that enhance focus, relaxation, creativity, and overall well-being.
+Our platform serves content creators, meditation practitioners, productivity enthusiasts, and anyone seeking immersive audio experiences. By placing Grok at the center of our multi-AI collaboration approach (alongside OpenAI and Gemini), we showcase Grok's ability to generate detailed audio prompts, analyze audio content, and enhance creative elements in soundscape generation.
 
 ---
 
 ## 🧠 Team & Approach
 
-### Team Name:  
-`SoundWave Innovators`
+### Team Name:
+`Team DevOPs`
 
-### Team Members:  
-- Sohom Chatterjee ([GitHub](https://github.com/Sagexd08) / Lead Developer)  
-- Aryan Sharma (UI/UX Designer)  
-- Priya Patel (AI Integration Specialist)  
-- Rahul Mehta (Backend Developer)  
+### Team Members:
+- Sohom Chatterjee ([GitHub](https://github.com/Sagexd08) / Team Leader)
+- Rajshree Talukdar (Frontend Developer)
+- Saikat Maji (Backend Developer)
+- Eshani Paul (AI Integration Specialist)
 
-### Our Approach:  
+### Our Approach:
 - We chose this problem because audio experiences remain largely static despite advances in AI, presenting an opportunity to create truly adaptive environments.
 - Key challenges we addressed include integrating multiple AI models for enhanced creativity, implementing real-time adaptation to user context, and creating an intuitive interface for audio customization.
 - Our breakthrough came when we developed a collaborative AI approach that combines the strengths of different models (Grok for detailed prompts, Gemini for creative enhancement, and OpenAI for high-quality synthesis).
@@ -60,7 +60,7 @@ Our platform serves content creators, meditation practitioners, productivity ent
 - **3D Graphics:** Three.js
 
 ### Sponsor Technologies Used:
-- [✅] **Groq:** Used for ultra-fast audio prompt generation and analysis
+- [✅] **Grok:** Central to our platform, used for detailed audio prompt generation, creative enhancement, and audio analysis
 - [ ] **Monad:** _Not implemented in current version_
 - [ ] **Fluvio:** _Not implemented in current version_
 - [ ] **Base:** _Not implemented in current version_
@@ -75,13 +75,13 @@ Our platform serves content creators, meditation practitioners, productivity ent
   <img src="https://res.cloudinary.com/dporz9gz6/image/upload/v1745176839/WhatsApp_Image_2025-04-21_at_00.38.35_372fbb13_iuvgdy.jpg" alt="SoundScape Features" width="600"/>
 </div>
 
-- ✅ **Multi-AI Collaboration:** Unique integration of Grok, Gemini, and OpenAI for superior audio generation
+- ✅ **Grok-Powered Audio Generation:** Leveraging Grok's advanced capabilities for detailed audio prompt creation
+- ✅ **Multi-AI Collaboration:** Grok at the center of our AI ecosystem, working with Gemini and OpenAI for enhanced results
 - ✅ **Environment-Based Audio:** Generate soundscapes based on different environments (forest, ocean, city, cafe)
 - ✅ **Mood-Based Customization:** Tailor audio to emotional states (relaxing, energetic, focused, peaceful)
-- ✅ **AI Music Generation:** Create custom music with control over genre, mood, and instruments
-- ✅ **Advanced Audio Analysis:** Analyze audio files to extract insights using Grok's capabilities
-- ✅ **Real-Time Adaptation:** Audio environments that adapt to surroundings and context
-- ✅ **Immersive 3D Visualization:** Visual representation of audio using Three.js
+- ✅ **Grok Audio Analysis:** Analyze audio files to extract detailed insights using Grok's advanced understanding capabilities
+- ✅ **AI Music Generation:** Create custom music with Grok-enhanced prompts controlling genre, mood, and instruments
+- ✅ **Real-Time Adaptation:** Audio environments that adapt to surroundings and context using Grok's contextual understanding
 
 ---
 
@@ -184,7 +184,7 @@ We believe SoundScape AI has the potential to revolutionize various fields, from
 ---
 
 <div align="center">
-  <p>Built with ❤️ by the SoundWave Innovators team</p>
+  <p>Built with ❤️ by Team DevOPs</p>
   <p>
     <a href="https://sound-scape-ai-psi.vercel.app/">Live Demo</a> •
     <a href="https://github.com/Sagexd08/SoundScape-Ai">GitHub</a>
