@@ -180,20 +180,6 @@ Our Grok-powered audio analyzer provides detailed insights about audio files:
 - Intuitive controls for audio customization
 - Seamless authentication and user experience
 
-## 📸 Screenshots
-
-<div align="center">
-  <table>
-    <tr>
-      <td><img src="https://res.cloudinary.com/dporz9gz6/image/upload/v1745176839/WhatsApp_Image_2025-04-21_at_00.38.17_a7bcb060_rarpmc.jpg" alt="Dashboard" width="400"/></td>
-      <td><img src="https://res.cloudinary.com/dporz9gz6/image/upload/v1745176839/WhatsApp_Image_2025-04-21_at_00.39.12_a0baa83c_pnmxsk.jpg" alt="AI Studio" width="400"/></td>
-    </tr>
-    <tr>
-      <td align="center"><b>Dashboard</b></td>
-      <td align="center"><b>AI Studio</b></td>
-    </tr>
-  </table>
-</div>
 
 ## 📝 License
 
