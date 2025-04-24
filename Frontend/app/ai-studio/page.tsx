@@ -216,6 +216,18 @@ export default function AIStudioPage() {
   const [isGeneratingSound, setIsGeneratingSound] = useState(false);
   const [selectedSoundEffect, setSelectedSoundEffect] = useState<SoundEffect | null>(null);
 
+  // Audio analysis state
+  const [uploadedFile, setUploadedFile] = useState<File | null>(null);
+  const [isAnalyzing, setIsAnalyzing] = useState(false);
+  const [analysisResults, setAnalysisResults] = useState<{
+    mood: string;
+    tempo: string;
+    instruments: string[];
+    genre: string;
+    quality: string;
+    features: { name: string; value: number }[];
+  } | null>(null);
+
   // Handle genre selection
   const handleGenreSelect = (genre: string) => {
     setSelectedGenre(genre === selectedGenre ? null : genre);
@@ -534,34 +546,185 @@ export default function AIStudioPage() {
                     </CardDescription>
                   </CardHeader>
                   <CardContent>
-                    <label className="border-2 border-dashed border-gray-800 rounded-lg p-6 text-center mb-4 cursor-pointer hover:border-indigo-600 transition-colors duration-300 block">
-                      <input
-                        type="file"
-                        className="hidden"
-                        accept=".mp3,.wav,.flac,.aac,.ogg"
-                        onChange={(e) => {
-                          const file = e.target.files?.[0];
-                          if (file) {
+                    {!uploadedFile ? (
+                      <div
+                        className={`border-2 border-dashed border-gray-800 rounded-lg p-6 text-center mb-4 cursor-pointer hover:border-indigo-600 transition-colors duration-300 relative`}
+                        onDragOver={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          e.currentTarget.classList.add('border-indigo-500');
+                        }}
+                        onDragLeave={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          e.currentTarget.classList.remove('border-indigo-500');
+                        }}
+                        onDrop={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          e.currentTarget.classList.remove('border-indigo-500');
+
+                          const files = e.dataTransfer.files;
+                          if (files.length > 0) {
+                            const file = files[0];
+
+                            // Check file type
+                            const validTypes = ['.mp3', '.wav', '.flac', '.aac', '.ogg'];
+                            const fileType = file.name.substring(file.name.lastIndexOf('.')).toLowerCase();
+                            if (!validTypes.includes(fileType)) {
+                              toast.error('Invalid file type. Please upload an audio file.');
+                              return;
+                            }
+
                             // Check file size (max 10MB)
                             if (file.size > 10 * 1024 * 1024) {
                               toast.error('File size exceeds 10MB limit');
                               return;
                             }
 
-                            toast.success(`File "${file.name}" selected`);
-                            // Here you would normally process the file
+                            // Set the uploaded file in state
+                            setUploadedFile(file);
+                            toast.success(`File "${file.name}" uploaded successfully`);
+
+                            // Reset any previous analysis
+                            setAnalysisResults(null);
                           }
                         }}
-                      />
-                      <FileAudio className="h-10 w-10 text-gray-500 mx-auto mb-2" />
-                      <p className="text-gray-300 mb-2">Drag and drop an audio file or click to browse</p>
-                      <p className="text-sm text-gray-500 mb-4">
-                        Supports MP3, WAV, FLAC, AAC, OGG (max 10MB)
-                      </p>
-                      <Button variant="outline" type="button">
-                        Select File
-                      </Button>
-                    </label>
+                      >
+                        <input
+                          type="file"
+                          id="audio-file-input"
+                          className="hidden"
+                          accept=".mp3,.wav,.flac,.aac,.ogg"
+                          onChange={(e) => {
+                            const file = e.target.files?.[0];
+                            if (file) {
+                              // Check file size (max 10MB)
+                              if (file.size > 10 * 1024 * 1024) {
+                                toast.error('File size exceeds 10MB limit');
+                                return;
+                              }
+
+                              // Set the uploaded file in state
+                              setUploadedFile(file);
+                              toast.success(`File "${file.name}" uploaded successfully`);
+
+                              // Reset any previous analysis
+                              setAnalysisResults(null);
+                            }
+                          }}
+                        />
+                        <label htmlFor="audio-file-input" className="block cursor-pointer">
+                          <FileAudio className="h-10 w-10 text-gray-500 mx-auto mb-2" />
+                          <p className="text-gray-300 mb-2">Drag and drop an audio file or click to browse</p>
+                          <p className="text-sm text-gray-500 mb-4">
+                            Supports MP3, WAV, FLAC, AAC, OGG (max 10MB)
+                          </p>
+                          <Button variant="outline" type="button">
+                            Select File
+                          </Button>
+                        </label>
+                      </div>
+                    ) : (
+                      <div className="mb-4">
+                        <div className="bg-gray-800/50 rounded-lg p-4 mb-4">
+                          <div className="flex items-center justify-between mb-2">
+                            <div className="flex items-center">
+                              <FileAudio className="h-5 w-5 text-indigo-400 mr-2" />
+                              <span className="font-medium text-white">{uploadedFile.name}</span>
+                            </div>
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              onClick={() => {
+                                setUploadedFile(null);
+                                setAnalysisResults(null);
+                              }}
+                            >
+                              Change
+                            </Button>
+                          </div>
+
+                          <div className="w-full bg-gray-700/50 rounded-lg overflow-hidden relative">
+                            {/* Audio player */}
+                            <audio
+                              controls
+                              className="w-full h-12 opacity-0 absolute inset-0 z-10"
+                              src={uploadedFile ? URL.createObjectURL(uploadedFile) : ''}
+                            />
+
+                            {/* Visual waveform overlay */}
+                            <div className="absolute inset-0 flex items-center justify-center gap-0.5 pointer-events-none">
+                              {Array.from({ length: 40 }).map((_, i) => (
+                                <div
+                                  key={i}
+                                  className="w-1 bg-indigo-500/70"
+                                  style={{
+                                    height: `${Math.random() * 70 + 30}%`,
+                                  }}
+                                />
+                              ))}
+                            </div>
+                          </div>
+                        </div>
+
+                        {analysisResults && (
+                          <div className="bg-indigo-900/20 rounded-lg p-4 mb-4 border border-indigo-800/30">
+                            <h3 className="text-lg font-medium mb-3 text-indigo-300">Analysis Results</h3>
+
+                            <div className="grid grid-cols-2 gap-4 mb-4">
+                              <div>
+                                <p className="text-sm text-gray-400 mb-1">Mood</p>
+                                <p className="font-medium">{analysisResults.mood}</p>
+                              </div>
+                              <div>
+                                <p className="text-sm text-gray-400 mb-1">Genre</p>
+                                <p className="font-medium">{analysisResults.genre}</p>
+                              </div>
+                              <div>
+                                <p className="text-sm text-gray-400 mb-1">Tempo</p>
+                                <p className="font-medium">{analysisResults.tempo}</p>
+                              </div>
+                              <div>
+                                <p className="text-sm text-gray-400 mb-1">Quality</p>
+                                <p className="font-medium">{analysisResults.quality}</p>
+                              </div>
+                            </div>
+
+                            <div className="mb-4">
+                              <p className="text-sm text-gray-400 mb-2">Instruments Detected</p>
+                              <div className="flex flex-wrap gap-2">
+                                {analysisResults.instruments.map((instrument, i) => (
+                                  <span key={i} className="px-2 py-1 bg-indigo-900/40 rounded-full text-xs">
+                                    {instrument}
+                                  </span>
+                                ))}
+                              </div>
+                            </div>
+
+                            <div>
+                              <p className="text-sm text-gray-400 mb-2">Audio Features</p>
+                              <div className="space-y-2">
+                                {analysisResults.features.map((feature, i) => (
+                                  <div key={i}>
+                                    <div className="flex justify-between text-xs mb-1">
+                                      <span>{feature.name}</span>
+                                      <span>{Math.round(feature.value * 100)}%</span>
+                                    </div>
+                                    <div className="w-full bg-gray-700/50 h-1.5 rounded-full overflow-hidden">
+                                      <div
+                                        className="h-full bg-indigo-500"
+                                        style={{ width: `${feature.value * 100}%` }}
+                                      />
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    )}
 
                     <Alert className="mb-4 border-blue-500 bg-blue-500/10">
                       <AlertCircle className="h-4 w-4 text-blue-500" />
@@ -574,10 +737,56 @@ export default function AIStudioPage() {
                   <CardFooter>
                     <Button
                       className="w-full bg-indigo-600 hover:bg-indigo-700"
-                      onClick={() => toast.info('Audio analysis initiated with Grok AI')}
+                      onClick={() => {
+                        if (!uploadedFile) {
+                          toast.error('Please upload an audio file first');
+                          return;
+                        }
+
+                        // Set analyzing state to show loading
+                        setIsAnalyzing(true);
+                        toast.info('Analyzing audio with Grok AI...');
+
+                        // Simulate analysis with a timeout (would be an API call in production)
+                        setTimeout(() => {
+                          // Generate mock analysis results
+                          const mockResults = {
+                            mood: ['Energetic', 'Calm', 'Melancholic', 'Upbeat', 'Dramatic'][Math.floor(Math.random() * 5)],
+                            tempo: ['Slow (60-80 BPM)', 'Moderate (90-120 BPM)', 'Fast (130-160 BPM)', 'Very Fast (160+ BPM)'][Math.floor(Math.random() * 4)],
+                            instruments: [
+                              'Piano', 'Guitar', 'Drums', 'Synthesizer', 'Bass', 'Strings', 'Vocals'
+                            ].sort(() => 0.5 - Math.random()).slice(0, Math.floor(Math.random() * 4) + 2),
+                            genre: ['Pop', 'Rock', 'Electronic', 'Classical', 'Jazz', 'Hip-Hop', 'Ambient'][Math.floor(Math.random() * 7)],
+                            quality: ['Excellent', 'Good', 'Average', 'Poor'][Math.floor(Math.random() * 4)],
+                            features: [
+                              { name: 'Danceability', value: Math.random() },
+                              { name: 'Energy', value: Math.random() },
+                              { name: 'Acousticness', value: Math.random() },
+                              { name: 'Instrumentalness', value: Math.random() },
+                              { name: 'Liveness', value: Math.random() },
+                              { name: 'Speechiness', value: Math.random() }
+                            ]
+                          };
+
+                          // Update state with results
+                          setAnalysisResults(mockResults);
+                          setIsAnalyzing(false);
+                          toast.success('Analysis complete!');
+                        }, 1500); // Simulate a 1.5 second analysis time
+                      }}
+                      disabled={isAnalyzing || !uploadedFile}
                     >
-                      <FileAudio className="h-4 w-4 mr-2" />
-                      Analyze with Grok AI
+                      {isAnalyzing ? (
+                        <>
+                          <div className="h-4 w-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></div>
+                          Analyzing...
+                        </>
+                      ) : (
+                        <>
+                          <FileAudio className="h-4 w-4 mr-2" />
+                          Analyze with Grok AI
+                        </>
+                      )}
                     </Button>
                   </CardFooter>
                 </Card>
