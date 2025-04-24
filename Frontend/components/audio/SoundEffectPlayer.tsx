@@ -2,18 +2,19 @@
 
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
-import { MusicTrack, formatDuration } from '@/lib/music-library';
-import { Music, ExternalLink, Volume2, VolumeX, Piano, Guitar, Violin, Drumstick, Mic2, Radio, Headphones, Tag } from 'lucide-react';
+import { SoundEffect, formatDuration } from '@/lib/sound-effects-library';
+import { AudioLines, ExternalLink, Volume2, VolumeX, Tag } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Slider } from '@/components/ui/slider';
 import { Badge } from '@/components/ui/badge';
+import * as Icons from 'lucide-react';
 
-interface YouTubePlayerProps {
-  track: MusicTrack;
+interface SoundEffectPlayerProps {
+  sound: SoundEffect;
   onClose?: () => void;
 }
 
-export default function YouTubePlayer({ track, onClose }: YouTubePlayerProps) {
+export default function SoundEffectPlayer({ sound, onClose }: SoundEffectPlayerProps) {
   const [isLoaded, setIsLoaded] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
   const [volume, setVolume] = useState(80);
@@ -25,7 +26,7 @@ export default function YouTubePlayer({ track, onClose }: YouTubePlayerProps) {
     return (match && match[2].length === 11) ? match[2] : null;
   };
 
-  const videoId = getYouTubeId(track.youtubeUrl);
+  const videoId = getYouTubeId(sound.youtubeUrl);
 
   // Handle iframe load event
   const handleIframeLoad = () => {
@@ -44,21 +45,28 @@ export default function YouTubePlayer({ track, onClose }: YouTubePlayerProps) {
 
   // Update iframe volume when volume state changes
   useEffect(() => {
-    const iframe = document.getElementById('youtube-player') as HTMLIFrameElement;
+    const iframe = document.getElementById('sound-effect-player') as HTMLIFrameElement;
     if (iframe && iframe.contentWindow) {
       try {
         // This is a simplified approach - in a real app, you'd use the YouTube Player API
         // to control volume more effectively
-        const message = isMuted
+        const message = isMuted 
           ? JSON.stringify({ event: 'command', func: 'mute' })
           : JSON.stringify({ event: 'command', func: 'unMute' });
-
+        
         iframe.contentWindow.postMessage(message, '*');
       } catch (error) {
         console.error('Error controlling YouTube player:', error);
       }
     }
   }, [isMuted, volume]);
+
+  // Dynamic icon component
+  const DynamicIcon = ({ name }: { name: string }) => {
+    // @ts-ignore - Dynamically accessing icons
+    const IconComponent = Icons[name] || Icons.AudioLines;
+    return <IconComponent className="h-full w-full" />;
+  };
 
   return (
     <Card className="w-full bg-gray-900/90 backdrop-blur-lg border border-gray-800 overflow-hidden">
@@ -68,16 +76,16 @@ export default function YouTubePlayer({ track, onClose }: YouTubePlayerProps) {
           {!isLoaded && (
             <div className="absolute inset-0 flex items-center justify-center bg-gray-900/80 z-10">
               <div className="flex flex-col items-center">
-                <Music className="h-8 w-8 text-indigo-400 animate-pulse mb-2" />
-                <p className="text-gray-300">Loading music...</p>
+                <AudioLines className="h-8 w-8 text-indigo-400 animate-pulse mb-2" />
+                <p className="text-gray-300">Loading audio...</p>
               </div>
             </div>
           )}
-
+          
           {/* YouTube iframe */}
           <div className="aspect-video w-full">
             <iframe
-              id="youtube-player"
+              id="sound-effect-player"
               src={`https://www.youtube.com/embed/${videoId}?autoplay=1&enablejsapi=1&origin=${typeof window !== 'undefined' ? window.location.origin : ''}`}
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               allowFullScreen
@@ -86,29 +94,26 @@ export default function YouTubePlayer({ track, onClose }: YouTubePlayerProps) {
             ></iframe>
           </div>
         </div>
-
-        {/* Track info and controls */}
+        
+        {/* Sound info and controls */}
         <div className="p-4">
           <div className="flex items-start gap-4 mb-3">
             <div className="w-12 h-12 bg-gradient-to-br from-indigo-900/50 to-purple-900/50 rounded-lg flex items-center justify-center text-indigo-300 flex-shrink-0">
-              {track.genre === 'Classical' && <Piano className="h-8 w-8" />}
-              {track.genre === 'Jazz' && <Drumstick className="h-8 w-8" />}
-              {track.genre === 'Electronic' && <Radio className="h-8 w-8" />}
-              {track.genre === 'Ambient' && <Headphones className="h-8 w-8" />}
-              {!['Classical', 'Jazz', 'Electronic', 'Ambient'].includes(track.genre) && <Music className="h-8 w-8" />}
-            </div>
-
-            <div className="flex-1">
-              <h3 className="text-lg font-semibold text-white">{track.title}</h3>
-              <p className="text-gray-400">{track.artist}</p>
-              <div className="flex items-center mt-1">
-                <Badge className="mr-2 bg-indigo-900/50 text-indigo-300 border-indigo-800/50">
-                  {track.genre}
-                </Badge>
-                <span className="text-xs text-gray-500">{formatDuration(track.duration)}</span>
+              <div className="w-8 h-8">
+                <DynamicIcon name={sound.iconName} />
               </div>
             </div>
-
+            
+            <div className="flex-1">
+              <h3 className="text-lg font-semibold text-white">{sound.title}</h3>
+              <div className="flex items-center">
+                <Badge className="mr-2 bg-indigo-900/50 text-indigo-300 border-indigo-800/50">
+                  {sound.category}
+                </Badge>
+                <span className="text-xs text-gray-500">{formatDuration(sound.duration)}</span>
+              </div>
+            </div>
+            
             <div className="flex items-center">
               {/* Volume control */}
               <div className="flex items-center mr-3">
@@ -130,12 +135,12 @@ export default function YouTubePlayer({ track, onClose }: YouTubePlayerProps) {
                   disabled={isMuted}
                 />
               </div>
-
+              
               {/* External links */}
-              {track.spotifyUrl && (
-                <a
-                  href={track.spotifyUrl}
-                  target="_blank"
+              {sound.spotifyUrl && (
+                <a 
+                  href={sound.spotifyUrl} 
+                  target="_blank" 
                   rel="noopener noreferrer"
                   className="text-green-400 hover:text-green-300 mr-2"
                   title="Open in Spotify"
@@ -145,10 +150,10 @@ export default function YouTubePlayer({ track, onClose }: YouTubePlayerProps) {
                   </svg>
                 </a>
               )}
-
-              <a
-                href={track.youtubeUrl}
-                target="_blank"
+              
+              <a 
+                href={sound.youtubeUrl} 
+                target="_blank" 
                 rel="noopener noreferrer"
                 className="text-red-500 hover:text-red-400"
                 title="Open in YouTube"
@@ -157,18 +162,23 @@ export default function YouTubePlayer({ track, onClose }: YouTubePlayerProps) {
               </a>
             </div>
           </div>
-
-          {track.description && (
-            <p className="text-sm text-gray-400 mb-3">{track.description}</p>
+          
+          {sound.description && (
+            <p className="text-sm text-gray-400 mb-3">{sound.description}</p>
           )}
-
+          
           <div className="flex flex-wrap gap-1 mt-2">
             <Tag className="h-3.5 w-3.5 text-gray-500 mr-1" />
-            {track.instruments.map((instrument, i) => (
+            {sound.tags.map((tag, i) => (
               <Badge key={i} variant="outline" className="text-xs bg-gray-800/50 text-gray-300 border-gray-700">
-                {instrument}
+                {tag}
               </Badge>
             ))}
+            {sound.mood && (
+              <Badge className="text-xs bg-indigo-900/50 text-indigo-300 border-indigo-800/50 ml-auto">
+                {sound.mood}
+              </Badge>
+            )}
           </div>
         </div>
       </CardContent>

@@ -8,7 +8,10 @@ import Navbar from '@/components/navbar';
 import ModernBackgroundLayout from '@/components/layouts/ModernBackgroundLayout';
 import MusicSelection from '@/components/music/MusicSelection';
 import YouTubePlayer from '@/components/music/YouTubePlayer';
+import SoundEffectsSelection from '@/components/audio/SoundEffectsSelection';
+import SoundEffectPlayer from '@/components/audio/SoundEffectPlayer';
 import { MusicTrack, getRandomTrack } from '@/lib/music-library';
+import { SoundEffect, getRandomSoundEffect } from '@/lib/sound-effects-library';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
@@ -205,6 +208,14 @@ export default function AIStudioPage() {
   const [isMusicGenerating, setIsMusicGenerating] = useState(false);
   const [selectedMusicTrack, setSelectedMusicTrack] = useState<MusicTrack | null>(null);
 
+  // Sound effects state
+  const [soundPrompt, setSoundPrompt] = useState('');
+  const [selectedEnvironment, setSelectedEnvironment] = useState<string | null>(null);
+  const [selectedTags, setSelectedTags] = useState<string[]>([]);
+  const [selectedMood, setSelectedMood] = useState<string | null>(null);
+  const [isGeneratingSound, setIsGeneratingSound] = useState(false);
+  const [selectedSoundEffect, setSelectedSoundEffect] = useState<SoundEffect | null>(null);
+
   // Handle genre selection
   const handleGenreSelect = (genre: string) => {
     setSelectedGenre(genre === selectedGenre ? null : genre);
@@ -260,6 +271,48 @@ export default function AIStudioPage() {
       toast.error('Failed to find music. Please try again.');
     } finally {
       setIsMusicGenerating(false);
+    }
+  };
+
+  // Handle sound effect generation
+  const handleGenerateSoundEffect = async () => {
+    if (!soundPrompt.trim() && !selectedEnvironment && selectedTags.length === 0 && !selectedMood) {
+      toast.error('Please enter a prompt or select environment options');
+      return;
+    }
+
+    setIsGeneratingSound(true);
+
+    try {
+      toast.info('Finding the perfect sound environment for you...');
+
+      // Get category, tags and mood from state
+      const category = selectedEnvironment || undefined;
+      const tags = selectedTags.length > 0 ? selectedTags : undefined;
+      const mood = selectedMood || undefined;
+
+      // Simulate API call with a timeout
+      await new Promise(resolve => setTimeout(resolve, 1500));
+
+      // Get a random sound effect that matches the criteria
+      const sound = getRandomSoundEffect(
+        category as string | undefined,
+        tags as string[] | undefined,
+        mood as string | undefined
+      );
+
+      // Set the selected sound effect
+      setSelectedSoundEffect(sound);
+
+      // Set audio title for display
+      setAudioTitle(sound.title);
+
+      toast.success('Sound environment found successfully!');
+    } catch (error) {
+      console.error('Error in sound effect generation:', error);
+      toast.error('Failed to find sound environment. Please try again.');
+    } finally {
+      setIsGeneratingSound(false);
     }
   };
 
@@ -323,179 +376,76 @@ export default function AIStudioPage() {
               </div>
 
               <TabsContent value="generate" className="mt-0">
-                <Card className="w-full bg-gray-900 border-gray-800">
+                <Card className="w-full bg-gray-900/90 backdrop-blur-lg border-gray-800">
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2">
                       <Wand2 className="h-5 w-5 text-indigo-400" />
-                      AI Audio Generator
+                      AI Sound Environment Library
                     </CardTitle>
                     <CardDescription>
-                      Create custom audio environments using AI
+                      Browse and play high-quality sound environments based on your preferences
                     </CardDescription>
                   </CardHeader>
                   <CardContent>
-                    <Textarea
-                      placeholder="Describe the audio environment you want to generate..."
-                      className="min-h-[100px] bg-gray-950 border-gray-800 mb-4"
-                      value={prompt}
-                      onChange={(e) => setPrompt(e.target.value)}
-                    />
-                    <div className="grid grid-cols-2 gap-4 mb-4">
-                      <div className="p-4 bg-gray-950 rounded-lg border border-gray-800">
-                        <h4 className="font-medium mb-2">Environment Type</h4>
-                        <div className="grid grid-cols-2 gap-2">
+                    {selectedSoundEffect ? (
+                      <div className="space-y-4">
+                        <SoundEffectPlayer
+                          sound={selectedSoundEffect}
+                          onClose={() => setSelectedSoundEffect(null)}
+                        />
+
+                        <div className="flex justify-end">
                           <Button
-                            variant={selectedEnvironment === 'forest' ? 'default' : 'outline'}
+                            variant="outline"
                             size="sm"
-                            className={`justify-start ${selectedEnvironment === 'forest' ? 'bg-indigo-600' : ''}`}
-                            onClick={() => handleEnvironmentSelect('forest')}
+                            onClick={() => setSelectedSoundEffect(null)}
+                            className="text-gray-400 hover:text-white"
                           >
-                            Forest
-                          </Button>
-                          <Button
-                            variant={selectedEnvironment === 'ocean' ? 'default' : 'outline'}
-                            size="sm"
-                            className={`justify-start ${selectedEnvironment === 'ocean' ? 'bg-indigo-600' : ''}`}
-                            onClick={() => handleEnvironmentSelect('ocean')}
-                          >
-                            Ocean
-                          </Button>
-                          <Button
-                            variant={selectedEnvironment === 'city' ? 'default' : 'outline'}
-                            size="sm"
-                            className={`justify-start ${selectedEnvironment === 'city' ? 'bg-indigo-600' : ''}`}
-                            onClick={() => handleEnvironmentSelect('city')}
-                          >
-                            City
-                          </Button>
-                          <Button
-                            variant={selectedEnvironment === 'cafe' ? 'default' : 'outline'}
-                            size="sm"
-                            className={`justify-start ${selectedEnvironment === 'cafe' ? 'bg-indigo-600' : ''}`}
-                            onClick={() => handleEnvironmentSelect('cafe')}
-                          >
-                            Cafe
+                            Browse more sounds
                           </Button>
                         </div>
                       </div>
-                      <div className="p-4 bg-gray-950 rounded-lg border border-gray-800">
-                        <h4 className="font-medium mb-2">Mood</h4>
-                        <div className="grid grid-cols-2 gap-2">
+                    ) : (
+                      <div className="space-y-6">
+                        <Textarea
+                          placeholder="Describe the sound environment you want (e.g., 'Peaceful forest with birds and gentle rain')..."
+                          className="min-h-[80px] bg-gray-950/80 border-gray-800 mb-4"
+                          value={soundPrompt}
+                          onChange={(e) => setSoundPrompt(e.target.value)}
+                        />
+
+                        <SoundEffectsSelection
+                          category={selectedEnvironment || undefined}
+                          tags={selectedTags}
+                          mood={selectedMood || undefined}
+                          onSelectSoundEffect={(sound) => {
+                            setSelectedSoundEffect(sound);
+                            setAudioTitle(sound.title);
+                          }}
+                        />
+
+                        <div className="flex justify-center pt-4">
                           <Button
-                            variant={selectedMood === 'relaxing' ? 'default' : 'outline'}
-                            size="sm"
-                            className={`justify-start ${selectedMood === 'relaxing' ? 'bg-indigo-600' : ''}`}
-                            onClick={() => handleMoodSelect('relaxing')}
+                            className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 px-6 py-6 shadow-lg shadow-indigo-500/20 hover:shadow-indigo-500/40"
+                            onClick={handleGenerateSoundEffect}
+                            disabled={isGeneratingSound}
                           >
-                            Relaxing
-                          </Button>
-                          <Button
-                            variant={selectedMood === 'energetic' ? 'default' : 'outline'}
-                            size="sm"
-                            className={`justify-start ${selectedMood === 'energetic' ? 'bg-indigo-600' : ''}`}
-                            onClick={() => handleMoodSelect('energetic')}
-                          >
-                            Energetic
-                          </Button>
-                          <Button
-                            variant={selectedMood === 'focused' ? 'default' : 'outline'}
-                            size="sm"
-                            className={`justify-start ${selectedMood === 'focused' ? 'bg-indigo-600' : ''}`}
-                            onClick={() => handleMoodSelect('focused')}
-                          >
-                            Focused
-                          </Button>
-                          <Button
-                            variant={selectedMood === 'peaceful' ? 'default' : 'outline'}
-                            size="sm"
-                            className={`justify-start ${selectedMood === 'peaceful' ? 'bg-indigo-600' : ''}`}
-                            onClick={() => handleMoodSelect('peaceful')}
-                          >
-                            Peaceful
+                            {isGeneratingSound ? (
+                              <>
+                                <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                                Finding perfect sound...
+                              </>
+                            ) : (
+                              <>
+                                <Wand2 className="h-4 w-4 mr-2" />
+                                Find Sound For Me
+                              </>
+                            )}
                           </Button>
                         </div>
-                      </div>
-                    </div>
-
-                    {generatedAudioUrl && (
-                      <div className="mt-6 p-4 bg-gray-950 rounded-lg border border-gray-800">
-                        <div className="flex items-center justify-between mb-4">
-                          <h4 className="font-medium flex items-center">
-                            <Music className="h-4 w-4 mr-2 text-indigo-400" />
-                            {audioTitle}
-                          </h4>
-                        </div>
-
-                        <div className="flex items-center space-x-4 mb-2">
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            onClick={togglePlayPause}
-                            className="h-10 w-10 rounded-full"
-                          >
-                            {isPlaying ? <Pause className="h-5 w-5" /> : <Play className="h-5 w-5" />}
-                          </Button>
-
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            onClick={toggleMute}
-                            className="h-8 w-8 rounded-full"
-                          >
-                            {isMuted ? <VolumeX className="h-4 w-4" /> : <Volume2 className="h-4 w-4" />}
-                          </Button>
-
-                          <div className="flex-1">
-                            <Slider
-                              value={[currentTime]}
-                              min={0}
-                              max={duration || 100}
-                              step={0.1}
-                              onValueChange={handleProgressChange}
-                              className="mb-1"
-                            />
-                            <div className="flex justify-between text-xs text-gray-400">
-                              <span>{formatTime(currentTime)}</span>
-                              <span>{formatTime(duration)}</span>
-                            </div>
-                          </div>
-                        </div>
-
-                        <div className="flex items-center space-x-2">
-                          <Volume2 className="h-4 w-4 text-gray-500" />
-                          <Slider
-                            value={[volume]}
-                            min={0}
-                            max={100}
-                            step={1}
-                            onValueChange={handleVolumeChange}
-                            className="w-24"
-                          />
-                        </div>
-
-                        <audio ref={audioRef} className="hidden" controls />
                       </div>
                     )}
                   </CardContent>
-                  <CardFooter>
-                    <Button
-                      className="w-full bg-indigo-600 hover:bg-indigo-700"
-                      onClick={handleGenerateAudio}
-                      disabled={isGenerating}
-                    >
-                      {isGenerating ? (
-                        <>
-                          <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                          Generating Audio...
-                        </>
-                      ) : (
-                        <>
-                          <Wand2 className="h-4 w-4 mr-2" />
-                          Generate Audio
-                        </>
-                      )}
-                    </Button>
-                  </CardFooter>
                 </Card>
               </TabsContent>
 
