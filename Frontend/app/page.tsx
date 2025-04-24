@@ -9,6 +9,8 @@ import { useAuth } from "@/components/auth/auth-provider";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import ModernBackgroundLayout from "@/components/layouts/ModernBackgroundLayout";
+import WaveformScene from "@/components/3d/WaveformScene";
+import HeadphonesModel from "@/components/3d/HeadphonesModel";
 
 export default function Home() {
   const { user, isLoading } = useAuth();
@@ -46,6 +48,16 @@ export default function Home() {
             animate={{ opacity: 1 }}
             transition={{ duration: 1 }}
           >
+            {/* 3D Headphones Model */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 1.5, delay: 0.5 }}
+              className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full h-full max-w-md max-h-md z-0"
+            >
+              <HeadphonesModel />
+            </motion.div>
+
             {/* Animated rings around the title */}
             <motion.div
               className="absolute -inset-10 md:-inset-20 rounded-full border border-indigo-500/20 z-0"
@@ -253,7 +265,17 @@ export default function Home() {
               </motion.div>
             </div>
 
-            <div className="mt-16 text-center relative">
+            {/* 3D Waveform Visualization */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.6 }}
+            className="w-full max-w-3xl mx-auto my-12"
+          >
+            <WaveformScene className="mb-8" />
+          </motion.div>
+
+          <div className="mt-8 text-center relative">
               {/* Glow effect behind button */}
               <div className="absolute inset-0 w-64 h-12 mx-auto bg-gradient-to-r from-indigo-600/30 to-purple-600/30 blur-xl rounded-full"></div>
 
