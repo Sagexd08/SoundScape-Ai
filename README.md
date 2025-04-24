@@ -82,13 +82,18 @@ Our platform serves content creators, meditation practitioners, productivity ent
 - ✅ **Grok Audio Analysis:** Analyze audio files to extract detailed insights using Grok's advanced understanding capabilities
 - ✅ **AI Music Generation:** Create custom music with Grok-enhanced prompts controlling genre, mood, and instruments
 - ✅ **Real-Time Adaptation:** Audio environments that adapt to surroundings and context using Grok's contextual understanding
+- ✅ **Audio File Upload & Analysis:** Upload and analyze your own audio files with detailed visualization and insights
+- ✅ **Track Download Options:** Download your favorite generated tracks directly from the player interface
+- ✅ **3D Interactive Elements:** Immersive 3D elements on the landing page for enhanced visual experience
+- ✅ **Vibrant Cosmic Backgrounds:** Dynamic, animated backgrounds across all pages for a consistent visual theme
+- ✅ **GitHub Authentication:** Additional authentication option for seamless user experience
 
 ---
 
 ## 📽️ Demo & Deliverables
 
 - **Live Demo:** [https://sound-scape-ai-psi.vercel.app/](https://sound-scape-ai-psi.vercel.app/)
-- **Demo Video Link:** [Coming Soon]
+- **Demo Video Link:** [https://youtu.be/rza-BmIgO90](https://youtu.be/rza-BmIgO90)
 - **Pitch Deck / PPT Link:** [Google Slides Presentation](https://docs.google.com/presentation/d/1VzCHzF8b_HBLjiXi-PNAnV-7aONFGm7xMzX2QirA0-g/edit?usp=sharing)
 - **GitHub Repository:** [https://github.com/Sagexd08/SoundScape-Ai](https://github.com/Sagexd08/SoundScape-Ai)
 
