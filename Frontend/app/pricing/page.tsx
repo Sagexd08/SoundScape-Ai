@@ -8,7 +8,7 @@ import { Switch } from "@/components/ui/switch"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 import Navbar from "@/components/navbar"
 import { cn } from "@/lib/utils"
-import SimpleHeroBackground from "@/components/three/SimpleHeroBackground"
+import VibrantBackgroundLayout from "@/components/layouts/VibrantBackgroundLayout"
 
 export default function PricingPage() {
   const [annual, setAnnual] = useState(true)
@@ -64,16 +64,8 @@ export default function PricingPage() {
   ]
 
   return (
-    <main className="min-h-screen bg-black text-white overflow-hidden">
-      {/* Global background */}
-      <div className="fixed inset-0 z-0">
-        <SimpleHeroBackground />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-transparent to-black/50" />
-      </div>
-
-      {/* Content */}
-      <div className="relative z-10">
-        <Navbar />
+    <VibrantBackgroundLayout variant="purple">
+      <Navbar />
 
         {/* Hero Section */}
         <section className="pt-32 pb-20 px-4 relative">
@@ -262,7 +254,6 @@ export default function PricingPage() {
             </div>
           </motion.div>
         </section>
-      </div>
-    </main>
+    </VibrantBackgroundLayout>
   )
 }

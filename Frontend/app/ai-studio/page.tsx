@@ -534,16 +534,34 @@ export default function AIStudioPage() {
                     </CardDescription>
                   </CardHeader>
                   <CardContent>
-                    <div className="border-2 border-dashed border-gray-800 rounded-lg p-6 text-center mb-4">
+                    <label className="border-2 border-dashed border-gray-800 rounded-lg p-6 text-center mb-4 cursor-pointer hover:border-indigo-600 transition-colors duration-300 block">
+                      <input
+                        type="file"
+                        className="hidden"
+                        accept=".mp3,.wav,.flac,.aac,.ogg"
+                        onChange={(e) => {
+                          const file = e.target.files?.[0];
+                          if (file) {
+                            // Check file size (max 10MB)
+                            if (file.size > 10 * 1024 * 1024) {
+                              toast.error('File size exceeds 10MB limit');
+                              return;
+                            }
+
+                            toast.success(`File "${file.name}" selected`);
+                            // Here you would normally process the file
+                          }
+                        }}
+                      />
                       <FileAudio className="h-10 w-10 text-gray-500 mx-auto mb-2" />
                       <p className="text-gray-300 mb-2">Drag and drop an audio file or click to browse</p>
                       <p className="text-sm text-gray-500 mb-4">
                         Supports MP3, WAV, FLAC, AAC, OGG (max 10MB)
                       </p>
-                      <Button variant="outline">
+                      <Button variant="outline" type="button">
                         Select File
                       </Button>
-                    </div>
+                    </label>
 
                     <Alert className="mb-4 border-blue-500 bg-blue-500/10">
                       <AlertCircle className="h-4 w-4 text-blue-500" />
@@ -554,7 +572,10 @@ export default function AIStudioPage() {
                     </Alert>
                   </CardContent>
                   <CardFooter>
-                    <Button className="w-full bg-indigo-600 hover:bg-indigo-700" disabled>
+                    <Button
+                      className="w-full bg-indigo-600 hover:bg-indigo-700"
+                      onClick={() => toast.info('Audio analysis initiated with Grok AI')}
+                    >
                       <FileAudio className="h-4 w-4 mr-2" />
                       Analyze with Grok AI
                     </Button>
