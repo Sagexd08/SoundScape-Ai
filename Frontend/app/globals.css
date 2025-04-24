@@ -89,26 +89,13 @@ html {
   @apply bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 to-purple-600 animate-gradient bg-[length:200%_auto];
 }
 
-/* 3D Styles */
-.perspective-1000 {
-  perspective: 1000px;
-}
-
-.preserve-3d {
-  transform-style: preserve-3d;
-}
-
-.backface-hidden {
-  backface-visibility: hidden;
-}
-
-/* Animation for 3D elements */
+/* Simple Animation for elements */
 @keyframes float {
   0%, 100% {
-    transform: translateY(0) translateZ(0);
+    transform: translateY(0);
   }
   50% {
-    transform: translateY(-10px) translateZ(20px);
+    transform: translateY(-10px);
   }
 }
 
