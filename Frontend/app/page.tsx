@@ -54,7 +54,7 @@ export default function Home() {
                 rotate: [0, 5, 0, -5, 0],
                 borderColor: ['rgba(99, 102, 241, 0.2)', 'rgba(168, 85, 247, 0.2)', 'rgba(99, 102, 241, 0.2)']
               }}
-              transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+              transition={{ duration: 20, repeat: Infinity, ease: "easeInOut" }}
             />
 
             <motion.div
@@ -64,7 +64,7 @@ export default function Home() {
                 rotate: [0, -5, 0, 5, 0],
                 borderColor: ['rgba(168, 85, 247, 0.1)', 'rgba(99, 102, 241, 0.1)', 'rgba(168, 85, 247, 0.1)']
               }}
-              transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
+              transition={{ duration: 25, repeat: Infinity, ease: "easeInOut" }}
             />
 
             <motion.h1
@@ -122,7 +122,7 @@ export default function Home() {
                 <Link href="/ai-studio" className="w-full flex items-center justify-center gap-2 relative z-10">
                   <motion.div
                     animate={{ rotate: [0, 15, -15, 0] }}
-                    transition={{ duration: 2, repeat: Infinity, repeatDelay: 3 }}
+                    transition={{ duration: 4, repeat: Infinity, repeatDelay: 8 }}
                   >
                     <Wand2 className="h-4 w-4" />
                   </motion.div>
@@ -147,7 +147,7 @@ export default function Home() {
                       scale: [1, 1.2, 1],
                       opacity: [1, 0.8, 1]
                     }}
-                    transition={{ duration: 2, repeat: Infinity, repeatDelay: 1 }}
+                    transition={{ duration: 4, repeat: Infinity, repeatDelay: 6 }}
                   >
                     <Sparkles className="h-4 w-4" />
                   </motion.div>
@@ -178,8 +178,8 @@ export default function Home() {
             <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
               {/* Feature Card 1 */}
               <motion.div
-                whileHover={{ y: -5, transition: { duration: 0.2 } }}
-                className="bg-gray-900 border border-gray-800 rounded-xl overflow-hidden hover:border-indigo-500/50 transition-all duration-300"
+                whileHover={{ y: -8, scale: 1.02, transition: { duration: 0.3 } }}
+                className="bg-gray-900/80 backdrop-blur-lg border border-gray-800 rounded-xl overflow-hidden hover:border-indigo-500/50 transition-all duration-500 shadow-lg shadow-indigo-500/10 hover:shadow-indigo-500/30"
               >
                 <div className="h-40 bg-gradient-to-br from-indigo-600/20 to-purple-600/20 flex items-center justify-center">
                   <Wand2 className="h-16 w-16 text-indigo-400" />
@@ -197,8 +197,8 @@ export default function Home() {
 
               {/* Feature Card 2 - Music Generation */}
               <motion.div
-                whileHover={{ y: -5, transition: { duration: 0.2 } }}
-                className="bg-gray-900 border border-gray-800 rounded-xl overflow-hidden hover:border-green-500/50 transition-all duration-300"
+                whileHover={{ y: -8, scale: 1.02, transition: { duration: 0.3 } }}
+                className="bg-gray-900/80 backdrop-blur-lg border border-gray-800 rounded-xl overflow-hidden hover:border-green-500/50 transition-all duration-500 shadow-lg shadow-green-500/10 hover:shadow-green-500/30"
               >
                 <div className="h-40 bg-gradient-to-br from-green-600/20 to-teal-600/20 flex items-center justify-center">
                   <Music className="h-16 w-16 text-green-400" />
@@ -216,8 +216,8 @@ export default function Home() {
 
               {/* Feature Card 3 */}
               <motion.div
-                whileHover={{ y: -5, transition: { duration: 0.2 } }}
-                className="bg-gray-900 border border-gray-800 rounded-xl overflow-hidden hover:border-purple-500/50 transition-all duration-300"
+                whileHover={{ y: -8, scale: 1.02, transition: { duration: 0.3 } }}
+                className="bg-gray-900/80 backdrop-blur-lg border border-gray-800 rounded-xl overflow-hidden hover:border-purple-500/50 transition-all duration-500 shadow-lg shadow-purple-500/10 hover:shadow-purple-500/30"
               >
                 <div className="h-40 bg-gradient-to-br from-purple-600/20 to-pink-600/20 flex items-center justify-center">
                   <FileAudio className="h-16 w-16 text-purple-400" />
@@ -235,8 +235,8 @@ export default function Home() {
 
               {/* Feature Card 4 */}
               <motion.div
-                whileHover={{ y: -5, transition: { duration: 0.2 } }}
-                className="bg-gray-900 border border-gray-800 rounded-xl overflow-hidden hover:border-blue-500/50 transition-all duration-300"
+                whileHover={{ y: -8, scale: 1.02, transition: { duration: 0.3 } }}
+                className="bg-gray-900/80 backdrop-blur-lg border border-gray-800 rounded-xl overflow-hidden hover:border-blue-500/50 transition-all duration-500 shadow-lg shadow-blue-500/10 hover:shadow-blue-500/30"
               >
                 <div className="h-40 bg-gradient-to-br from-blue-600/20 to-indigo-600/20 flex items-center justify-center">
                   <Brain className="h-16 w-16 text-blue-400" />
@@ -253,13 +253,30 @@ export default function Home() {
               </motion.div>
             </div>
 
-            <div className="mt-12 text-center">
-              <Button className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 transition-all duration-300">
-                <Link href="/ai-studio" className="flex items-center gap-2">
-                  <Headphones className="h-4 w-4" />
-                  Experience Full AI Studio
-                </Link>
-              </Button>
+            <div className="mt-16 text-center relative">
+              {/* Glow effect behind button */}
+              <div className="absolute inset-0 w-64 h-12 mx-auto bg-gradient-to-r from-indigo-600/30 to-purple-600/30 blur-xl rounded-full"></div>
+
+              <motion.div
+                whileHover={{ scale: 1.05, y: -3 }}
+                whileTap={{ scale: 0.98 }}
+              >
+                <Button className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 transition-all duration-500 shadow-lg shadow-purple-500/20 hover:shadow-purple-500/40 px-6 py-6 relative overflow-hidden group">
+                  <div className="absolute inset-0 w-full h-full bg-gradient-to-r from-indigo-600/0 via-white/10 to-indigo-600/0 transform -translate-x-full group-hover:translate-x-full transition-all duration-1000"></div>
+                  <Link href="/ai-studio" className="flex items-center gap-3 relative z-10">
+                    <motion.div
+                      animate={{
+                        rotate: [0, 10, 0, -10, 0],
+                        scale: [1, 1.1, 1]
+                      }}
+                      transition={{ duration: 5, repeat: Infinity, repeatDelay: 5 }}
+                    >
+                      <Headphones className="h-5 w-5" />
+                    </motion.div>
+                    <span className="font-semibold tracking-wide">Experience Full AI Studio</span>
+                  </Link>
+                </Button>
+              </motion.div>
             </div>
           </div>
         </motion.div>

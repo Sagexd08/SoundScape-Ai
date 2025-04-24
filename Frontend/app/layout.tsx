@@ -15,9 +15,9 @@ export const metadata = {
   title: 'SoundScape AI',
   description: 'AI-powered audio environments that adapt to your surroundings and mood in real-time',
   icons: {
-    icon: 'https://asset.cloudinary.com/dm9h4bawl/971707f5e3d6113c9dc9fe890ecc5631',
-    apple: 'https://asset.cloudinary.com/dm9h4bawl/971707f5e3d6113c9dc9fe890ecc5631',
-    shortcut: 'https://asset.cloudinary.com/dm9h4bawl/971707f5e3d6113c9dc9fe890ecc5631'
+    icon: 'https://res.cloudinary.com/dm9h4bawl/image/upload/v1745476391/Screenshot_2025-04-24_120134_ijojnw.png',
+    apple: 'https://res.cloudinary.com/dm9h4bawl/image/upload/v1745476391/Screenshot_2025-04-24_120134_ijojnw.png',
+    shortcut: 'https://res.cloudinary.com/dm9h4bawl/image/upload/v1745476391/Screenshot_2025-04-24_120134_ijojnw.png'
   }
 }
 

@@ -79,7 +79,7 @@ export default function SimpleBackgroundLayout({ children }: BackgroundLayoutPro
                 y: [0, Math.random() * 100 - 50],
               }}
               transition={{
-                duration: Math.random() * 20 + 10,
+                duration: Math.random() * 40 + 30, // Much slower animation
                 repeat: Infinity,
                 repeatType: 'reverse',
                 ease: 'easeInOut',
