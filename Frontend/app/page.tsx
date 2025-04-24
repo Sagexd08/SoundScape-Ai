@@ -8,7 +8,7 @@ import { Wand2, FileAudio, Headphones, Brain, Sparkles, ArrowRight, Music } from
 import { useAuth } from "@/components/auth/auth-provider";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
-import SimpleBackgroundLayout from "@/components/layouts/SimpleBackgroundLayout";
+import ModernBackgroundLayout from "@/components/layouts/ModernBackgroundLayout";
 
 export default function Home() {
   const { user, isLoading } = useAuth();
@@ -36,7 +36,7 @@ export default function Home() {
   }
 
   return (
-    <SimpleBackgroundLayout>
+    <ModernBackgroundLayout>
       <div className="flex min-h-screen flex-col items-center p-0 relative">
         <Navbar />
         <div className="relative z-10 flex flex-col items-center justify-center min-h-screen p-8">
@@ -281,6 +281,6 @@ export default function Home() {
           </div>
         </motion.div>
       </div>
-    </SimpleBackgroundLayout>
+    </ModernBackgroundLayout>
   );
 }

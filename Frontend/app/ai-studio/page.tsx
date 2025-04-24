@@ -5,7 +5,10 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Wand2, FileAudio, Sparkles, Music, AlertCircle, Play, Pause, Volume2, VolumeX, Loader2, Download } from 'lucide-react';
 import { motion } from 'framer-motion';
 import Navbar from '@/components/navbar';
-import SimpleBackgroundLayout from '@/components/layouts/SimpleBackgroundLayout';
+import ModernBackgroundLayout from '@/components/layouts/ModernBackgroundLayout';
+import MusicSelection from '@/components/music/MusicSelection';
+import YouTubePlayer from '@/components/music/YouTubePlayer';
+import { MusicTrack, getRandomTrack } from '@/lib/music-library';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
@@ -200,6 +203,7 @@ export default function AIStudioPage() {
   const [selectedGenre, setSelectedGenre] = useState<string | null>(null);
   const [selectedInstruments, setSelectedInstruments] = useState<string[]>([]);
   const [isMusicGenerating, setIsMusicGenerating] = useState(false);
+  const [selectedMusicTrack, setSelectedMusicTrack] = useState<MusicTrack | null>(null);
 
   // Handle genre selection
   const handleGenreSelect = (genre: string) => {
@@ -225,58 +229,35 @@ export default function AIStudioPage() {
     setIsMusicGenerating(true);
 
     try {
-      toast.info('Generating music using AI...');
+      toast.info('Finding the perfect music for you...');
+
+      // Get genre and instruments from state
+      const genre = selectedGenre || undefined;
+      const instruments = selectedInstruments.length > 0 ? selectedInstruments : undefined;
 
       // Simulate API call with a timeout
-      await new Promise(resolve => setTimeout(resolve, 3000));
+      await new Promise(resolve => setTimeout(resolve, 1500));
 
-      // Generate a title based on the prompt or selected genre
-      let title = '';
-      if (selectedGenre) {
-        title = `${selectedGenre} Music`;
-        if (selectedInstruments.length > 0) {
-          title += ` with ${selectedInstruments.join(', ')}`;
-        }
-      } else {
-        title = `Custom: ${musicPrompt.substring(0, 30)}${musicPrompt.length > 30 ? '...' : ''}`;
-      }
-
-      setAudioTitle(title);
-
-      // Use the same audio generation function for now
-      // In a real implementation, this would use a different API for music generation
-      const audioUrl = await generateAudio(
-        `Generate ${selectedGenre || 'ambient'} music ${selectedInstruments.length > 0 ? `featuring ${selectedInstruments.join(', ')}` : ''} ${musicPrompt ? `with the following description: ${musicPrompt}` : ''}`
+      // Get a random track that matches the criteria
+      const track = getRandomTrack(
+        genre as string | undefined,
+        instruments as string[] | undefined
       );
 
-      setGeneratedAudioUrl(audioUrl);
-      toast.success('Music generated successfully!');
+      // Set the selected track
+      setSelectedMusicTrack(track);
 
-      // Auto-play the generated audio
-      if (audioRef.current) {
-        audioRef.current.src = audioUrl;
-        audioRef.current.volume = volume / 100;
-
-        // Set up event listeners
-        audioRef.current.onloadedmetadata = () => {
-          if (audioRef.current) {
-            setDuration(audioRef.current.duration);
-          }
-        };
-
-        audioRef.current.onended = () => {
-          setIsPlaying(false);
-        };
-
-        audioRef.current.play().catch(err => {
-          console.error('Error playing audio:', err);
-          toast.error('Could not autoplay audio. Please click play manually.');
-        });
-        setIsPlaying(true);
+      // Set audio title for display
+      let title = track.title;
+      if (track.artist) {
+        title += ` - ${track.artist}`;
       }
+      setAudioTitle(title);
+
+      toast.success('Music found successfully!');
     } catch (error) {
       console.error('Error in music generation:', error);
-      toast.error('Failed to generate music. Please try again.');
+      toast.error('Failed to find music. Please try again.');
     } finally {
       setIsMusicGenerating(false);
     }
@@ -290,7 +271,7 @@ export default function AIStudioPage() {
   }, []);
 
   return (
-    <SimpleBackgroundLayout>
+    <ModernBackgroundLayout>
       <div className="min-h-screen">
         <Navbar />
         <div className="container mx-auto px-4 pt-32 pb-16">
@@ -519,177 +500,75 @@ export default function AIStudioPage() {
               </TabsContent>
 
               <TabsContent value="music" className="mt-0">
-                <Card className="w-full bg-gray-900 border-gray-800">
+                <Card className="w-full bg-gray-900/90 backdrop-blur-lg border-gray-800">
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2">
                       <Music className="h-5 w-5 text-indigo-400" />
-                      AI Music Generator
+                      AI Music Library
                     </CardTitle>
                     <CardDescription>
-                      Create custom music using AI with detailed control over genre, mood, and instruments
+                      Browse and play high-quality music based on your preferences
                     </CardDescription>
                   </CardHeader>
                   <CardContent>
-                    <Textarea
-                      placeholder="Describe the music you want to generate..."
-                      className="min-h-[100px] bg-gray-950 border-gray-800 mb-4"
-                      value={musicPrompt}
-                      onChange={(e) => setMusicPrompt(e.target.value)}
-                    />
-                    <div className="grid grid-cols-2 gap-4 mb-4">
-                      <div className="p-4 bg-gray-950 rounded-lg border border-gray-800">
-                        <h4 className="font-medium mb-2">Genre</h4>
-                        <div className="grid grid-cols-2 gap-2">
+                    {selectedMusicTrack ? (
+                      <div className="space-y-4">
+                        <YouTubePlayer
+                          track={selectedMusicTrack}
+                          onClose={() => setSelectedMusicTrack(null)}
+                        />
+
+                        <div className="flex justify-end">
                           <Button
-                            variant={selectedGenre === 'Ambient' ? 'default' : 'outline'}
+                            variant="outline"
                             size="sm"
-                            className={`justify-start ${selectedGenre === 'Ambient' ? 'bg-indigo-600' : ''}`}
-                            onClick={() => handleGenreSelect('Ambient')}
+                            onClick={() => setSelectedMusicTrack(null)}
+                            className="text-gray-400 hover:text-white"
                           >
-                            Ambient
-                          </Button>
-                          <Button
-                            variant={selectedGenre === 'Classical' ? 'default' : 'outline'}
-                            size="sm"
-                            className={`justify-start ${selectedGenre === 'Classical' ? 'bg-indigo-600' : ''}`}
-                            onClick={() => handleGenreSelect('Classical')}
-                          >
-                            Classical
-                          </Button>
-                          <Button
-                            variant={selectedGenre === 'Electronic' ? 'default' : 'outline'}
-                            size="sm"
-                            className={`justify-start ${selectedGenre === 'Electronic' ? 'bg-indigo-600' : ''}`}
-                            onClick={() => handleGenreSelect('Electronic')}
-                          >
-                            Electronic
-                          </Button>
-                          <Button
-                            variant={selectedGenre === 'Jazz' ? 'default' : 'outline'}
-                            size="sm"
-                            className={`justify-start ${selectedGenre === 'Jazz' ? 'bg-indigo-600' : ''}`}
-                            onClick={() => handleGenreSelect('Jazz')}
-                          >
-                            Jazz
+                            Browse more music
                           </Button>
                         </div>
                       </div>
-                      <div className="p-4 bg-gray-950 rounded-lg border border-gray-800">
-                        <h4 className="font-medium mb-2">Instruments</h4>
-                        <div className="grid grid-cols-2 gap-2">
-                          <Button
-                            variant={selectedInstruments.includes('Piano') ? 'default' : 'outline'}
-                            size="sm"
-                            className={`justify-start ${selectedInstruments.includes('Piano') ? 'bg-indigo-600' : ''}`}
-                            onClick={() => handleInstrumentSelect('Piano')}
-                          >
-                            Piano
-                          </Button>
-                          <Button
-                            variant={selectedInstruments.includes('Guitar') ? 'default' : 'outline'}
-                            size="sm"
-                            className={`justify-start ${selectedInstruments.includes('Guitar') ? 'bg-indigo-600' : ''}`}
-                            onClick={() => handleInstrumentSelect('Guitar')}
-                          >
-                            Guitar
-                          </Button>
-                          <Button
-                            variant={selectedInstruments.includes('Strings') ? 'default' : 'outline'}
-                            size="sm"
-                            className={`justify-start ${selectedInstruments.includes('Strings') ? 'bg-indigo-600' : ''}`}
-                            onClick={() => handleInstrumentSelect('Strings')}
-                          >
-                            Strings
-                          </Button>
-                          <Button
-                            variant={selectedInstruments.includes('Synth') ? 'default' : 'outline'}
-                            size="sm"
-                            className={`justify-start ${selectedInstruments.includes('Synth') ? 'bg-indigo-600' : ''}`}
-                            onClick={() => handleInstrumentSelect('Synth')}
-                          >
-                            Synth
-                          </Button>
-                        </div>
-                      </div>
-                    </div>
+                    ) : (
+                      <div className="space-y-6">
+                        <Textarea
+                          placeholder="Describe the music you want (e.g., 'Classical piano music for relaxation')..."
+                          className="min-h-[80px] bg-gray-950/80 border-gray-800 mb-4"
+                          value={musicPrompt}
+                          onChange={(e) => setMusicPrompt(e.target.value)}
+                        />
 
-                    {generatedAudioUrl && activeTab === 'music' && (
-                      <div className="mt-6 p-4 bg-gray-950 rounded-lg border border-gray-800">
-                        <div className="flex items-center justify-between mb-4">
-                          <h4 className="font-medium flex items-center">
-                            <Music className="h-4 w-4 mr-2 text-indigo-400" />
-                            {audioTitle}
-                          </h4>
-                        </div>
+                        <MusicSelection
+                          genre={selectedGenre || undefined}
+                          instruments={selectedInstruments}
+                          onSelectTrack={(track) => {
+                            setSelectedMusicTrack(track);
+                            setAudioTitle(`${track.title} - ${track.artist}`);
+                          }}
+                        />
 
-                        <div className="flex items-center space-x-4 mb-2">
+                        <div className="flex justify-center pt-4">
                           <Button
-                            variant="ghost"
-                            size="icon"
-                            onClick={togglePlayPause}
-                            className="h-10 w-10 rounded-full"
+                            className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 px-6 py-6 shadow-lg shadow-indigo-500/20 hover:shadow-indigo-500/40"
+                            onClick={handleGenerateMusic}
+                            disabled={isMusicGenerating}
                           >
-                            {isPlaying ? <Pause className="h-5 w-5" /> : <Play className="h-5 w-5" />}
+                            {isMusicGenerating ? (
+                              <>
+                                <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                                Finding perfect music...
+                              </>
+                            ) : (
+                              <>
+                                <Music className="h-4 w-4 mr-2" />
+                                Find Music For Me
+                              </>
+                            )}
                           </Button>
-
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            onClick={toggleMute}
-                            className="h-8 w-8 rounded-full"
-                          >
-                            {isMuted ? <VolumeX className="h-4 w-4" /> : <Volume2 className="h-4 w-4" />}
-                          </Button>
-
-                          <div className="flex-1">
-                            <Slider
-                              value={[currentTime]}
-                              min={0}
-                              max={duration || 100}
-                              step={0.1}
-                              onValueChange={handleProgressChange}
-                              className="mb-1"
-                            />
-                            <div className="flex justify-between text-xs text-gray-400">
-                              <span>{formatTime(currentTime)}</span>
-                              <span>{formatTime(duration)}</span>
-                            </div>
-                          </div>
-                        </div>
-
-                        <div className="flex items-center space-x-2">
-                          <Volume2 className="h-4 w-4 text-gray-500" />
-                          <Slider
-                            value={[volume]}
-                            min={0}
-                            max={100}
-                            step={1}
-                            onValueChange={handleVolumeChange}
-                            className="w-24"
-                          />
                         </div>
                       </div>
                     )}
                   </CardContent>
-                  <CardFooter>
-                    <Button
-                      className="w-full bg-indigo-600 hover:bg-indigo-700"
-                      onClick={handleGenerateMusic}
-                      disabled={isMusicGenerating}
-                    >
-                      {isMusicGenerating ? (
-                        <>
-                          <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                          Generating Music...
-                        </>
-                      ) : (
-                        <>
-                          <Music className="h-4 w-4 mr-2" />
-                          Generate Music
-                        </>
-                      )}
-                    </Button>
-                  </CardFooter>
                 </Card>
               </TabsContent>
 
@@ -804,6 +683,6 @@ export default function AIStudioPage() {
           </div>
         </div>
       </div>
-    </SimpleBackgroundLayout>
+    </ModernBackgroundLayout>
   );
 }
