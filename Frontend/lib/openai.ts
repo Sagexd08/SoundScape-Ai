@@ -101,14 +101,36 @@ function getDemoAudioUrl(prompt: string): string {
     ocean: 'https://cdn.pixabay.com/download/audio/2021/08/09/audio_12b0c7443c.mp3?filename=ocean-waves-112802.mp3',
     city: 'https://cdn.pixabay.com/download/audio/2022/01/18/audio_d1a8d6dc0f.mp3?filename=city-ambience-9272.mp3',
     cafe: 'https://cdn.pixabay.com/download/audio/2022/03/15/audio_1e1a0c5f92.mp3?filename=coffee-shop-ambience-6953.mp3',
-    ambient: 'https://cdn.pixabay.com/download/audio/2022/03/10/audio_c8c8a73467.mp3?filename=ambient-piano-amp-strings-10711.mp3'
+    ambient: 'https://cdn.pixabay.com/download/audio/2022/03/10/audio_c8c8a73467.mp3?filename=ambient-piano-amp-strings-10711.mp3',
+    // Music demo files
+    classical: 'https://cdn.pixabay.com/download/audio/2022/01/18/audio_d5cc55b2f0.mp3?filename=peaceful-piano-9788.mp3',
+    electronic: 'https://cdn.pixabay.com/download/audio/2022/03/19/audio_270f49b19e.mp3?filename=electronic-future-beats-117997.mp3',
+    jazz: 'https://cdn.pixabay.com/download/audio/2022/03/15/audio_c8a7bf7a55.mp3?filename=jazz-happy-110855.mp3',
+    piano: 'https://cdn.pixabay.com/download/audio/2022/01/20/audio_d16737d365.mp3?filename=piano-moment-9835.mp3',
+    guitar: 'https://cdn.pixabay.com/download/audio/2022/01/13/audio_d16a6cb8d0.mp3?filename=acoustic-guitars-ambient-uplifting-background-music-for-videos-5642.mp3',
+    strings: 'https://cdn.pixabay.com/download/audio/2022/01/26/audio_d0fd9b8a0f.mp3?filename=cinematic-documentary-piano-10711.mp3',
+    synth: 'https://cdn.pixabay.com/download/audio/2022/03/15/audio_c8c8a73467.mp3?filename=ambient-piano-amp-strings-10711.mp3'
   };
 
   // Determine which demo audio to use based on the prompt
-  if (prompt.toLowerCase().includes('forest')) return demoAudio.forest;
-  if (prompt.toLowerCase().includes('ocean') || prompt.toLowerCase().includes('sea') || prompt.toLowerCase().includes('wave')) return demoAudio.ocean;
-  if (prompt.toLowerCase().includes('city') || prompt.toLowerCase().includes('urban')) return demoAudio.city;
-  if (prompt.toLowerCase().includes('cafe') || prompt.toLowerCase().includes('coffee')) return demoAudio.cafe;
+  const promptLower = prompt.toLowerCase();
+
+  // Environment sounds
+  if (promptLower.includes('forest')) return demoAudio.forest;
+  if (promptLower.includes('ocean') || promptLower.includes('sea') || promptLower.includes('wave')) return demoAudio.ocean;
+  if (promptLower.includes('city') || promptLower.includes('urban')) return demoAudio.city;
+  if (promptLower.includes('cafe') || promptLower.includes('coffee')) return demoAudio.cafe;
+
+  // Music genres
+  if (promptLower.includes('classical') || promptLower.includes('orchestra')) return demoAudio.classical;
+  if (promptLower.includes('electronic') || promptLower.includes('edm') || promptLower.includes('techno')) return demoAudio.electronic;
+  if (promptLower.includes('jazz') || promptLower.includes('blues')) return demoAudio.jazz;
+
+  // Instruments
+  if (promptLower.includes('piano')) return demoAudio.piano;
+  if (promptLower.includes('guitar')) return demoAudio.guitar;
+  if (promptLower.includes('strings') || promptLower.includes('violin') || promptLower.includes('cello')) return demoAudio.strings;
+  if (promptLower.includes('synth') || promptLower.includes('synthesizer')) return demoAudio.synth;
 
   // Default to ambient if no match
   return demoAudio.ambient;

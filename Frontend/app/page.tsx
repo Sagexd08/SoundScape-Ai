@@ -34,54 +34,127 @@ export default function Home() {
   if (!user) {
     return null;
   }
-  
+
   return (
     <SimpleBackgroundLayout>
       <div className="flex min-h-screen flex-col items-center p-0 relative">
         <Navbar />
         <div className="relative z-10 flex flex-col items-center justify-center min-h-screen p-8">
-          <motion.h1
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, ease: "easeOut" }}
-            className="text-4xl md:text-7xl font-extrabold mb-6 text-center bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 to-purple-600 animate-gradient bg-[length:200%_auto] font-montserrat tracking-tight"
+          <motion.div
+            className="relative mb-8"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 1 }}
           >
-            SoundScape AI
-          </motion.h1>
+            {/* Animated rings around the title */}
+            <motion.div
+              className="absolute -inset-10 md:-inset-20 rounded-full border border-indigo-500/20 z-0"
+              animate={{
+                scale: [1, 1.05, 1],
+                rotate: [0, 5, 0, -5, 0],
+                borderColor: ['rgba(99, 102, 241, 0.2)', 'rgba(168, 85, 247, 0.2)', 'rgba(99, 102, 241, 0.2)']
+              }}
+              transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+            />
 
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
-            className="text-xl md:text-2xl mb-8 text-center max-w-2xl text-gray-300 font-montserrat font-light leading-relaxed"
+            <motion.div
+              className="absolute -inset-20 md:-inset-32 rounded-full border border-purple-500/10 z-0"
+              animate={{
+                scale: [1.05, 1, 1.05],
+                rotate: [0, -5, 0, 5, 0],
+                borderColor: ['rgba(168, 85, 247, 0.1)', 'rgba(99, 102, 241, 0.1)', 'rgba(168, 85, 247, 0.1)']
+              }}
+              transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
+            />
+
+            <motion.h1
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, ease: "easeOut" }}
+              className="text-4xl md:text-7xl font-extrabold mb-6 text-center bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 to-purple-600 animate-gradient bg-[length:200%_auto] font-montserrat tracking-tight relative z-10"
+            >
+              SoundScape AI
+            </motion.h1>
+          </motion.div>
+
+          <motion.div
+            className="relative"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 1, delay: 0.3 }}
           >
-            AI-powered audio environments that adapt to your surroundings and mood in real-time
-          </motion.p>
+            {/* Animated underline */}
+            <motion.div
+              className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 h-1 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-full"
+              initial={{ width: 0 }}
+              animate={{ width: '120px' }}
+              transition={{ duration: 1, delay: 1 }}
+            />
+
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
+              className="text-xl md:text-2xl mb-8 text-center max-w-2xl text-gray-300 font-montserrat font-light leading-relaxed"
+            >
+              AI-powered audio environments that adapt to your surroundings and mood in real-time
+            </motion.p>
+          </motion.div>
 
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.5, delay: 0.4 }}
-            className="flex flex-col sm:flex-row gap-4 w-full max-w-md"
+            className="flex flex-col sm:flex-row gap-4 w-full max-w-md relative"
           >
-            <Button
-              className="bg-indigo-600 hover:bg-indigo-700 w-full transition-all duration-300 transform hover:scale-105 hover:shadow-lg hover:shadow-indigo-500/30 font-montserrat"
-            >
-              <Link href="/ai-studio" className="w-full flex items-center justify-center gap-2">
-                <Wand2 className="h-4 w-4" />
-                Try AI Studio
-              </Link>
-            </Button>
+            {/* Glow effect behind buttons */}
+            <div className="absolute -inset-4 bg-gradient-to-r from-indigo-500/20 to-purple-500/20 rounded-xl blur-xl z-0"></div>
 
-            <Button
-              variant="outline"
-              className="border-indigo-600 text-indigo-400 hover:bg-indigo-950 w-full transition-all duration-300 transform hover:scale-105 hover:shadow-lg hover:shadow-indigo-500/20 font-montserrat"
+            <motion.div
+              whileHover={{ scale: 1.05, y: -5 }}
+              whileTap={{ scale: 0.98 }}
+              className="relative z-10 w-full"
             >
-              <Link href="/features" className="w-full flex items-center justify-center gap-2">
-                <Sparkles className="h-4 w-4" />
-                Explore Features
-              </Link>
-            </Button>
+              <Button
+                className="bg-gradient-to-r from-indigo-600 to-indigo-700 hover:from-indigo-500 hover:to-indigo-600 w-full transition-all duration-300 shadow-lg shadow-indigo-500/20 hover:shadow-indigo-500/40 font-montserrat group overflow-hidden"
+              >
+                <div className="absolute inset-0 w-full h-full bg-gradient-to-r from-indigo-600/0 via-indigo-400/10 to-indigo-600/0 group-hover:via-indigo-400/20 transform -translate-x-full group-hover:translate-x-full transition-all duration-1000"></div>
+                <Link href="/ai-studio" className="w-full flex items-center justify-center gap-2 relative z-10">
+                  <motion.div
+                    animate={{ rotate: [0, 15, -15, 0] }}
+                    transition={{ duration: 2, repeat: Infinity, repeatDelay: 3 }}
+                  >
+                    <Wand2 className="h-4 w-4" />
+                  </motion.div>
+                  Try AI Studio
+                </Link>
+              </Button>
+            </motion.div>
+
+            <motion.div
+              whileHover={{ scale: 1.05, y: -5 }}
+              whileTap={{ scale: 0.98 }}
+              className="relative z-10 w-full"
+            >
+              <Button
+                variant="outline"
+                className="border-indigo-600 text-indigo-400 hover:bg-indigo-950 w-full transition-all duration-300 shadow-lg shadow-indigo-500/10 hover:shadow-indigo-500/30 font-montserrat group overflow-hidden"
+              >
+                <div className="absolute inset-0 w-full h-full bg-gradient-to-r from-indigo-600/0 via-indigo-400/5 to-indigo-600/0 group-hover:via-indigo-400/10 transform -translate-x-full group-hover:translate-x-full transition-all duration-1000"></div>
+                <Link href="/features" className="w-full flex items-center justify-center gap-2 relative z-10">
+                  <motion.div
+                    animate={{
+                      scale: [1, 1.2, 1],
+                      opacity: [1, 0.8, 1]
+                    }}
+                    transition={{ duration: 2, repeat: Infinity, repeatDelay: 1 }}
+                  >
+                    <Sparkles className="h-4 w-4" />
+                  </motion.div>
+                  Explore Features
+                </Link>
+              </Button>
+            </motion.div>
           </motion.div>
         </div>
 

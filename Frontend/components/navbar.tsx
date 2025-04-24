@@ -60,7 +60,7 @@ export default function Navbar() {
               className="w-10 h-10 rounded-full overflow-hidden flex items-center justify-center"
             >
               <img
-                src="https://res.cloudinary.com/dm9h4bawl/image/upload/v1745427929/Screenshot_2025-04-23_223435_ahljcf.png"
+                src="https://asset.cloudinary.com/dm9h4bawl/971707f5e3d6113c9dc9fe890ecc5631"
                 alt="SoundScape AI Logo"
                 className="w-full h-full object-cover"
               />
@@ -109,7 +109,7 @@ export default function Navbar() {
                       <div className="flex h-8 w-8 items-center justify-center rounded-full overflow-hidden">
                         {!user.user_metadata?.avatar_url && (
                           <img
-                            src="https://res.cloudinary.com/dm9h4bawl/image/upload/v1745427929/Screenshot_2025-04-23_223435_ahljcf.png"
+                            src="https://asset.cloudinary.com/dm9h4bawl/971707f5e3d6113c9dc9fe890ecc5631"
                             alt="SoundScape AI Logo"
                             className="w-full h-full object-cover"
                           />
@@ -242,7 +242,7 @@ export default function Navbar() {
                       <div className="flex h-10 w-10 items-center justify-center rounded-full overflow-hidden">
                         {!user.user_metadata?.avatar_url && (
                           <img
-                            src="https://res.cloudinary.com/dm9h4bawl/image/upload/v1745427929/Screenshot_2025-04-23_223435_ahljcf.png"
+                            src="https://asset.cloudinary.com/dm9h4bawl/971707f5e3d6113c9dc9fe890ecc5631"
                             alt="SoundScape AI Logo"
                             className="w-full h-full object-cover"
                           />
