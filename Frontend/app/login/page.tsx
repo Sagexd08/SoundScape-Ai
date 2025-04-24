@@ -10,6 +10,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Separator } from "@/components/ui/separator"
 import { GoogleButton } from "@/components/auth/google-button"
+import { GitHubButton } from "@/components/auth/github-button"
 import Link from "next/link"
 import Navbar from "@/components/navbar"
 import SimpleBackgroundLayout from "@/components/layouts/SimpleBackgroundLayout"
@@ -140,11 +141,16 @@ function LoginForm() {
                       </Alert>
                     )}
 
-                    {/* Google Sign-in Button */}
+                    {/* OAuth Sign-in Buttons */}
                     <div className="space-y-2">
                       <GoogleButton
                         text="Sign in with Google"
                         className="bg-white text-black hover:bg-gray-100"
+                        variant="outline"
+                      />
+                      <GitHubButton
+                        text="Sign in with GitHub"
+                        className="bg-gray-900 text-white hover:bg-gray-800 border-gray-700"
                         variant="outline"
                       />
                     </div>

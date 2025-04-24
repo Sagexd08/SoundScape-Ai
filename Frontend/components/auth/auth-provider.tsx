@@ -22,6 +22,7 @@ interface AuthContextType extends AuthState {
   signIn: (email: string, password: string) => Promise<void>;
   signUp: (email: string, password: string, metadata?: Record<string, any>) => Promise<void>;
   signInWithGoogle: () => Promise<void>;
+  signInWithGitHub: () => Promise<void>;
   signOut: () => Promise<void>;
   resetPassword: (email: string) => Promise<void>;
   updatePassword: (password: string) => Promise<void>;
@@ -89,12 +90,29 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setAuthState(prev => ({ ...prev, isLoading: true, error: null }));
 
     try {
+      // We'll skip the admin check as it's not available in the client
+      // Instead, we'll handle the error more gracefully
+
+      // Proceed with sign in
       const { data, error } = await supabase.auth.signInWithPassword({
         email,
         password,
       });
 
-      if (error) throw error;
+      if (error) {
+        // Log detailed error for debugging
+        console.error('Sign in error details:', error);
+
+        // If error is "Invalid login credentials", provide a more helpful message
+        if (error.message === 'Invalid login credentials') {
+          const customError = new Error('Email or password is incorrect. Please try again.') as AuthError;
+          customError.status = error.status;
+          customError.name = error.name;
+          throw customError;
+        }
+
+        throw error;
+      }
 
       setAuthState(prev => ({
         ...prev,
@@ -122,10 +140,33 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         password,
         options: {
           data: metadata,
+          emailRedirectTo: `${window.location.origin}/auth/callback`,
         },
       });
 
-      if (error) throw error;
+      if (error) {
+        // Log detailed error for debugging
+        console.error('Sign up error details:', error);
+
+        // Handle specific error cases
+        if (error.message.includes('already registered')) {
+          const customError = new Error('This email is already registered. Please sign in instead.') as AuthError;
+          customError.status = error.status;
+          customError.name = error.name;
+          throw customError;
+        }
+
+        throw error;
+      }
+
+      // Check if user is confirmed or needs email verification
+      if (data.user && data.user.identities && data.user.identities.length === 0) {
+        // This means the user already exists but hasn't confirmed their email
+        const customError = new Error('This email is already registered but not confirmed. Please check your email for the confirmation link.') as AuthError;
+        customError.status = 400;
+        customError.name = 'EmailNotConfirmed';
+        throw customError;
+      }
 
       setAuthState(prev => ({
         ...prev,
@@ -242,6 +283,32 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   };
 
+  // Sign in with GitHub
+  const signInWithGitHub = async () => {
+    setAuthState(prev => ({ ...prev, isLoading: true, error: null }));
+
+    try {
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: 'github',
+        options: {
+          redirectTo: `${window.location.origin}/auth/callback`,
+        },
+      });
+
+      if (error) throw error;
+
+      // No need to update state here as the redirect will happen
+      // and the auth state will be updated when the user returns
+    } catch (error) {
+      console.error('Error signing in with GitHub:', error);
+      setAuthState(prev => ({
+        ...prev,
+        error: error as AuthError,
+        isLoading: false
+      }));
+    }
+  };
+
   return (
     <AuthContext.Provider
       value={{
@@ -249,6 +316,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         signIn,
         signUp,
         signInWithGoogle,
+        signInWithGitHub,
         signOut,
         resetPassword,
         updatePassword,
