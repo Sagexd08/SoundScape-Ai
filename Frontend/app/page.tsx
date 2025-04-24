@@ -122,51 +122,61 @@ export default function Home() {
             {/* Glow effect behind buttons */}
             <div className="absolute -inset-4 bg-gradient-to-r from-indigo-500/20 to-purple-500/20 rounded-xl blur-xl z-0"></div>
 
-            <motion.div
-              whileHover={{ scale: 1.05, y: -5 }}
-              whileTap={{ scale: 0.98 }}
-              className="relative z-10 w-full"
-            >
-              <Button
-                className="bg-gradient-to-r from-indigo-600 to-indigo-700 hover:from-indigo-500 hover:to-indigo-600 w-full transition-all duration-300 shadow-lg shadow-indigo-500/20 hover:shadow-indigo-500/40 font-montserrat group overflow-hidden"
+            <div className="relative z-10 w-full will-change-transform">
+              <motion.div
+                whileHover={{ scale: 1.05, y: -5 }}
+                whileTap={{ scale: 0.98 }}
+                className="will-change-transform"
               >
-                <div className="absolute inset-0 w-full h-full bg-gradient-to-r from-indigo-600/0 via-indigo-400/10 to-indigo-600/0 group-hover:via-indigo-400/20 transform -translate-x-full group-hover:translate-x-full transition-all duration-1000"></div>
-                <Link href="/ai-studio" className="w-full flex items-center justify-center gap-2 relative z-10">
-                  <motion.div
-                    animate={{ rotate: [0, 15, -15, 0] }}
-                    transition={{ duration: 4, repeat: Infinity, repeatDelay: 8 }}
+                <Link href="/ai-studio" className="block w-full">
+                  <Button
+                    className="bg-gradient-to-r from-indigo-600 to-indigo-700 hover:from-indigo-500 hover:to-indigo-600 w-full transition-colors duration-300 shadow-lg shadow-indigo-500/20 hover:shadow-indigo-500/40 font-montserrat relative overflow-hidden"
                   >
-                    <Wand2 className="h-4 w-4" />
-                  </motion.div>
-                  Try AI Studio
+                    <div className="absolute inset-0 bg-black/0 hover:bg-black/10 transition-colors duration-300"></div>
+                    <div className="w-full flex items-center justify-center gap-2 relative z-10">
+                      <motion.div
+                        animate={{ rotate: [0, 15, -15, 0] }}
+                        transition={{ duration: 4, repeat: Infinity, repeatDelay: 8 }}
+                        className="will-change-transform"
+                      >
+                        <Wand2 className="h-4 w-4" />
+                      </motion.div>
+                      Try AI Studio
+                    </div>
+                  </Button>
                 </Link>
-              </Button>
-            </motion.div>
+              </motion.div>
+            </div>
 
-            <motion.div
-              whileHover={{ scale: 1.05, y: -5 }}
-              whileTap={{ scale: 0.98 }}
-              className="relative z-10 w-full"
-            >
-              <Button
-                variant="outline"
-                className="border-indigo-600 text-indigo-400 hover:bg-indigo-950 w-full transition-all duration-300 shadow-lg shadow-indigo-500/10 hover:shadow-indigo-500/30 font-montserrat group overflow-hidden"
+            <div className="relative z-10 w-full will-change-transform">
+              <motion.div
+                whileHover={{ scale: 1.05, y: -5 }}
+                whileTap={{ scale: 0.98 }}
+                className="will-change-transform"
               >
-                <div className="absolute inset-0 w-full h-full bg-gradient-to-r from-indigo-600/0 via-indigo-400/5 to-indigo-600/0 group-hover:via-indigo-400/10 transform -translate-x-full group-hover:translate-x-full transition-all duration-1000"></div>
-                <Link href="/features" className="w-full flex items-center justify-center gap-2 relative z-10">
-                  <motion.div
-                    animate={{
-                      scale: [1, 1.2, 1],
-                      opacity: [1, 0.8, 1]
-                    }}
-                    transition={{ duration: 4, repeat: Infinity, repeatDelay: 6 }}
+                <Link href="/features" className="block w-full">
+                  <Button
+                    variant="outline"
+                    className="border-indigo-600 text-indigo-400 hover:bg-indigo-950 w-full transition-colors duration-300 shadow-lg shadow-indigo-500/10 hover:shadow-indigo-500/30 font-montserrat relative overflow-hidden"
                   >
-                    <Sparkles className="h-4 w-4" />
-                  </motion.div>
-                  Explore Features
+                    <div className="absolute inset-0 bg-indigo-950/0 hover:bg-indigo-950/50 transition-colors duration-300"></div>
+                    <div className="w-full flex items-center justify-center gap-2 relative z-10">
+                      <motion.div
+                        animate={{
+                          scale: [1, 1.2, 1],
+                          opacity: [1, 0.8, 1]
+                        }}
+                        transition={{ duration: 4, repeat: Infinity, repeatDelay: 6 }}
+                        className="will-change-transform"
+                      >
+                        <Sparkles className="h-4 w-4" />
+                      </motion.div>
+                      Explore Features
+                    </div>
+                  </Button>
                 </Link>
-              </Button>
-            </motion.div>
+              </motion.div>
+            </div>
           </motion.div>
         </div>
 
@@ -279,26 +289,32 @@ export default function Home() {
               {/* Glow effect behind button */}
               <div className="absolute inset-0 w-64 h-12 mx-auto bg-gradient-to-r from-indigo-600/30 to-purple-600/30 blur-xl rounded-full"></div>
 
-              <motion.div
-                whileHover={{ scale: 1.05, y: -3 }}
-                whileTap={{ scale: 0.98 }}
-              >
-                <Button className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 transition-all duration-500 shadow-lg shadow-purple-500/20 hover:shadow-purple-500/40 px-6 py-6 relative overflow-hidden group">
-                  <div className="absolute inset-0 w-full h-full bg-gradient-to-r from-indigo-600/0 via-white/10 to-indigo-600/0 transform -translate-x-full group-hover:translate-x-full transition-all duration-1000"></div>
-                  <Link href="/ai-studio" className="flex items-center gap-3 relative z-10">
-                    <motion.div
-                      animate={{
-                        rotate: [0, 10, 0, -10, 0],
-                        scale: [1, 1.1, 1]
-                      }}
-                      transition={{ duration: 5, repeat: Infinity, repeatDelay: 5 }}
-                    >
-                      <Headphones className="h-5 w-5" />
-                    </motion.div>
-                    <span className="font-semibold tracking-wide">Experience Full AI Studio</span>
+              <div className="relative will-change-transform">
+                <motion.div
+                  whileHover={{ scale: 1.05, y: -3 }}
+                  whileTap={{ scale: 0.98 }}
+                  className="will-change-transform"
+                >
+                  <Link href="/ai-studio" className="inline-block">
+                    <Button className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 transition-colors duration-300 shadow-lg shadow-purple-500/20 hover:shadow-purple-500/40 px-6 py-6 relative overflow-hidden">
+                      <div className="absolute inset-0 bg-black/0 hover:bg-black/10 transition-colors duration-300"></div>
+                      <div className="flex items-center gap-3 relative z-10">
+                        <motion.div
+                          animate={{
+                            rotate: [0, 10, 0, -10, 0],
+                            scale: [1, 1.1, 1]
+                          }}
+                          transition={{ duration: 5, repeat: Infinity, repeatDelay: 5 }}
+                          className="will-change-transform"
+                        >
+                          <Headphones className="h-5 w-5" />
+                        </motion.div>
+                        <span className="font-semibold tracking-wide">Experience Full AI Studio</span>
+                      </div>
+                    </Button>
                   </Link>
-                </Button>
-              </motion.div>
+                </motion.div>
+              </div>
             </div>
           </div>
         </motion.div>
