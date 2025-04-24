@@ -210,9 +210,9 @@ export default function AIStudioPage() {
 
   // Sound effects state
   const [soundPrompt, setSoundPrompt] = useState('');
-  const [selectedEnvironment, setSelectedEnvironment] = useState<string | null>(null);
+  const [selectedSoundEnvironment, setSelectedSoundEnvironment] = useState<string | null>(null);
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
-  const [selectedMood, setSelectedMood] = useState<string | null>(null);
+  const [selectedSoundMood, setSelectedSoundMood] = useState<string | null>(null);
   const [isGeneratingSound, setIsGeneratingSound] = useState(false);
   const [selectedSoundEffect, setSelectedSoundEffect] = useState<SoundEffect | null>(null);
 
@@ -276,7 +276,7 @@ export default function AIStudioPage() {
 
   // Handle sound effect generation
   const handleGenerateSoundEffect = async () => {
-    if (!soundPrompt.trim() && !selectedEnvironment && selectedTags.length === 0 && !selectedMood) {
+    if (!soundPrompt.trim() && !selectedSoundEnvironment && selectedTags.length === 0 && !selectedSoundMood) {
       toast.error('Please enter a prompt or select environment options');
       return;
     }
@@ -287,9 +287,9 @@ export default function AIStudioPage() {
       toast.info('Finding the perfect sound environment for you...');
 
       // Get category, tags and mood from state
-      const category = selectedEnvironment || undefined;
+      const category = selectedSoundEnvironment || undefined;
       const tags = selectedTags.length > 0 ? selectedTags : undefined;
-      const mood = selectedMood || undefined;
+      const mood = selectedSoundMood || undefined;
 
       // Simulate API call with a timeout
       await new Promise(resolve => setTimeout(resolve, 1500));
@@ -415,9 +415,9 @@ export default function AIStudioPage() {
                         />
 
                         <SoundEffectsSelection
-                          category={selectedEnvironment || undefined}
+                          category={selectedSoundEnvironment || undefined}
                           tags={selectedTags}
-                          mood={selectedMood || undefined}
+                          mood={selectedSoundMood || undefined}
                           onSelectSoundEffect={(sound) => {
                             setSelectedSoundEffect(sound);
                             setAudioTitle(sound.title);
