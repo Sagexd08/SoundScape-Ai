@@ -860,6 +860,156 @@ export default function AIStudioPage() {
                 </ul>
               </motion.div>
             </div>
+
+            {/* New Feature Cards Section */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, ease: "easeOut", delay: 0.2 }}
+              className="mt-12 mb-8 text-center"
+            >
+              <h2 className="text-2xl md:text-3xl font-bold mb-2 bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 to-purple-400">
+                Advanced Audio Features
+              </h2>
+              <p className="text-gray-400 max-w-2xl mx-auto mb-8">
+                Experience our cutting-edge audio technology with these powerful features
+              </p>
+            </motion.div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
+              {/* Environment-Based Audio */}
+              <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, ease: "easeOut", delay: 0.2 }}
+                className="bg-gradient-to-br from-indigo-900/30 to-indigo-800/10 border border-indigo-800/30 rounded-xl p-6 backdrop-blur-sm"
+              >
+                <div className="bg-indigo-500/20 p-3 rounded-lg w-12 h-12 flex items-center justify-center mb-4">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-6 w-6 text-indigo-400">
+                    <path d="M2 12a5 5 0 0 0 5 5 8 8 0 0 1 5 2 8 8 0 0 1 5-2 5 5 0 0 0 5-5V7h-5a8 8 0 0 0-5 2 8 8 0 0 0-5-2H2Z"></path>
+                  </svg>
+                </div>
+                <h3 className="text-xl font-semibold mb-3 text-white">Environment-Based Audio</h3>
+                <p className="text-gray-300 mb-4">
+                  Generate immersive soundscapes based on different environments like forests, oceans, cities, and cafes.
+                </p>
+                <ul className="space-y-2 text-gray-400">
+                  <li className="flex items-start gap-2">
+                    <Sparkles className="h-4 w-4 text-indigo-400 mt-1 shrink-0" />
+                    <span>Multiple environment presets</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <Sparkles className="h-4 w-4 text-indigo-400 mt-1 shrink-0" />
+                    <span>High-fidelity nature sounds</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <Sparkles className="h-4 w-4 text-indigo-400 mt-1 shrink-0" />
+                    <span>Customizable ambient elements</span>
+                  </li>
+                </ul>
+                <Button
+                  variant="outline"
+                  className="mt-4 w-full border-indigo-600/50 text-indigo-400 hover:bg-indigo-900/50"
+                  onClick={() => {
+                    setActiveTab('generate');
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                  }}
+                >
+                  Try Environment Audio
+                </Button>
+              </motion.div>
+
+              {/* Mood-Based Customization */}
+              <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, ease: "easeOut", delay: 0.3 }}
+                className="bg-gradient-to-br from-purple-900/30 to-purple-800/10 border border-purple-800/30 rounded-xl p-6 backdrop-blur-sm"
+              >
+                <div className="bg-purple-500/20 p-3 rounded-lg w-12 h-12 flex items-center justify-center mb-4">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-6 w-6 text-purple-400">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <path d="M8 14s1.5 2 4 2 4-2 4-2"></path>
+                    <line x1="9" y1="9" x2="9.01" y2="9"></line>
+                    <line x1="15" y1="9" x2="15.01" y2="9"></line>
+                  </svg>
+                </div>
+                <h3 className="text-xl font-semibold mb-3 text-white">Mood-Based Customization</h3>
+                <p className="text-gray-300 mb-4">
+                  Tailor audio to match your emotional state, whether relaxing, energetic, focused, or peaceful.
+                </p>
+                <ul className="space-y-2 text-gray-400">
+                  <li className="flex items-start gap-2">
+                    <Sparkles className="h-4 w-4 text-purple-400 mt-1 shrink-0" />
+                    <span>Emotion-responsive audio</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <Sparkles className="h-4 w-4 text-purple-400 mt-1 shrink-0" />
+                    <span>Mood enhancement technology</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <Sparkles className="h-4 w-4 text-purple-400 mt-1 shrink-0" />
+                    <span>Personalized emotional profiles</span>
+                  </li>
+                </ul>
+                <Button
+                  variant="outline"
+                  className="mt-4 w-full border-purple-600/50 text-purple-400 hover:bg-purple-900/50"
+                  onClick={() => {
+                    setActiveTab('generate');
+                    setSelectedMood('relaxing');
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                  }}
+                >
+                  Try Mood Customization
+                </Button>
+              </motion.div>
+
+              {/* Real-Time Adaptation */}
+              <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, ease: "easeOut", delay: 0.4 }}
+                className="bg-gradient-to-br from-blue-900/30 to-blue-800/10 border border-blue-800/30 rounded-xl p-6 backdrop-blur-sm"
+              >
+                <div className="bg-blue-500/20 p-3 rounded-lg w-12 h-12 flex items-center justify-center mb-4">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-6 w-6 text-blue-400">
+                    <path d="M22 12c0 6-4.39 10-9.806 10C7.792 22 4.24 19.665 3 16"></path>
+                    <path d="M2 12C2 6 6.39 2 11.806 2 16.209 2 19.76 4.335 21 8"></path>
+                    <path d="M7 17l-4-1-1 4"></path>
+                    <path d="M17 7l4 1 1-4"></path>
+                  </svg>
+                </div>
+                <h3 className="text-xl font-semibold mb-3 text-white">Real-Time Adaptation</h3>
+                <p className="text-gray-300 mb-4">
+                  Experience audio environments that adapt to your surroundings and context in real-time.
+                </p>
+                <ul className="space-y-2 text-gray-400">
+                  <li className="flex items-start gap-2">
+                    <Sparkles className="h-4 w-4 text-blue-400 mt-1 shrink-0" />
+                    <span>Context-aware sound mixing</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <Sparkles className="h-4 w-4 text-blue-400 mt-1 shrink-0" />
+                    <span>Dynamic audio transitions</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <Sparkles className="h-4 w-4 text-blue-400 mt-1 shrink-0" />
+                    <span>Adaptive volume and EQ</span>
+                  </li>
+                </ul>
+                <Button
+                  variant="outline"
+                  className="mt-4 w-full border-blue-600/50 text-blue-400 hover:bg-blue-900/50"
+                  onClick={() => {
+                    setActiveTab('generate');
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                  }}
+                >
+                  Try Real-Time Adaptation
+                </Button>
+              </motion.div>
+            </div>
           </div>
         </div>
       </div>
