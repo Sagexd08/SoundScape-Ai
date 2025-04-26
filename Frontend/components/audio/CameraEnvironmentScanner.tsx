@@ -50,7 +50,7 @@ export default function CameraEnvironmentScanner({
       const stream = await navigator.mediaDevices.getUserMedia({
         video: { facingMode: 'environment' }
       });
-      
+
       if (videoRef.current) {
         videoRef.current.srcObject = stream;
       }
@@ -66,7 +66,7 @@ export default function CameraEnvironmentScanner({
     if (videoRef.current && videoRef.current.srcObject) {
       const stream = videoRef.current.srcObject as MediaStream;
       const tracks = stream.getTracks();
-      
+
       tracks.forEach(track => track.stop());
       videoRef.current.srcObject = null;
     }
@@ -77,21 +77,21 @@ export default function CameraEnvironmentScanner({
     if (videoRef.current && canvasRef.current) {
       const video = videoRef.current;
       const canvas = canvasRef.current;
-      
+
       // Set canvas dimensions to match video
       canvas.width = video.videoWidth;
       canvas.height = video.videoHeight;
-      
+
       // Draw video frame to canvas
       const context = canvas.getContext('2d');
       if (context) {
         context.drawImage(video, 0, 0, canvas.width, canvas.height);
-        
+
         // Convert canvas to data URL
         const imageDataUrl = canvas.toDataURL('image/jpeg');
         setCapturedImage(imageDataUrl);
         setIsCameraActive(false);
-        
+
         // Process the captured image
         processImage(imageDataUrl);
       }
@@ -107,21 +107,21 @@ export default function CameraEnvironmentScanner({
         toast.error('Please upload an image file');
         return;
       }
-      
+
       // Check file size (max 5MB)
       if (file.size > 5 * 1024 * 1024) {
         toast.error('File size exceeds 5MB limit');
         return;
       }
-      
+
       setUploadedImage(file);
-      
+
       // Create a data URL from the file
       const reader = new FileReader();
       reader.onload = (e) => {
         const imageDataUrl = e.target?.result as string;
         setCapturedImage(imageDataUrl);
-        
+
         // Process the uploaded image
         processImage(imageDataUrl);
       };
@@ -132,24 +132,24 @@ export default function CameraEnvironmentScanner({
   // Process image with Gemini AI
   const processImage = async (imageDataUrl: string) => {
     setIsProcessing(true);
-    
+
     try {
       toast.info('Analyzing environment with Gemini AI...');
-      
+
       // Call Gemini AI to analyze the image
       const result = await aiService.analyzeEnvironmentImage(imageDataUrl);
-      
+
       if (result && result.environment) {
         // Extract environment and additional data
         const { environment, description, mood, songSuggestions } = result;
-        
+
         // Pass the detected environment and additional data to the parent component
         onEnvironmentDetected(environment, {
           description,
           mood,
           songSuggestions
         });
-        
+
         toast.success(`Environment detected: ${environment}`);
         onClose();
       } else {
@@ -158,11 +158,11 @@ export default function CameraEnvironmentScanner({
     } catch (error) {
       console.error('Error analyzing image:', error);
       toast.error('Failed to analyze image. Please try again.');
-      
+
       // Fallback to predefined environments
       const environments = ['forest', 'ocean', 'city', 'cafe', 'mountains', 'rain'];
       const randomEnvironment = environments[Math.floor(Math.random() * environments.length)];
-      
+
       onEnvironmentDetected(randomEnvironment);
       toast.info(`Using fallback environment: ${randomEnvironment}`);
       onClose();
@@ -193,7 +193,7 @@ export default function CameraEnvironmentScanner({
             Scan your surroundings or upload an image to detect the environment and generate matching audio
           </CardDescription>
         </CardHeader>
-        
+
         <CardContent className="space-y-4">
           {isProcessing ? (
             <div className="flex flex-col items-center justify-center py-12">
@@ -213,7 +213,7 @@ export default function CameraEnvironmentScanner({
                   className="w-full h-full object-cover"
                 />
               </div>
-              
+
               <div className="flex justify-between">
                 <Button
                   variant="outline"
@@ -224,7 +224,7 @@ export default function CameraEnvironmentScanner({
                 >
                   Take Another
                 </Button>
-                
+
                 <Button
                   onClick={() => {
                     if (capturedImage) {
@@ -248,7 +248,7 @@ export default function CameraEnvironmentScanner({
                   className="w-full h-full object-cover"
                 />
               </div>
-              
+
               <div className="flex justify-between">
                 <Button
                   variant="outline"
@@ -256,7 +256,7 @@ export default function CameraEnvironmentScanner({
                 >
                   Cancel
                 </Button>
-                
+
                 <Button
                   onClick={captureImage}
                   className="bg-indigo-600 hover:bg-indigo-700"
@@ -275,7 +275,7 @@ export default function CameraEnvironmentScanner({
                 <span className="text-sm font-medium">Use Camera</span>
                 <span className="text-xs text-gray-400">Scan your surroundings</span>
               </Button>
-              
+
               <Button
                 onClick={() => fileInputRef.current?.click()}
                 className="h-32 bg-gray-800/80 hover:bg-gray-700/80 border border-gray-700 rounded-lg flex flex-col items-center justify-center gap-2 p-4"
@@ -294,15 +294,24 @@ export default function CameraEnvironmentScanner({
             </div>
           )}
         </CardContent>
-        
+
         <CardFooter className="flex flex-col space-y-2 border-t border-gray-800 pt-4">
+          <div className="flex justify-between w-full mb-3">
+            <Button
+              variant="outline"
+              onClick={onClose}
+              className="border-gray-700 text-gray-400 hover:text-white"
+            >
+              Back to AI Studio
+            </Button>
+          </div>
           <p className="text-xs text-gray-500">
             The environment scanner uses Gemini AI to analyze your surroundings and detect the environment type.
             This helps generate more accurate and immersive audio that matches your location.
           </p>
         </CardFooter>
       </Card>
-      
+
       {/* Hidden canvas for image capture */}
       <canvas ref={canvasRef} className="hidden" />
     </div>

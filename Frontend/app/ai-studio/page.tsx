@@ -13,6 +13,7 @@ import SoundEffectPlayer from '@/components/audio/SoundEffectPlayer';
 import CameraEnvironmentScanner from '@/components/audio/CameraEnvironmentScanner';
 import MoodSelector from '@/components/audio/MoodSelector';
 import RealTimeAdapter from '@/components/audio/RealTimeAdapter';
+import SongSuggestions from '@/components/audio/SongSuggestions';
 import { MusicTrack, getRandomTrack } from '@/lib/music-library';
 import { SoundEffect, getRandomSoundEffect } from '@/lib/sound-effects-library';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
@@ -336,6 +337,14 @@ export default function AIStudioPage() {
     }
   };
 
+  // State for song suggestions
+  const [environmentSongSuggestions, setEnvironmentSongSuggestions] = useState<Array<{
+    title: string;
+    artist: string;
+    genre: string;
+    youtubeUrl?: string;
+  }> | null>(null);
+
   // Handle environment detection from camera or image
   const handleEnvironmentDetected = (
     environment: string,
@@ -357,12 +366,10 @@ export default function AIStudioPage() {
         setSelectedMood(additionalData.mood);
       }
 
-      // If we have song suggestions, show them
+      // If we have song suggestions, save them
       if (additionalData.songSuggestions && additionalData.songSuggestions.length > 0) {
-        // In a real implementation, we would use these suggestions
-        // For now, just show a toast with the first suggestion
-        const firstSong = additionalData.songSuggestions[0];
-        toast.info(`Suggested music: "${firstSong.title}" by ${firstSong.artist} (${firstSong.genre})`);
+        setEnvironmentSongSuggestions(additionalData.songSuggestions);
+        toast.success(`Found ${additionalData.songSuggestions.length} song suggestions for this environment`);
       }
     } else {
       // Generate a prompt based on the detected environment
@@ -377,6 +384,36 @@ export default function AIStudioPage() {
 
       const generatedPrompt = environmentPrompts[environment] || `${environment} sounds and atmosphere`;
       setPrompt(generatedPrompt);
+
+      // Generate default song suggestions if none were provided
+      const defaultSuggestions: Record<string, Array<{title: string, artist: string, genre: string}>> = {
+        forest: [
+          { title: "Forest Dreams", artist: "Nature Sounds", genre: "Ambient" },
+          { title: "Woodland Whispers", artist: "Eco Ensemble", genre: "New Age" }
+        ],
+        ocean: [
+          { title: "Ocean Waves", artist: "Coastal Sounds", genre: "Ambient" },
+          { title: "Seaside Serenity", artist: "Marine Melodies", genre: "New Age" }
+        ],
+        city: [
+          { title: "Urban Pulse", artist: "City Beats", genre: "Electronic" },
+          { title: "Metropolitan", artist: "Street Rhythm", genre: "Jazz Fusion" }
+        ],
+        cafe: [
+          { title: "Coffee Shop Jazz", artist: "Cafe Collective", genre: "Jazz" },
+          { title: "Morning Brew", artist: "Acoustic Ensemble", genre: "Acoustic" }
+        ],
+        mountains: [
+          { title: "Alpine Ascent", artist: "Peak Performers", genre: "Orchestral" },
+          { title: "Summit", artist: "Mountain Melody", genre: "Cinematic" }
+        ],
+        rain: [
+          { title: "Rainfall", artist: "Storm Sounds", genre: "Ambient" },
+          { title: "Gentle Downpour", artist: "Weather Tones", genre: "Lo-fi" }
+        ]
+      };
+
+      setEnvironmentSongSuggestions(defaultSuggestions[environment] || []);
     }
   };
 
@@ -455,7 +492,7 @@ export default function AIStudioPage() {
           </motion.div>
 
           {/* Feature Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
             {/* Environment-Based Audio Card */}
             <Card className="bg-gradient-to-br from-blue-900/40 to-indigo-900/40 border-blue-800/50 hover:border-blue-700/50 transition-colors">
               <CardHeader>
@@ -468,23 +505,56 @@ export default function AIStudioPage() {
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <p className="text-sm text-gray-300 mb-4">
-                  Scan your surroundings or select from a list of environments to generate immersive soundscapes that match your setting.
-                </p>
-                <div className="flex flex-col space-y-2">
-                  <div className="flex items-center text-xs text-gray-400">
-                    <span className="inline-block w-5 h-5 rounded-full bg-blue-500 flex items-center justify-center text-white mr-2">✓</span>
-                    Camera environment detection
+                {selectedEnvironment && environmentSongSuggestions ? (
+                  <div className="space-y-4">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <span className="inline-block w-6 h-6 rounded-full bg-blue-500 flex items-center justify-center text-white">✓</span>
+                        <span className="font-medium text-white capitalize">{selectedEnvironment} Environment Detected</span>
+                      </div>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => {
+                          setSelectedEnvironment(null);
+                          setEnvironmentSongSuggestions(null);
+                        }}
+                        className="text-xs border-gray-700"
+                      >
+                        Reset
+                      </Button>
+                    </div>
+
+                    {/* Import and use the SongSuggestions component */}
+                    <div className="mt-4">
+                      {/* @ts-ignore - Importing dynamically */}
+                      <SongSuggestions
+                        suggestions={environmentSongSuggestions}
+                        environment={selectedEnvironment}
+                      />
+                    </div>
                   </div>
-                  <div className="flex items-center text-xs text-gray-400">
-                    <span className="inline-block w-5 h-5 rounded-full bg-blue-500 flex items-center justify-center text-white mr-2">✓</span>
-                    Gemini AI image analysis
-                  </div>
-                  <div className="flex items-center text-xs text-gray-400">
-                    <span className="inline-block w-5 h-5 rounded-full bg-blue-500 flex items-center justify-center text-white mr-2">✓</span>
-                    Immersive environment audio
-                  </div>
-                </div>
+                ) : (
+                  <>
+                    <p className="text-sm text-gray-300 mb-4">
+                      Scan your surroundings or select from a list of environments to generate immersive soundscapes that match your setting.
+                    </p>
+                    <div className="flex flex-col space-y-2">
+                      <div className="flex items-center text-xs text-gray-400">
+                        <span className="inline-block w-5 h-5 rounded-full bg-blue-500 flex items-center justify-center text-white mr-2">✓</span>
+                        Camera environment detection
+                      </div>
+                      <div className="flex items-center text-xs text-gray-400">
+                        <span className="inline-block w-5 h-5 rounded-full bg-blue-500 flex items-center justify-center text-white mr-2">✓</span>
+                        Gemini AI image analysis
+                      </div>
+                      <div className="flex items-center text-xs text-gray-400">
+                        <span className="inline-block w-5 h-5 rounded-full bg-blue-500 flex items-center justify-center text-white mr-2">✓</span>
+                        Immersive environment audio
+                      </div>
+                    </div>
+                  </>
+                )}
               </CardContent>
               <CardFooter>
                 <Button
@@ -492,48 +562,7 @@ export default function AIStudioPage() {
                   onClick={() => setShowEnvironmentScanner(true)}
                 >
                   <Camera className="h-4 w-4 mr-2" />
-                  Scan Environment
-                </Button>
-              </CardFooter>
-            </Card>
-
-            {/* Mood-Based Customization Card */}
-            <Card className="bg-gradient-to-br from-purple-900/40 to-pink-900/40 border-purple-800/50 hover:border-purple-700/50 transition-colors">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Sparkles className="h-5 w-5 text-purple-400" />
-                  Mood-Based Customization
-                </CardTitle>
-                <CardDescription>
-                  Personalize audio to enhance your mood
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <p className="text-sm text-gray-300 mb-4">
-                  Select a mood or describe how you feel to generate personalized audio that enhances your emotional state.
-                </p>
-                <div className="flex flex-col space-y-2">
-                  <div className="flex items-center text-xs text-gray-400">
-                    <span className="inline-block w-5 h-5 rounded-full bg-purple-500 flex items-center justify-center text-white mr-2">✓</span>
-                    Mood-based audio generation
-                  </div>
-                  <div className="flex items-center text-xs text-gray-400">
-                    <span className="inline-block w-5 h-5 rounded-full bg-purple-500 flex items-center justify-center text-white mr-2">✓</span>
-                    Custom mood descriptions
-                  </div>
-                  <div className="flex items-center text-xs text-gray-400">
-                    <span className="inline-block w-5 h-5 rounded-full bg-purple-500 flex items-center justify-center text-white mr-2">✓</span>
-                    AI-enhanced emotional audio
-                  </div>
-                </div>
-              </CardContent>
-              <CardFooter>
-                <Button
-                  className="w-full bg-purple-600 hover:bg-purple-700"
-                  onClick={() => setShowMoodSelector(true)}
-                >
-                  <Sparkles className="h-4 w-4 mr-2" />
-                  Select Mood
+                  {selectedEnvironment ? 'Scan New Environment' : 'Scan Environment'}
                 </Button>
               </CardFooter>
             </Card>
@@ -575,6 +604,49 @@ export default function AIStudioPage() {
                 >
                   <Zap className="h-4 w-4 mr-2" />
                   Activate Real-Time
+                </Button>
+              </CardFooter>
+            </Card>
+          </div>
+
+          {/* Mood-Based Customization Card - Moved to its own row for better layout */}
+          <div className="mb-8">
+            <Card className="bg-gradient-to-br from-purple-900/40 to-pink-900/40 border-purple-800/50 hover:border-purple-700/50 transition-colors">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Sparkles className="h-5 w-5 text-purple-400" />
+                  Mood-Based Customization
+                </CardTitle>
+                <CardDescription>
+                  Personalize audio to enhance your mood
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <p className="text-sm text-gray-300 mb-4">
+                  Select a mood or describe how you feel to generate personalized audio that enhances your emotional state.
+                </p>
+                <div className="flex flex-col space-y-2">
+                  <div className="flex items-center text-xs text-gray-400">
+                    <span className="inline-block w-5 h-5 rounded-full bg-purple-500 flex items-center justify-center text-white mr-2">✓</span>
+                    Mood-based audio generation
+                  </div>
+                  <div className="flex items-center text-xs text-gray-400">
+                    <span className="inline-block w-5 h-5 rounded-full bg-purple-500 flex items-center justify-center text-white mr-2">✓</span>
+                    Custom mood descriptions
+                  </div>
+                  <div className="flex items-center text-xs text-gray-400">
+                    <span className="inline-block w-5 h-5 rounded-full bg-purple-500 flex items-center justify-center text-white mr-2">✓</span>
+                    AI-enhanced emotional audio
+                  </div>
+                </div>
+              </CardContent>
+              <CardFooter>
+                <Button
+                  className="w-full bg-purple-600 hover:bg-purple-700"
+                  onClick={() => setShowMoodSelector(true)}
+                >
+                  <Sparkles className="h-4 w-4 mr-2" />
+                  Select Mood
                 </Button>
               </CardFooter>
             </Card>

@@ -26,7 +26,7 @@ export default function RealTimeAdapter({
   const [sensitivityLevel, setSensitivityLevel] = useState(70);
   const [lastAnalysisTime, setLastAnalysisTime] = useState(0);
   const [analysisInterval, setAnalysisInterval] = useState(5000); // 5 seconds
-  
+
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
@@ -88,7 +88,7 @@ export default function RealTimeAdapter({
       const stream = await navigator.mediaDevices.getUserMedia({
         video: { facingMode: 'environment' }
       });
-      
+
       if (videoRef.current) {
         videoRef.current.srcObject = stream;
       }
@@ -105,7 +105,7 @@ export default function RealTimeAdapter({
     if (videoRef.current && videoRef.current.srcObject) {
       const stream = videoRef.current.srcObject as MediaStream;
       const tracks = stream.getTracks();
-      
+
       tracks.forEach(track => track.stop());
       videoRef.current.srcObject = null;
     }
@@ -116,19 +116,19 @@ export default function RealTimeAdapter({
     if (videoRef.current && canvasRef.current) {
       const video = videoRef.current;
       const canvas = canvasRef.current;
-      
+
       // Set canvas dimensions to match video
       canvas.width = video.videoWidth;
       canvas.height = video.videoHeight;
-      
+
       // Draw video frame to canvas
       const context = canvas.getContext('2d');
       if (context) {
         context.drawImage(video, 0, 0, canvas.width, canvas.height);
-        
+
         // Convert canvas to data URL
         const imageDataUrl = canvas.toDataURL('image/jpeg', 0.7); // Lower quality for faster processing
-        
+
         // Process the captured image
         processImage(imageDataUrl);
       }
@@ -144,15 +144,15 @@ export default function RealTimeAdapter({
         toast.error('Please upload an image or video file');
         return;
       }
-      
+
       // Check file size (max 10MB)
       if (file.size > 10 * 1024 * 1024) {
         toast.error('File size exceeds 10MB limit');
         return;
       }
-      
+
       setUploadedMedia(file);
-      
+
       // If it's an image, process it
       if (file.type.startsWith('image/')) {
         const reader = new FileReader();
@@ -171,18 +171,18 @@ export default function RealTimeAdapter({
   // Process image with Gemini AI
   const processImage = async (imageDataUrl: string) => {
     setIsProcessing(true);
-    
+
     try {
       // Call Gemini AI to analyze the image
       const result = await aiService.analyzeEnvironmentImage(imageDataUrl);
-      
+
       if (result && result.environment) {
         // Extract environment
         const { environment } = result;
-        
+
         // Update detected environment
         setDetectedEnvironment(environment);
-        
+
         // Show toast only on environment change
         if (environment !== detectedEnvironment) {
           toast.success(`Environment changed: ${environment}`);
@@ -203,7 +203,7 @@ export default function RealTimeAdapter({
   const toggleRealTimeAdaptation = () => {
     const newState = !isActive;
     setIsActive(newState);
-    
+
     if (newState) {
       toast.success('Real-time adaptation activated');
       // Start camera if not already active
@@ -237,7 +237,7 @@ export default function RealTimeAdapter({
             Continuously analyze your surroundings and adapt audio in real-time
           </CardDescription>
         </CardHeader>
-        
+
         <CardContent className="space-y-6">
           <div className="flex items-center justify-between space-x-2">
             <div>
@@ -254,7 +254,7 @@ export default function RealTimeAdapter({
               onCheckedChange={toggleRealTimeAdaptation}
             />
           </div>
-          
+
           {isActive && (
             <div className="space-y-6 pt-4 border-t border-gray-800">
               <div className="space-y-2">
@@ -279,7 +279,7 @@ export default function RealTimeAdapter({
                   Controls how quickly the audio adapts to changes in your environment
                 </p>
               </div>
-              
+
               <div className="space-y-2">
                 <div className="flex justify-between">
                   <Label htmlFor="sensitivity-level" className="text-sm">
@@ -302,7 +302,7 @@ export default function RealTimeAdapter({
                   Determines how sensitive the system is to subtle changes in your environment
                 </p>
               </div>
-              
+
               <div className="relative aspect-video bg-gray-950 rounded-lg overflow-hidden">
                 {isCameraActive ? (
                   <video
@@ -329,14 +329,14 @@ export default function RealTimeAdapter({
                     </p>
                   </div>
                 )}
-                
+
                 {/* Environment indicator */}
                 {detectedEnvironment && (
                   <div className="absolute top-2 left-2 bg-black/60 backdrop-blur-sm px-3 py-1.5 rounded-full text-sm font-medium text-white">
                     <span className="capitalize">{detectedEnvironment}</span>
                   </div>
                 )}
-                
+
                 {/* Processing indicator */}
                 {isProcessing && (
                   <div className="absolute bottom-2 right-2 bg-black/60 backdrop-blur-sm px-2 py-1 rounded-full flex items-center">
@@ -345,7 +345,7 @@ export default function RealTimeAdapter({
                   </div>
                 )}
               </div>
-              
+
               <div className="grid grid-cols-2 gap-3">
                 <Button
                   variant="outline"
@@ -354,7 +354,7 @@ export default function RealTimeAdapter({
                 >
                   {isCameraActive ? 'Disable Camera' : 'Enable Camera'}
                 </Button>
-                
+
                 <Button
                   variant="outline"
                   onClick={() => fileInputRef.current?.click()}
@@ -375,15 +375,24 @@ export default function RealTimeAdapter({
             </div>
           )}
         </CardContent>
-        
+
         <CardFooter className="flex flex-col space-y-2 border-t border-gray-800 pt-4">
+          <div className="flex justify-between w-full mb-3">
+            <Button
+              variant="outline"
+              onClick={onClose}
+              className="border-gray-700 text-gray-400 hover:text-white"
+            >
+              Back to AI Studio
+            </Button>
+          </div>
           <p className="text-xs text-gray-500">
             Real-Time Adaptation uses your device's camera to continuously analyze your surroundings and dynamically adjust the audio.
             The audio will seamlessly transition as your environment changes, providing an immersive experience.
           </p>
         </CardFooter>
       </Card>
-      
+
       {/* Hidden canvas for image capture */}
       <canvas ref={canvasRef} className="hidden" />
     </div>
