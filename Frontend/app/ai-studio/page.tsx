@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Wand2, FileAudio, Sparkles, Music, AlertCircle, Play, Pause, Volume2, VolumeX, Loader2, Download, Camera, Zap } from 'lucide-react';
+import { Wand2, FileAudio, Sparkles, Music, AlertCircle, Play, Pause, Volume2, VolumeX, Loader2, Download, Camera, Zap, Shield, Headphones } from 'lucide-react';
 import { motion } from 'framer-motion';
 import Navbar from '@/components/navbar';
 import ModernBackgroundLayout from '@/components/layouts/ModernBackgroundLayout';
@@ -14,6 +14,7 @@ import CameraEnvironmentScanner from '@/components/audio/CameraEnvironmentScanne
 import MoodSelector from '@/components/audio/MoodSelector';
 import RealTimeAdapter from '@/components/audio/RealTimeAdapter';
 import SongSuggestions from '@/components/audio/SongSuggestions';
+import MoodBasedSuggestions from '@/components/audio/MoodBasedSuggestions';
 import { MusicTrack, getRandomTrack } from '@/lib/music-library';
 import { SoundEffect, getRandomSoundEffect } from '@/lib/sound-effects-library';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
@@ -236,6 +237,8 @@ export default function AIStudioPage() {
   const [showEnvironmentScanner, setShowEnvironmentScanner] = useState(false);
   const [showMoodSelector, setShowMoodSelector] = useState(false);
   const [showRealTimeAdapter, setShowRealTimeAdapter] = useState(false);
+  const [selectedMoodForSuggestions, setSelectedMoodForSuggestions] = useState<string | null>(null);
+  const [showMoodSuggestions, setShowMoodSuggestions] = useState(false);
 
   // Handle genre selection
   const handleGenreSelect = (genre: string) => {
@@ -494,7 +497,7 @@ export default function AIStudioPage() {
           {/* Feature Cards */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
             {/* Environment-Based Audio Card */}
-            <Card className="bg-gradient-to-br from-blue-900/40 to-indigo-900/40 border-blue-800/50 hover:border-blue-700/50 transition-colors">
+            <Card className="bg-gradient-to-br from-blue-900/40 to-indigo-900/40 border-blue-800/50 hover:border-blue-700/50 transition-colors shadow-lg shadow-blue-900/20">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Camera className="h-5 w-5 text-blue-400" />
@@ -539,6 +542,28 @@ export default function AIStudioPage() {
                     <p className="text-sm text-gray-300 mb-4">
                       Scan your surroundings or select from a list of environments to generate immersive soundscapes that match your setting.
                     </p>
+
+                    {/* Environment Selection */}
+                    <div className="bg-black/20 rounded-lg p-3 mb-4 border border-blue-800/30">
+                      <h3 className="text-sm font-medium text-blue-300 mb-2">Popular Environments</h3>
+                      <div className="grid grid-cols-3 gap-2 mb-2">
+                        {['Forest', 'Ocean', 'City', 'Cafe', 'Mountains', 'Rain'].map((env) => (
+                          <Button
+                            key={env}
+                            variant="outline"
+                            size="sm"
+                            className="h-auto py-1 border-blue-800/30 hover:bg-blue-800/30 transition-all text-xs"
+                            onClick={() => {
+                              handleEnvironmentDetected(env.toLowerCase());
+                              toast.success(`Environment set to: ${env}`);
+                            }}
+                          >
+                            {env}
+                          </Button>
+                        ))}
+                      </div>
+                    </div>
+
                     <div className="flex flex-col space-y-2">
                       <div className="flex items-center text-xs text-gray-400">
                         <span className="inline-block w-5 h-5 rounded-full bg-blue-500 flex items-center justify-center text-white mr-2">✓</span>
@@ -551,6 +576,10 @@ export default function AIStudioPage() {
                       <div className="flex items-center text-xs text-gray-400">
                         <span className="inline-block w-5 h-5 rounded-full bg-blue-500 flex items-center justify-center text-white mr-2">✓</span>
                         Immersive environment audio
+                      </div>
+                      <div className="flex items-center text-xs text-gray-400">
+                        <span className="inline-block w-5 h-5 rounded-full bg-blue-500 flex items-center justify-center text-white mr-2">✓</span>
+                        Audio playback with controls
                       </div>
                     </div>
                   </>
@@ -568,7 +597,7 @@ export default function AIStudioPage() {
             </Card>
 
             {/* Real-Time Adaptation Card */}
-            <Card className="bg-gradient-to-br from-green-900/40 to-teal-900/40 border-green-800/50 hover:border-green-700/50 transition-colors">
+            <Card className="bg-gradient-to-br from-green-900/40 to-teal-900/40 border-green-800/50 hover:border-green-700/50 transition-colors shadow-lg shadow-green-900/20">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Zap className="h-5 w-5 text-green-400" />
@@ -582,6 +611,45 @@ export default function AIStudioPage() {
                 <p className="text-sm text-gray-300 mb-4">
                   Continuously analyze your surroundings and adapt the audio in real-time as your environment changes.
                 </p>
+
+                {/* ANC and ENC Features */}
+                <div className="bg-black/20 rounded-lg p-3 mb-4 border border-green-800/30">
+                  <h3 className="text-sm font-medium text-green-300 mb-2 flex items-center">
+                    <Shield className="h-4 w-4 mr-1.5" />
+                    Noise Control Features
+                  </h3>
+
+                  <div className="grid grid-cols-2 gap-3 mb-3">
+                    <div className="bg-green-900/20 rounded-lg p-2 border border-green-800/30">
+                      <div className="flex items-center mb-1">
+                        <Headphones className="h-4 w-4 text-green-400 mr-1.5" />
+                        <span className="text-xs font-medium text-white">ANC Technology</span>
+                      </div>
+                      <p className="text-xs text-gray-400">
+                        Active Noise Cancellation reduces unwanted ambient sounds
+                      </p>
+                    </div>
+
+                    <div className="bg-green-900/20 rounded-lg p-2 border border-green-800/30">
+                      <div className="flex items-center mb-1">
+                        <Volume2 className="h-4 w-4 text-green-400 mr-1.5" />
+                        <span className="text-xs font-medium text-white">ENC Technology</span>
+                      </div>
+                      <p className="text-xs text-gray-400">
+                        Environmental Noise Control enhances important sounds
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center justify-between text-xs">
+                    <span className="text-gray-400">Noise Reduction Level</span>
+                    <span className="text-green-400 font-medium">Advanced</span>
+                  </div>
+                  <div className="w-full bg-black/30 h-1.5 rounded-full mt-1 mb-2">
+                    <div className="bg-green-500 h-full rounded-full" style={{ width: '85%' }}></div>
+                  </div>
+                </div>
+
                 <div className="flex flex-col space-y-2">
                   <div className="flex items-center text-xs text-gray-400">
                     <span className="inline-block w-5 h-5 rounded-full bg-green-500 flex items-center justify-center text-white mr-2">✓</span>
@@ -594,6 +662,14 @@ export default function AIStudioPage() {
                   <div className="flex items-center text-xs text-gray-400">
                     <span className="inline-block w-5 h-5 rounded-full bg-green-500 flex items-center justify-center text-white mr-2">✓</span>
                     Adaptive noise masking
+                  </div>
+                  <div className="flex items-center text-xs text-gray-400">
+                    <span className="inline-block w-5 h-5 rounded-full bg-green-500 flex items-center justify-center text-white mr-2">✓</span>
+                    Active Noise Cancellation (ANC)
+                  </div>
+                  <div className="flex items-center text-xs text-gray-400">
+                    <span className="inline-block w-5 h-5 rounded-full bg-green-500 flex items-center justify-center text-white mr-2">✓</span>
+                    Environmental Noise Control (ENC)
                   </div>
                 </div>
               </CardContent>
@@ -611,7 +687,7 @@ export default function AIStudioPage() {
 
           {/* Mood-Based Customization Card - Moved to its own row for better layout */}
           <div className="mb-8">
-            <Card className="bg-gradient-to-br from-purple-900/40 to-pink-900/40 border-purple-800/50 hover:border-purple-700/50 transition-colors">
+            <Card className="bg-gradient-to-br from-purple-900/40 to-pink-900/40 border-purple-800/50 hover:border-purple-700/50 transition-colors shadow-lg shadow-purple-900/20">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Sparkles className="h-5 w-5 text-purple-400" />
@@ -622,32 +698,90 @@ export default function AIStudioPage() {
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <p className="text-sm text-gray-300 mb-4">
-                  Select a mood or describe how you feel to generate personalized audio that enhances your emotional state.
-                </p>
-                <div className="flex flex-col space-y-2">
-                  <div className="flex items-center text-xs text-gray-400">
-                    <span className="inline-block w-5 h-5 rounded-full bg-purple-500 flex items-center justify-center text-white mr-2">✓</span>
-                    Mood-based audio generation
+                {selectedMoodForSuggestions ? (
+                  <div className="space-y-4">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <span className="inline-block w-6 h-6 rounded-full bg-purple-500 flex items-center justify-center text-white">✓</span>
+                        <span className="font-medium text-white capitalize">{selectedMoodForSuggestions} Mood Selected</span>
+                      </div>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => {
+                          setSelectedMoodForSuggestions(null);
+                          setShowMoodSuggestions(false);
+                        }}
+                        className="text-xs border-gray-700"
+                      >
+                        Reset
+                      </Button>
+                    </div>
+
+                    {/* Show mood-based audio suggestions */}
+                    <MoodBasedSuggestions
+                      mood={selectedMoodForSuggestions}
+                      onClose={() => {
+                        setSelectedMoodForSuggestions(null);
+                        setShowMoodSuggestions(false);
+                      }}
+                    />
                   </div>
-                  <div className="flex items-center text-xs text-gray-400">
-                    <span className="inline-block w-5 h-5 rounded-full bg-purple-500 flex items-center justify-center text-white mr-2">✓</span>
-                    Custom mood descriptions
-                  </div>
-                  <div className="flex items-center text-xs text-gray-400">
-                    <span className="inline-block w-5 h-5 rounded-full bg-purple-500 flex items-center justify-center text-white mr-2">✓</span>
-                    AI-enhanced emotional audio
-                  </div>
-                </div>
+                ) : (
+                  <>
+                    <p className="text-sm text-gray-300 mb-4">
+                      Select a mood or describe how you feel to generate personalized audio that enhances your emotional state.
+                    </p>
+                    <div className="grid grid-cols-2 gap-3 mb-4">
+                      {['Relaxing', 'Energetic', 'Focused', 'Peaceful', 'Uplifting', 'Melancholic'].map((mood) => (
+                        <Button
+                          key={mood}
+                          variant="outline"
+                          className="h-auto py-3 flex flex-col items-center justify-center gap-1 border-purple-800/50 hover:bg-purple-800/30 transition-all"
+                          onClick={() => {
+                            setSelectedMoodForSuggestions(mood.toLowerCase());
+                            setShowMoodSuggestions(true);
+                            toast.success(`Mood set to: ${mood}`);
+                          }}
+                        >
+                          <span className="text-lg mb-1">
+                            {mood === 'Relaxing' ? '🧘‍♂️' :
+                             mood === 'Energetic' ? '⚡' :
+                             mood === 'Focused' ? '🧠' :
+                             mood === 'Peaceful' ? '🌿' :
+                             mood === 'Uplifting' ? '🌞' : '🌧️'}
+                          </span>
+                          <span className="font-medium text-sm">{mood}</span>
+                        </Button>
+                      ))}
+                    </div>
+                    <div className="flex flex-col space-y-2">
+                      <div className="flex items-center text-xs text-gray-400">
+                        <span className="inline-block w-5 h-5 rounded-full bg-purple-500 flex items-center justify-center text-white mr-2">✓</span>
+                        Mood-based audio generation
+                      </div>
+                      <div className="flex items-center text-xs text-gray-400">
+                        <span className="inline-block w-5 h-5 rounded-full bg-purple-500 flex items-center justify-center text-white mr-2">✓</span>
+                        Suggested tracks for each mood
+                      </div>
+                      <div className="flex items-center text-xs text-gray-400">
+                        <span className="inline-block w-5 h-5 rounded-full bg-purple-500 flex items-center justify-center text-white mr-2">✓</span>
+                        AI-enhanced emotional audio
+                      </div>
+                    </div>
+                  </>
+                )}
               </CardContent>
               <CardFooter>
-                <Button
-                  className="w-full bg-purple-600 hover:bg-purple-700"
-                  onClick={() => setShowMoodSelector(true)}
-                >
-                  <Sparkles className="h-4 w-4 mr-2" />
-                  Select Mood
-                </Button>
+                {!selectedMoodForSuggestions && (
+                  <Button
+                    className="w-full bg-purple-600 hover:bg-purple-700"
+                    onClick={() => setShowMoodSelector(true)}
+                  >
+                    <Sparkles className="h-4 w-4 mr-2" />
+                    Advanced Mood Selection
+                  </Button>
+                )}
               </CardFooter>
             </Card>
           </div>
