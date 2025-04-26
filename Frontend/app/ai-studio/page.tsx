@@ -494,296 +494,49 @@ export default function AIStudioPage() {
             </p>
           </motion.div>
 
-          {/* Feature Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-            {/* Environment-Based Audio Card */}
-            <Card className="bg-gradient-to-br from-blue-900/40 to-indigo-900/40 border-blue-800/50 hover:border-blue-700/50 transition-colors shadow-lg shadow-blue-900/20">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Camera className="h-5 w-5 text-blue-400" />
-                  Environment-Based Audio
-                </CardTitle>
-                <CardDescription>
-                  Generate audio based on your surroundings
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                {selectedEnvironment && environmentSongSuggestions ? (
-                  <div className="space-y-4">
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-2">
-                        <span className="inline-block w-6 h-6 rounded-full bg-blue-500 flex items-center justify-center text-white">✓</span>
-                        <span className="font-medium text-white capitalize">{selectedEnvironment} Environment Detected</span>
-                      </div>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => {
-                          setSelectedEnvironment(null);
-                          setEnvironmentSongSuggestions(null);
-                        }}
-                        className="text-xs border-gray-700"
-                      >
-                        Reset
-                      </Button>
-                    </div>
+          {/* Quick Feature Links */}
+          <div className="flex flex-wrap justify-center gap-3 mb-8">
+            <Button
+              variant="outline"
+              className="bg-gradient-to-br from-blue-900/40 to-indigo-900/40 border-blue-800/50 hover:border-blue-700/50 transition-colors shadow-md"
+              onClick={() => {
+                const featureSection = document.getElementById('feature-environment');
+                if (featureSection) {
+                  featureSection.scrollIntoView({ behavior: 'smooth' });
+                }
+              }}
+            >
+              <Camera className="h-4 w-4 mr-2 text-blue-400" />
+              Environment-Based Audio
+            </Button>
 
-                    {/* Import and use the SongSuggestions component */}
-                    <div className="mt-4">
-                      {/* @ts-ignore - Importing dynamically */}
-                      <SongSuggestions
-                        suggestions={environmentSongSuggestions}
-                        environment={selectedEnvironment}
-                      />
-                    </div>
-                  </div>
-                ) : (
-                  <>
-                    <p className="text-sm text-gray-300 mb-4">
-                      Scan your surroundings or select from a list of environments to generate immersive soundscapes that match your setting.
-                    </p>
+            <Button
+              variant="outline"
+              className="bg-gradient-to-br from-purple-900/40 to-pink-900/40 border-purple-800/50 hover:border-purple-700/50 transition-colors shadow-md"
+              onClick={() => {
+                const featureSection = document.getElementById('feature-mood');
+                if (featureSection) {
+                  featureSection.scrollIntoView({ behavior: 'smooth' });
+                }
+              }}
+            >
+              <Sparkles className="h-4 w-4 mr-2 text-purple-400" />
+              Mood-Based Customization
+            </Button>
 
-                    {/* Environment Selection */}
-                    <div className="bg-black/20 rounded-lg p-3 mb-4 border border-blue-800/30">
-                      <h3 className="text-sm font-medium text-blue-300 mb-2">Popular Environments</h3>
-                      <div className="grid grid-cols-3 gap-2 mb-2">
-                        {['Forest', 'Ocean', 'City', 'Cafe', 'Mountains', 'Rain'].map((env) => (
-                          <Button
-                            key={env}
-                            variant="outline"
-                            size="sm"
-                            className="h-auto py-1 border-blue-800/30 hover:bg-blue-800/30 transition-all text-xs"
-                            onClick={() => {
-                              handleEnvironmentDetected(env.toLowerCase());
-                              toast.success(`Environment set to: ${env}`);
-                            }}
-                          >
-                            {env}
-                          </Button>
-                        ))}
-                      </div>
-                    </div>
-
-                    <div className="flex flex-col space-y-2">
-                      <div className="flex items-center text-xs text-gray-400">
-                        <span className="inline-block w-5 h-5 rounded-full bg-blue-500 flex items-center justify-center text-white mr-2">✓</span>
-                        Camera environment detection
-                      </div>
-                      <div className="flex items-center text-xs text-gray-400">
-                        <span className="inline-block w-5 h-5 rounded-full bg-blue-500 flex items-center justify-center text-white mr-2">✓</span>
-                        Gemini AI image analysis
-                      </div>
-                      <div className="flex items-center text-xs text-gray-400">
-                        <span className="inline-block w-5 h-5 rounded-full bg-blue-500 flex items-center justify-center text-white mr-2">✓</span>
-                        Immersive environment audio
-                      </div>
-                      <div className="flex items-center text-xs text-gray-400">
-                        <span className="inline-block w-5 h-5 rounded-full bg-blue-500 flex items-center justify-center text-white mr-2">✓</span>
-                        Audio playback with controls
-                      </div>
-                    </div>
-                  </>
-                )}
-              </CardContent>
-              <CardFooter>
-                <Button
-                  className="w-full bg-blue-600 hover:bg-blue-700"
-                  onClick={() => setShowEnvironmentScanner(true)}
-                >
-                  <Camera className="h-4 w-4 mr-2" />
-                  {selectedEnvironment ? 'Scan New Environment' : 'Scan Environment'}
-                </Button>
-              </CardFooter>
-            </Card>
-
-            {/* Real-Time Adaptation Card */}
-            <Card className="bg-gradient-to-br from-green-900/40 to-teal-900/40 border-green-800/50 hover:border-green-700/50 transition-colors shadow-lg shadow-green-900/20">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Zap className="h-5 w-5 text-green-400" />
-                  Real-Time Adaptation
-                </CardTitle>
-                <CardDescription>
-                  Dynamically adjust audio to your environment
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <p className="text-sm text-gray-300 mb-4">
-                  Continuously analyze your surroundings and adapt the audio in real-time as your environment changes.
-                </p>
-
-                {/* ANC and ENC Features */}
-                <div className="bg-black/20 rounded-lg p-3 mb-4 border border-green-800/30">
-                  <h3 className="text-sm font-medium text-green-300 mb-2 flex items-center">
-                    <Shield className="h-4 w-4 mr-1.5" />
-                    Noise Control Features
-                  </h3>
-
-                  <div className="grid grid-cols-2 gap-3 mb-3">
-                    <div className="bg-green-900/20 rounded-lg p-2 border border-green-800/30">
-                      <div className="flex items-center mb-1">
-                        <Headphones className="h-4 w-4 text-green-400 mr-1.5" />
-                        <span className="text-xs font-medium text-white">ANC Technology</span>
-                      </div>
-                      <p className="text-xs text-gray-400">
-                        Active Noise Cancellation reduces unwanted ambient sounds
-                      </p>
-                    </div>
-
-                    <div className="bg-green-900/20 rounded-lg p-2 border border-green-800/30">
-                      <div className="flex items-center mb-1">
-                        <Volume2 className="h-4 w-4 text-green-400 mr-1.5" />
-                        <span className="text-xs font-medium text-white">ENC Technology</span>
-                      </div>
-                      <p className="text-xs text-gray-400">
-                        Environmental Noise Control enhances important sounds
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-center justify-between text-xs">
-                    <span className="text-gray-400">Noise Reduction Level</span>
-                    <span className="text-green-400 font-medium">Advanced</span>
-                  </div>
-                  <div className="w-full bg-black/30 h-1.5 rounded-full mt-1 mb-2">
-                    <div className="bg-green-500 h-full rounded-full" style={{ width: '85%' }}></div>
-                  </div>
-                </div>
-
-                <div className="flex flex-col space-y-2">
-                  <div className="flex items-center text-xs text-gray-400">
-                    <span className="inline-block w-5 h-5 rounded-full bg-green-500 flex items-center justify-center text-white mr-2">✓</span>
-                    Continuous environment analysis
-                  </div>
-                  <div className="flex items-center text-xs text-gray-400">
-                    <span className="inline-block w-5 h-5 rounded-full bg-green-500 flex items-center justify-center text-white mr-2">✓</span>
-                    Dynamic audio transitions
-                  </div>
-                  <div className="flex items-center text-xs text-gray-400">
-                    <span className="inline-block w-5 h-5 rounded-full bg-green-500 flex items-center justify-center text-white mr-2">✓</span>
-                    Adaptive noise masking
-                  </div>
-                  <div className="flex items-center text-xs text-gray-400">
-                    <span className="inline-block w-5 h-5 rounded-full bg-green-500 flex items-center justify-center text-white mr-2">✓</span>
-                    Active Noise Cancellation (ANC)
-                  </div>
-                  <div className="flex items-center text-xs text-gray-400">
-                    <span className="inline-block w-5 h-5 rounded-full bg-green-500 flex items-center justify-center text-white mr-2">✓</span>
-                    Environmental Noise Control (ENC)
-                  </div>
-                </div>
-              </CardContent>
-              <CardFooter>
-                <Button
-                  className="w-full bg-green-600 hover:bg-green-700"
-                  onClick={() => setShowRealTimeAdapter(true)}
-                >
-                  <Zap className="h-4 w-4 mr-2" />
-                  Activate Real-Time
-                </Button>
-              </CardFooter>
-            </Card>
-          </div>
-
-          {/* Mood-Based Customization Card - Moved to its own row for better layout */}
-          <div className="mb-8">
-            <Card className="bg-gradient-to-br from-purple-900/40 to-pink-900/40 border-purple-800/50 hover:border-purple-700/50 transition-colors shadow-lg shadow-purple-900/20">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Sparkles className="h-5 w-5 text-purple-400" />
-                  Mood-Based Customization
-                </CardTitle>
-                <CardDescription>
-                  Personalize audio to enhance your mood
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                {selectedMoodForSuggestions ? (
-                  <div className="space-y-4">
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-2">
-                        <span className="inline-block w-6 h-6 rounded-full bg-purple-500 flex items-center justify-center text-white">✓</span>
-                        <span className="font-medium text-white capitalize">{selectedMoodForSuggestions} Mood Selected</span>
-                      </div>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => {
-                          setSelectedMoodForSuggestions(null);
-                          setShowMoodSuggestions(false);
-                        }}
-                        className="text-xs border-gray-700"
-                      >
-                        Reset
-                      </Button>
-                    </div>
-
-                    {/* Show mood-based audio suggestions */}
-                    <MoodBasedSuggestions
-                      mood={selectedMoodForSuggestions}
-                      onClose={() => {
-                        setSelectedMoodForSuggestions(null);
-                        setShowMoodSuggestions(false);
-                      }}
-                    />
-                  </div>
-                ) : (
-                  <>
-                    <p className="text-sm text-gray-300 mb-4">
-                      Select a mood or describe how you feel to generate personalized audio that enhances your emotional state.
-                    </p>
-                    <div className="grid grid-cols-2 gap-3 mb-4">
-                      {['Relaxing', 'Energetic', 'Focused', 'Peaceful', 'Uplifting', 'Melancholic'].map((mood) => (
-                        <Button
-                          key={mood}
-                          variant="outline"
-                          className="h-auto py-3 flex flex-col items-center justify-center gap-1 border-purple-800/50 hover:bg-purple-800/30 transition-all"
-                          onClick={() => {
-                            setSelectedMoodForSuggestions(mood.toLowerCase());
-                            setShowMoodSuggestions(true);
-                            toast.success(`Mood set to: ${mood}`);
-                          }}
-                        >
-                          <span className="text-lg mb-1">
-                            {mood === 'Relaxing' ? '🧘‍♂️' :
-                             mood === 'Energetic' ? '⚡' :
-                             mood === 'Focused' ? '🧠' :
-                             mood === 'Peaceful' ? '🌿' :
-                             mood === 'Uplifting' ? '🌞' : '🌧️'}
-                          </span>
-                          <span className="font-medium text-sm">{mood}</span>
-                        </Button>
-                      ))}
-                    </div>
-                    <div className="flex flex-col space-y-2">
-                      <div className="flex items-center text-xs text-gray-400">
-                        <span className="inline-block w-5 h-5 rounded-full bg-purple-500 flex items-center justify-center text-white mr-2">✓</span>
-                        Mood-based audio generation
-                      </div>
-                      <div className="flex items-center text-xs text-gray-400">
-                        <span className="inline-block w-5 h-5 rounded-full bg-purple-500 flex items-center justify-center text-white mr-2">✓</span>
-                        Suggested tracks for each mood
-                      </div>
-                      <div className="flex items-center text-xs text-gray-400">
-                        <span className="inline-block w-5 h-5 rounded-full bg-purple-500 flex items-center justify-center text-white mr-2">✓</span>
-                        AI-enhanced emotional audio
-                      </div>
-                    </div>
-                  </>
-                )}
-              </CardContent>
-              <CardFooter>
-                {!selectedMoodForSuggestions && (
-                  <Button
-                    className="w-full bg-purple-600 hover:bg-purple-700"
-                    onClick={() => setShowMoodSelector(true)}
-                  >
-                    <Sparkles className="h-4 w-4 mr-2" />
-                    Advanced Mood Selection
-                  </Button>
-                )}
-              </CardFooter>
-            </Card>
+            <Button
+              variant="outline"
+              className="bg-gradient-to-br from-green-900/40 to-teal-900/40 border-green-800/50 hover:border-green-700/50 transition-colors shadow-md"
+              onClick={() => {
+                const featureSection = document.getElementById('feature-realtime');
+                if (featureSection) {
+                  featureSection.scrollIntoView({ behavior: 'smooth' });
+                }
+              }}
+            >
+              <Zap className="h-4 w-4 mr-2 text-green-400" />
+              Real-Time Adaptation
+            </Button>
           </div>
 
           <Alert className="mb-8 border-blue-500 bg-blue-500/10">
@@ -1310,134 +1063,202 @@ export default function AIStudioPage() {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
               {/* Environment-Based Audio */}
               <motion.div
+                id="feature-environment"
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, ease: "easeOut", delay: 0.2 }}
-                className="bg-gradient-to-br from-indigo-900/30 to-indigo-800/10 border border-indigo-800/30 rounded-xl p-6 backdrop-blur-sm"
+                className="bg-gradient-to-br from-blue-900/40 to-indigo-900/40 border border-blue-800/50 hover:border-blue-700/50 transition-colors shadow-lg shadow-blue-900/20 rounded-xl p-6 backdrop-blur-sm"
               >
-                <div className="bg-indigo-500/20 p-3 rounded-lg w-12 h-12 flex items-center justify-center mb-4">
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-6 w-6 text-indigo-400">
-                    <path d="M2 12a5 5 0 0 0 5 5 8 8 0 0 1 5 2 8 8 0 0 1 5-2 5 5 0 0 0 5-5V7h-5a8 8 0 0 0-5 2 8 8 0 0 0-5-2H2Z"></path>
-                  </svg>
+                <div className="bg-blue-500/20 p-3 rounded-lg w-12 h-12 flex items-center justify-center mb-4">
+                  <Camera className="h-6 w-6 text-blue-400" />
                 </div>
                 <h3 className="text-xl font-semibold mb-3 text-white">Environment-Based Audio</h3>
                 <p className="text-gray-300 mb-4">
                   Generate immersive soundscapes based on different environments like forests, oceans, cities, and cafes.
                 </p>
+
+                {/* Environment Selection */}
+                <div className="bg-black/20 rounded-lg p-3 mb-4 border border-blue-800/30">
+                  <h3 className="text-sm font-medium text-blue-300 mb-2">Popular Environments</h3>
+                  <div className="grid grid-cols-3 gap-2 mb-2">
+                    {['Forest', 'Ocean', 'City', 'Cafe', 'Mountains', 'Rain'].map((env) => (
+                      <Button
+                        key={env}
+                        variant="outline"
+                        size="sm"
+                        className="h-auto py-1 border-blue-800/30 hover:bg-blue-800/30 transition-all text-xs"
+                        onClick={() => {
+                          handleEnvironmentDetected(env.toLowerCase());
+                          toast.success(`Environment set to: ${env}`);
+                          window.scrollTo({ top: 0, behavior: 'smooth' });
+                        }}
+                      >
+                        {env}
+                      </Button>
+                    ))}
+                  </div>
+                </div>
+
                 <ul className="space-y-2 text-gray-400">
                   <li className="flex items-start gap-2">
-                    <Sparkles className="h-4 w-4 text-indigo-400 mt-1 shrink-0" />
-                    <span>Multiple environment presets</span>
+                    <Sparkles className="h-4 w-4 text-blue-400 mt-1 shrink-0" />
+                    <span>Camera environment detection</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <Sparkles className="h-4 w-4 text-indigo-400 mt-1 shrink-0" />
-                    <span>High-fidelity nature sounds</span>
+                    <Sparkles className="h-4 w-4 text-blue-400 mt-1 shrink-0" />
+                    <span>Gemini AI image analysis</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <Sparkles className="h-4 w-4 text-indigo-400 mt-1 shrink-0" />
-                    <span>Customizable ambient elements</span>
+                    <Sparkles className="h-4 w-4 text-blue-400 mt-1 shrink-0" />
+                    <span>Audio playback with controls</span>
                   </li>
                 </ul>
                 <Button
-                  variant="outline"
-                  className="mt-4 w-full border-indigo-600/50 text-indigo-400 hover:bg-indigo-900/50"
+                  className="mt-4 w-full bg-blue-600 hover:bg-blue-700"
                   onClick={() => {
-                    setActiveTab('generate');
+                    setShowEnvironmentScanner(true);
                     window.scrollTo({ top: 0, behavior: 'smooth' });
                   }}
                 >
-                  Try Environment Audio
+                  <Camera className="h-4 w-4 mr-2" />
+                  Scan Environment
                 </Button>
               </motion.div>
 
               {/* Mood-Based Customization */}
               <motion.div
+                id="feature-mood"
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, ease: "easeOut", delay: 0.3 }}
-                className="bg-gradient-to-br from-purple-900/30 to-purple-800/10 border border-purple-800/30 rounded-xl p-6 backdrop-blur-sm"
+                className="bg-gradient-to-br from-purple-900/40 to-pink-900/40 border border-purple-800/50 hover:border-purple-700/50 transition-colors shadow-lg shadow-purple-900/20 rounded-xl p-6 backdrop-blur-sm"
               >
                 <div className="bg-purple-500/20 p-3 rounded-lg w-12 h-12 flex items-center justify-center mb-4">
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-6 w-6 text-purple-400">
-                    <circle cx="12" cy="12" r="10"></circle>
-                    <path d="M8 14s1.5 2 4 2 4-2 4-2"></path>
-                    <line x1="9" y1="9" x2="9.01" y2="9"></line>
-                    <line x1="15" y1="9" x2="15.01" y2="9"></line>
-                  </svg>
+                  <Sparkles className="h-6 w-6 text-purple-400" />
                 </div>
                 <h3 className="text-xl font-semibold mb-3 text-white">Mood-Based Customization</h3>
                 <p className="text-gray-300 mb-4">
                   Tailor audio to match your emotional state, whether relaxing, energetic, focused, or peaceful.
                 </p>
+
+                {/* Mood Selection */}
+                <div className="bg-black/20 rounded-lg p-3 mb-4 border border-purple-800/30">
+                  <h3 className="text-sm font-medium text-purple-300 mb-2">Select a Mood</h3>
+                  <div className="grid grid-cols-3 gap-2 mb-2">
+                    {['Relaxing', 'Energetic', 'Focused'].map((mood) => (
+                      <Button
+                        key={mood}
+                        variant="outline"
+                        size="sm"
+                        className="h-auto py-1 border-purple-800/30 hover:bg-purple-800/30 transition-all text-xs"
+                        onClick={() => {
+                          setSelectedMoodForSuggestions(mood.toLowerCase());
+                          setShowMoodSuggestions(true);
+                          toast.success(`Mood set to: ${mood}`);
+                          window.scrollTo({ top: 0, behavior: 'smooth' });
+                        }}
+                      >
+                        {mood}
+                      </Button>
+                    ))}
+                  </div>
+                </div>
+
                 <ul className="space-y-2 text-gray-400">
                   <li className="flex items-start gap-2">
                     <Sparkles className="h-4 w-4 text-purple-400 mt-1 shrink-0" />
-                    <span>Emotion-responsive audio</span>
+                    <span>Mood-based audio generation</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <Sparkles className="h-4 w-4 text-purple-400 mt-1 shrink-0" />
-                    <span>Mood enhancement technology</span>
+                    <span>Suggested tracks for each mood</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <Sparkles className="h-4 w-4 text-purple-400 mt-1 shrink-0" />
-                    <span>Personalized emotional profiles</span>
+                    <span>AI-enhanced emotional audio</span>
                   </li>
                 </ul>
                 <Button
-                  variant="outline"
-                  className="mt-4 w-full border-purple-600/50 text-purple-400 hover:bg-purple-900/50"
+                  className="mt-4 w-full bg-purple-600 hover:bg-purple-700"
                   onClick={() => {
-                    setActiveTab('generate');
-                    setSelectedMood('relaxing');
+                    setShowMoodSelector(true);
                     window.scrollTo({ top: 0, behavior: 'smooth' });
                   }}
                 >
-                  Try Mood Customization
+                  <Sparkles className="h-4 w-4 mr-2" />
+                  Advanced Mood Selection
                 </Button>
               </motion.div>
 
               {/* Real-Time Adaptation */}
               <motion.div
+                id="feature-realtime"
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, ease: "easeOut", delay: 0.4 }}
-                className="bg-gradient-to-br from-blue-900/30 to-blue-800/10 border border-blue-800/30 rounded-xl p-6 backdrop-blur-sm"
+                className="bg-gradient-to-br from-green-900/40 to-teal-900/40 border border-green-800/50 hover:border-green-700/50 transition-colors shadow-lg shadow-green-900/20 rounded-xl p-6 backdrop-blur-sm"
               >
-                <div className="bg-blue-500/20 p-3 rounded-lg w-12 h-12 flex items-center justify-center mb-4">
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-6 w-6 text-blue-400">
-                    <path d="M22 12c0 6-4.39 10-9.806 10C7.792 22 4.24 19.665 3 16"></path>
-                    <path d="M2 12C2 6 6.39 2 11.806 2 16.209 2 19.76 4.335 21 8"></path>
-                    <path d="M7 17l-4-1-1 4"></path>
-                    <path d="M17 7l4 1 1-4"></path>
-                  </svg>
+                <div className="bg-green-500/20 p-3 rounded-lg w-12 h-12 flex items-center justify-center mb-4">
+                  <Zap className="h-6 w-6 text-green-400" />
                 </div>
                 <h3 className="text-xl font-semibold mb-3 text-white">Real-Time Adaptation</h3>
                 <p className="text-gray-300 mb-4">
                   Experience audio environments that adapt to your surroundings and context in real-time.
                 </p>
+
+                {/* ANC and ENC Features */}
+                <div className="bg-black/20 rounded-lg p-3 mb-4 border border-green-800/30">
+                  <h3 className="text-sm font-medium text-green-300 mb-2 flex items-center">
+                    <Shield className="h-4 w-4 mr-1.5" />
+                    Noise Control Features
+                  </h3>
+
+                  <div className="grid grid-cols-2 gap-3 mb-3">
+                    <div className="bg-green-900/20 rounded-lg p-2 border border-green-800/30">
+                      <div className="flex items-center mb-1">
+                        <Headphones className="h-4 w-4 text-green-400 mr-1.5" />
+                        <span className="text-xs font-medium text-white">ANC</span>
+                      </div>
+                      <p className="text-xs text-gray-400">
+                        Active Noise Cancellation
+                      </p>
+                    </div>
+
+                    <div className="bg-green-900/20 rounded-lg p-2 border border-green-800/30">
+                      <div className="flex items-center mb-1">
+                        <Volume2 className="h-4 w-4 text-green-400 mr-1.5" />
+                        <span className="text-xs font-medium text-white">ENC</span>
+                      </div>
+                      <p className="text-xs text-gray-400">
+                        Environmental Noise Control
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
                 <ul className="space-y-2 text-gray-400">
                   <li className="flex items-start gap-2">
-                    <Sparkles className="h-4 w-4 text-blue-400 mt-1 shrink-0" />
-                    <span>Context-aware sound mixing</span>
+                    <Sparkles className="h-4 w-4 text-green-400 mt-1 shrink-0" />
+                    <span>Continuous environment analysis</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <Sparkles className="h-4 w-4 text-blue-400 mt-1 shrink-0" />
+                    <Sparkles className="h-4 w-4 text-green-400 mt-1 shrink-0" />
                     <span>Dynamic audio transitions</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <Sparkles className="h-4 w-4 text-blue-400 mt-1 shrink-0" />
-                    <span>Adaptive volume and EQ</span>
+                    <Sparkles className="h-4 w-4 text-green-400 mt-1 shrink-0" />
+                    <span>Adaptive noise masking</span>
                   </li>
                 </ul>
                 <Button
-                  variant="outline"
-                  className="mt-4 w-full border-blue-600/50 text-blue-400 hover:bg-blue-900/50"
+                  className="mt-4 w-full bg-green-600 hover:bg-green-700"
                   onClick={() => {
-                    setActiveTab('generate');
+                    setShowRealTimeAdapter(true);
                     window.scrollTo({ top: 0, behavior: 'smooth' });
                   }}
                 >
-                  Try Real-Time Adaptation
+                  <Zap className="h-4 w-4 mr-2" />
+                  Activate Real-Time
                 </Button>
               </motion.div>
             </div>
