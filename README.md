@@ -78,10 +78,10 @@ Our platform serves content creators, meditation practitioners, productivity ent
 - ✅ **Grok-Powered Audio Generation:** Leveraging Grok's advanced capabilities for detailed audio prompt creation
 - ✅ **Multi-AI Collaboration:** Grok at the center of our AI ecosystem, working with Gemini and OpenAI for enhanced results
 - ✅ **Environment-Based Audio:** Generate soundscapes based on different environments (forest, ocean, city, cafe)
-- ✅ **Mood-Based Customization:** Tailor audio to emotional states (relaxing, energetic, focused, peaceful)
+- ✅ **Mood-Based Customization:** Tailor audio to emotional states (relaxing, energetic, focused, peaceful) with suggested tracks and audio playback
 - ✅ **Grok Audio Analysis:** Analyze audio files to extract detailed insights using Grok's advanced understanding capabilities
 - ✅ **AI Music Generation:** Create custom music with Grok-enhanced prompts controlling genre, mood, and instruments
-- ✅ **Real-Time Adaptation:** Audio environments that adapt to surroundings and context using Grok's contextual understanding
+- ✅ **Real-Time Adaptation:** Audio environments that adapt to surroundings and context with ANC (Active Noise Cancellation) and ENC (Environmental Noise Control)
 - ✅ **Audio File Upload & Analysis:** Upload and analyze your own audio files with detailed visualization and insights
 - ✅ **Track Download Options:** Download your favorite generated tracks directly from the player interface
 - ✅ **3D Interactive Elements:** Immersive 3D elements on the landing page for enhanced visual experience
@@ -89,6 +89,16 @@ Our platform serves content creators, meditation practitioners, productivity ent
 - ✅ **GitHub Authentication:** Additional authentication option for seamless user experience
 
 ---
+
+## 🔄 Latest Updates (April 2025)
+
+We've recently enhanced the AI Studio page with several new features:
+
+- **Mood-Based Audio Suggestions:** Browse and play suggested tracks for each mood
+- **Audio Playback Controls:** Full-featured audio player with volume, progress tracking, and download options
+- **ANC/ENC Technology:** Added Active Noise Cancellation and Environmental Noise Control to the Real-Time Adaptation feature
+- **Quick Environment Selection:** Easily select from popular environments without using the camera
+- **Enhanced UI:** Improved styling with consistent shadows, better visual hierarchy, and more intuitive controls
 
 ## 📽️ Demo & Deliverables
 
@@ -106,6 +116,14 @@ Our platform serves content creators, meditation practitioners, productivity ent
     <tr>
       <td align="center"><b>Dashboard</b></td>
       <td align="center"><b>AI Studio</b></td>
+    </tr>
+    <tr>
+      <td><img src="https://res.cloudinary.com/dm9h4bawl/image/upload/v1745476391/Screenshot_2025-04-24_120134_ijojnw.png" alt="Mood-Based Audio" width="400"/></td>
+      <td><img src="https://res.cloudinary.com/dm9h4bawl/image/upload/v1745476391/Screenshot_2025-04-24_120134_ijojnw.png" alt="Real-Time Adaptation" width="400"/></td>
+    </tr>
+    <tr>
+      <td align="center"><b>Mood-Based Audio with Playback</b></td>
+      <td align="center"><b>Real-Time Adaptation with ANC/ENC</b></td>
     </tr>
   </table>
 </div>
