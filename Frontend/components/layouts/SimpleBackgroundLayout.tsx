@@ -10,8 +10,17 @@ interface BackgroundLayoutProps {
 export default function SimpleBackgroundLayout({ children }: BackgroundLayoutProps) {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [windowSize, setWindowSize] = useState({ width: 0, height: 0 });
+  const [isBrowser, setIsBrowser] = useState(false);
 
+  // Handle browser detection
   useEffect(() => {
+    setIsBrowser(true);
+  }, []);
+
+  // Handle window size and mouse position
+  useEffect(() => {
+    if (!isBrowser) return;
+
     // Set initial window size
     setWindowSize({
       width: window.innerWidth,
@@ -41,15 +50,17 @@ export default function SimpleBackgroundLayout({ children }: BackgroundLayoutPro
       window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('resize', handleResize);
     };
-  }, []);
+  }, [isBrowser]);
 
   // Calculate parallax values based on mouse position
   const calcParallaxX = (depth = 1) => {
+    if (windowSize.width === 0) return 0;
     const x = (mousePosition.x - windowSize.width / 2) / depth;
     return x * 0.01; // Adjust sensitivity
   };
 
   const calcParallaxY = (depth = 1) => {
+    if (windowSize.height === 0) return 0;
     const y = (mousePosition.y - windowSize.height / 2) / depth;
     return y * 0.01; // Adjust sensitivity
   };
@@ -62,68 +73,74 @@ export default function SimpleBackgroundLayout({ children }: BackgroundLayoutPro
         <div className="absolute inset-0 bg-[url('/noise.svg')] opacity-20 mix-blend-soft-light"></div>
 
         {/* Animated particles */}
-        <div className="absolute inset-0 overflow-hidden">
-          {Array.from({ length: 20 }).map((_, i) => (
-            <motion.div
-              key={i}
-              className="absolute rounded-full bg-indigo-500/10"
-              style={{
-                width: Math.random() * 200 + 50,
-                height: Math.random() * 200 + 50,
-                left: `${Math.random() * 100}%`,
-                top: `${Math.random() * 100}%`,
-                filter: 'blur(40px)',
-              }}
-              animate={{
-                x: [0, Math.random() * 100 - 50],
-                y: [0, Math.random() * 100 - 50],
-              }}
-              transition={{
-                duration: Math.random() * 40 + 30, // Much slower animation
-                repeat: Infinity,
-                repeatType: 'reverse',
-                ease: 'easeInOut',
-              }}
-            />
-          ))}
-        </div>
+        {isBrowser && (
+          <div className="absolute inset-0 overflow-hidden">
+            {Array.from({ length: 20 }).map((_, i) => (
+              <motion.div
+                key={i}
+                className="absolute rounded-full bg-indigo-500/10"
+                style={{
+                  width: Math.random() * 200 + 50,
+                  height: Math.random() * 200 + 50,
+                  left: `${Math.random() * 100}%`,
+                  top: `${Math.random() * 100}%`,
+                  filter: 'blur(40px)',
+                }}
+                animate={{
+                  x: [0, Math.random() * 100 - 50],
+                  y: [0, Math.random() * 100 - 50],
+                }}
+                transition={{
+                  duration: Math.random() * 40 + 30, // Much slower animation
+                  repeat: Infinity,
+                  repeatType: 'reverse',
+                  ease: 'easeInOut',
+                }}
+              />
+            ))}
+          </div>
+        )}
 
         {/* Parallax floating elements */}
-        <motion.div
-          className="absolute w-64 h-64 rounded-full bg-purple-600/5 filter blur-3xl"
-          style={{
-            top: '20%',
-            left: '10%',
-          }}
-          animate={{
-            x: calcParallaxX(10),
-            y: calcParallaxY(10),
-          }}
-        />
+        {windowSize.width > 0 && (
+          <>
+            <motion.div
+              className="absolute w-64 h-64 rounded-full bg-purple-600/5 filter blur-3xl"
+              style={{
+                top: '20%',
+                left: '10%',
+              }}
+              animate={{
+                x: calcParallaxX(10),
+                y: calcParallaxY(10),
+              }}
+            />
 
-        <motion.div
-          className="absolute w-96 h-96 rounded-full bg-indigo-600/5 filter blur-3xl"
-          style={{
-            bottom: '10%',
-            right: '15%',
-          }}
-          animate={{
-            x: calcParallaxX(15),
-            y: calcParallaxY(15),
-          }}
-        />
+            <motion.div
+              className="absolute w-96 h-96 rounded-full bg-indigo-600/5 filter blur-3xl"
+              style={{
+                bottom: '10%',
+                right: '15%',
+              }}
+              animate={{
+                x: calcParallaxX(15),
+                y: calcParallaxY(15),
+              }}
+            />
 
-        <motion.div
-          className="absolute w-72 h-72 rounded-full bg-blue-600/5 filter blur-3xl"
-          style={{
-            top: '40%',
-            right: '25%',
-          }}
-          animate={{
-            x: calcParallaxX(20),
-            y: calcParallaxY(20),
-          }}
-        />
+            <motion.div
+              className="absolute w-72 h-72 rounded-full bg-blue-600/5 filter blur-3xl"
+              style={{
+                top: '40%',
+                right: '25%',
+              }}
+              animate={{
+                x: calcParallaxX(20),
+                y: calcParallaxY(20),
+              }}
+            />
+          </>
+        )}
       </div>
 
       {/* Content */}
