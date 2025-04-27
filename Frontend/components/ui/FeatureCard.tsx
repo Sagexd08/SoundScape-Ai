@@ -1,10 +1,10 @@
 import React from 'react';
-import { IconType } from 'react-icons';
+import { LucideIcon } from 'lucide-react';
 
 interface FeatureCardProps {
   title: string;
   description: string;
-  icon: IconType;
+  icon: LucideIcon;
   variant?: 'default' | 'elevated' | 'bordered' | 'minimal';
   className?: string;
   onClick?: () => void;

@@ -1,6 +1,6 @@
 import React from 'react';
 import Head from 'next/head';
-import { FiLayers, FiCpu, FiSliders, FiEar, FiDownload, FiUsers, FiSave, FiBarChart2 } from 'react-icons/fi';
+import { Layers, Cpu, Sliders, Headphones, Download, Users, Save, BarChart2 } from 'lucide-react';
 import FeatureGrid from '../components/sections/FeatureGrid';
 
 const StudioPage = () => {
@@ -8,42 +8,42 @@ const StudioPage = () => {
     {
       title: 'AI Audio Generation',
       description: 'Generate high-quality audio with state-of-the-art neural networks that understand your creative vision.',
-      icon: FiCpu
+      icon: Cpu
     },
     {
       title: 'Multi-track Composition',
       description: 'Layer multiple tracks with our intuitive interface for complete creative control over your project.',
-      icon: FiLayers
+      icon: Layers
     },
     {
       title: 'Advanced Mixing Tools',
       description: 'Professional-grade mixing tools with presets and customizable parameters for the perfect sound.',
-      icon: FiSliders
+      icon: Sliders
     },
     {
       title: 'Intelligent Mastering',
       description: 'One-click mastering that adapts to your audio and delivers studio-quality results instantly.',
-      icon: FiEar
+      icon: Headphones
     },
     {
       title: 'Universal Export',
       description: 'Export your audio in multiple formats optimized for streaming, film, games, or any platform you need.',
-      icon: FiDownload
+      icon: Download
     },
     {
       title: 'Collaborative Projects',
       description: 'Invite team members to collaborate in real-time with built-in version control and comments.',
-      icon: FiUsers
+      icon: Users
     },
     {
       title: 'Cloud Workspaces',
       description: 'Access your projects from anywhere with secure cloud storage and automatic backups.',
-      icon: FiSave
+      icon: Save
     },
     {
       title: 'Usage Analytics',
       description: 'Track how your content performs with detailed analytics on playback, engagement, and more.',
-      icon: FiBarChart2
+      icon: BarChart2
     }
   ];
 
@@ -78,8 +78,8 @@ const StudioPage = () => {
         </section>
 
         {/* Feature Grid Section */}
-        <FeatureGrid 
-          title="Studio Features" 
+        <FeatureGrid
+          title="Studio Features"
           subtitle="Everything you need to bring your audio projects to life"
           features={studioFeatures}
           columns={4}

@@ -1,12 +1,12 @@
 import React from 'react';
 import FeatureCard from '../ui/FeatureCard';
-import { IconType } from 'react-icons';
-import { FiAward, FiEdit3, FiMusic, FiSliders, FiTrendingUp, FiZap } from 'react-icons/fi';
+import { LucideIcon } from 'lucide-react';
+import { Award, Edit3, Music, Sliders, TrendingUp, Zap } from 'lucide-react';
 
 interface Feature {
   title: string;
   description: string;
-  icon: IconType;
+  icon: LucideIcon;
 }
 
 interface FeatureGridProps {
@@ -21,32 +21,32 @@ const defaultFeatures: Feature[] = [
   {
     title: 'Smart Audio Creation',
     description: 'Create studio-quality soundtracks with our AI-powered tools in minutes.',
-    icon: FiMusic
+    icon: Music
   },
   {
     title: 'Advanced Customization',
     description: 'Fine-tune every aspect of your audio with intuitive controls and presets.',
-    icon: FiSliders
+    icon: Sliders
   },
   {
     title: 'Real-time Collaboration',
     description: 'Work together seamlessly with team members from anywhere in the world.',
-    icon: FiEdit3
+    icon: Edit3
   },
   {
     title: 'Performance Analytics',
     description: 'Track how your audio performs across platforms with detailed insights.',
-    icon: FiTrendingUp
+    icon: TrendingUp
   },
   {
     title: 'Lightning Fast Export',
     description: 'Export your projects in multiple formats optimized for any platform.',
-    icon: FiZap
+    icon: Zap
   },
   {
     title: 'Professional Quality',
     description: 'Industry-standard output that meets the needs of professionals.',
-    icon: FiAward
+    icon: Award
   }
 ];
 
