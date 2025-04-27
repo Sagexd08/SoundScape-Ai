@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Wand2, FileAudio, Sparkles, Music, AlertCircle, Play, Pause, Volume2, VolumeX, Loader2, Download, Camera, Zap, Shield, Headphones } from 'lucide-react';
+import { Wand2, FileAudio, Sparkles, Music, AlertCircle, Play, Pause, Volume2, VolumeX, Loader2, Download, Camera, Zap, Shield, Headphones, MonitorSmartphone, Mic } from 'lucide-react';
 import { motion } from 'framer-motion';
 import Navbar from '@/components/navbar';
 import ModernBackgroundLayout from '@/components/layouts/ModernBackgroundLayout';
@@ -15,6 +15,7 @@ import MoodSelector from '@/components/audio/MoodSelector';
 import RealTimeAdapter from '@/components/audio/RealTimeAdapter';
 import SongSuggestions from '@/components/audio/SongSuggestions';
 import MoodBasedSuggestions from '@/components/audio/MoodBasedSuggestions';
+import ScreenpipeIntegration from '@/components/screenpipe/ScreenpipeIntegration';
 import { MusicTrack, getRandomTrack } from '@/lib/music-library';
 import { SoundEffect, getRandomSoundEffect } from '@/lib/sound-effects-library';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
@@ -537,6 +538,20 @@ export default function AIStudioPage() {
               <Zap className="h-4 w-4 mr-2 text-green-400" />
               Real-Time Adaptation
             </Button>
+
+            <Button
+              variant="outline"
+              className="bg-gradient-to-br from-cyan-900/40 to-blue-900/40 border-cyan-800/50 hover:border-cyan-700/50 transition-colors shadow-md"
+              onClick={() => {
+                const featureSection = document.getElementById('feature-screenpipe');
+                if (featureSection) {
+                  featureSection.scrollIntoView({ behavior: 'smooth' });
+                }
+              }}
+            >
+              <MonitorSmartphone className="h-4 w-4 mr-2 text-cyan-400" />
+              Screenpipe Integration
+            </Button>
           </div>
 
           <Alert className="mb-8 border-blue-500 bg-blue-500/10">
@@ -555,7 +570,7 @@ export default function AIStudioPage() {
               className="w-full"
             >
               <div className="flex justify-center mb-6">
-                <TabsList className="grid w-full max-w-md grid-cols-3">
+                <TabsList className="grid w-full max-w-md grid-cols-4">
                   <TabsTrigger value="generate" className="flex items-center gap-2">
                     <Wand2 className="h-4 w-4" />
                     <span>Generate Audio</span>
@@ -567,6 +582,10 @@ export default function AIStudioPage() {
                   <TabsTrigger value="analyze" className="flex items-center gap-2">
                     <FileAudio className="h-4 w-4" />
                     <span>Analyze</span>
+                  </TabsTrigger>
+                  <TabsTrigger value="screenpipe" className="flex items-center gap-2">
+                    <MonitorSmartphone className="h-4 w-4" />
+                    <span>Screenpipe</span>
                   </TabsTrigger>
                 </TabsList>
               </div>
@@ -975,6 +994,23 @@ export default function AIStudioPage() {
                   </CardFooter>
                 </Card>
               </TabsContent>
+
+              <TabsContent value="screenpipe" className="mt-0">
+                <ScreenpipeIntegration
+                  onContentAnalyzed={(data) => {
+                    if (data.environment) {
+                      handleEnvironmentDetected(
+                        data.environment,
+                        {
+                          description: data.description,
+                          mood: data.mood,
+                          songSuggestions: data.songSuggestions
+                        }
+                      );
+                    }
+                  }}
+                />
+              </TabsContent>
             </Tabs>
           </div>
 
@@ -1060,7 +1096,7 @@ export default function AIStudioPage() {
               </p>
             </motion.div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mt-6">
               {/* Environment-Based Audio */}
               <motion.div
                 id="feature-environment"
@@ -1259,6 +1295,64 @@ export default function AIStudioPage() {
                 >
                   <Zap className="h-4 w-4 mr-2" />
                   Activate Real-Time
+                </Button>
+              </motion.div>
+
+              {/* Screenpipe Integration */}
+              <motion.div
+                id="feature-screenpipe"
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, ease: "easeOut", delay: 0.5 }}
+                className="bg-gradient-to-br from-cyan-900/40 to-blue-900/40 border border-cyan-800/50 hover:border-cyan-700/50 transition-colors shadow-lg shadow-cyan-900/20 rounded-xl p-6 backdrop-blur-sm"
+              >
+                <div className="bg-cyan-500/20 p-3 rounded-lg w-12 h-12 flex items-center justify-center mb-4">
+                  <MonitorSmartphone className="h-6 w-6 text-cyan-400" />
+                </div>
+                <h3 className="text-xl font-semibold mb-3 text-white">Screenpipe Integration</h3>
+                <p className="text-gray-300 mb-4">
+                  Capture your screen and audio to automatically generate perfectly matched soundscapes.
+                </p>
+
+                {/* Features */}
+                <div className="bg-black/20 rounded-lg p-3 mb-4 border border-cyan-800/30">
+                  <h3 className="text-sm font-medium text-cyan-300 mb-2">Key Features</h3>
+                  <div className="space-y-2">
+                    <div className="flex items-center gap-2">
+                      <Camera className="h-4 w-4 text-cyan-400" />
+                      <span className="text-sm">24/7 Screen Recording</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Mic className="h-4 w-4 text-cyan-400" />
+                      <span className="text-sm">Ambient Audio Capture</span>
+                    </div>
+                  </div>
+                </div>
+
+                <ul className="space-y-2 text-gray-400">
+                  <li className="flex items-start gap-2">
+                    <Sparkles className="h-4 w-4 text-cyan-400 mt-1 shrink-0" />
+                    <span>100% local processing</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <Sparkles className="h-4 w-4 text-cyan-400 mt-1 shrink-0" />
+                    <span>Privacy-first design</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <Sparkles className="h-4 w-4 text-cyan-400 mt-1 shrink-0" />
+                    <span>Context-aware AI</span>
+                  </li>
+                </ul>
+                <Button
+                  className="mt-4 w-full bg-cyan-600 hover:bg-cyan-700"
+                  onClick={() => {
+                    // Add a new tab for Screenpipe
+                    setActiveTab('screenpipe');
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                  }}
+                >
+                  <MonitorSmartphone className="h-4 w-4 mr-2" />
+                  Try Screenpipe Integration
                 </Button>
               </motion.div>
             </div>

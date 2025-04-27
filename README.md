@@ -54,6 +54,7 @@ Our platform serves content creators, meditation practitioners, productivity ent
 - **Backend:** Supabase for authentication and database
 - **Database:** Supabase PostgreSQL
 - **AI:** OpenAI API, Grok API, Gemini API
+- **Context Capture:** Screenpipe for screen and audio recording
 - **Hosting:** Vercel
 - **Authentication:** Supabase Auth with Google OAuth
 - **UI Components:** shadcn/ui
@@ -61,10 +62,10 @@ Our platform serves content creators, meditation practitioners, productivity ent
 
 ### Sponsor Technologies Used:
 - [✅] **Grok:** Central to our platform, used for detailed audio prompt generation, creative enhancement, and audio analysis
+- [✅] **Screenpipe:** Integrated for context-aware screen and audio capture, enabling environment detection and real-time adaptation
 - [ ] **Monad:** _Not implemented in current version_
 - [ ] **Fluvio:** _Not implemented in current version_
 - [ ] **Base:** _Not implemented in current version_
-- [ ] **Screenpipe:** _Not implemented in current version_
 - [ ] **Stellar:** _Not implemented in current version_
 
 ---
@@ -82,6 +83,7 @@ Our platform serves content creators, meditation practitioners, productivity ent
 - ✅ **Grok Audio Analysis:** Analyze audio files to extract detailed insights using Grok's advanced understanding capabilities
 - ✅ **AI Music Generation:** Create custom music with Grok-enhanced prompts controlling genre, mood, and instruments
 - ✅ **Real-Time Adaptation:** Audio environments that adapt to surroundings and context with ANC (Active Noise Cancellation) and ENC (Environmental Noise Control)
+- ✅ **Screenpipe Integration:** Capture screen and audio content to automatically generate perfectly matched soundscapes with 100% local processing
 - ✅ **Audio File Upload & Analysis:** Upload and analyze your own audio files with detailed visualization and insights
 - ✅ **Track Download Options:** Download your favorite generated tracks directly from the player interface
 - ✅ **3D Interactive Elements:** Immersive 3D elements on the landing page for enhanced visual experience
@@ -94,6 +96,7 @@ Our platform serves content creators, meditation practitioners, productivity ent
 
 We've recently enhanced the AI Studio page with several new features:
 
+- **Screenpipe Integration:** Added 100% local screen and audio capture for context-aware soundscape generation
 - **Mood-Based Audio Suggestions:** Browse and play suggested tracks for each mood
 - **Audio Playback Controls:** Full-featured audio player with volume, progress tracking, and download options
 - **ANC/ENC Technology:** Added Active Noise Cancellation and Environmental Noise Control to the Real-Time Adaptation feature
