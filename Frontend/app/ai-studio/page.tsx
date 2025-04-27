@@ -2,11 +2,10 @@
 
 import { useState, useRef, useEffect } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Wand2, FileAudio, Sparkles, Music, AlertCircle, Play, Pause, Volume2, VolumeX, Loader2, Download, Camera, Zap, Shield, Headphones, MonitorSmartphone, Mic } from 'lucide-react';
+import { Wand2, FileAudio, Sparkles, Music, AlertCircle, Play, Pause, Volume2, VolumeX, Loader2, Download, Camera, Zap, Shield, Headphones, MonitorSmartphone, Mic, ArrowLeft } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useRouter } from 'next/navigation';
 import Navbar from '@/components/navbar';
-import ModernBackgroundLayout from '@/components/layouts/ModernBackgroundLayout';
 import { useAuth } from '@/components/auth/auth-provider';
 import MusicSelection from '@/components/music/MusicSelection';
 import YouTubePlayer from '@/components/music/YouTubePlayer';
@@ -46,19 +45,17 @@ export default function AIStudioPage() {
     }
   }, [user, isLoading, router]);
 
-  // Show loading state while checking authentication
-  if (isLoading) {
-    return (
-      <div className="flex min-h-screen items-center justify-center bg-black text-white">
-        <div className="animate-pulse text-xl">Loading...</div>
-      </div>
-    );
-  }
+  // State for loading UI
+  const [showContent, setShowContent] = useState(false);
 
-  // Only render the page if user is authenticated
-  if (!user) {
-    return null;
-  }
+  // Set showContent based on auth state
+  useEffect(() => {
+    if (!isLoading && user) {
+      setShowContent(true);
+    } else {
+      setShowContent(false);
+    }
+  }, [isLoading, user]);
 
   // Audio generator state
   const [prompt, setPrompt] = useState('');
@@ -497,7 +494,29 @@ export default function AIStudioPage() {
   }, []);
 
   return (
-    <ModernBackgroundLayout>
+    <div className="min-h-screen bg-gradient-to-b from-black via-indigo-950 to-purple-950 text-white relative overflow-hidden">
+      {/* Simple background elements */}
+      <div className="absolute inset-0 z-0">
+        <div className="absolute inset-0 bg-gradient-to-br from-black via-indigo-950/40 to-black"></div>
+        <div className="absolute top-[10%] left-[5%] w-80 h-80 rounded-full bg-indigo-600/10 filter blur-[80px]"></div>
+        <div className="absolute bottom-[5%] right-[3%] w-96 h-96 rounded-full bg-purple-600/10 filter blur-[100px]"></div>
+      </div>
+
+      {/* Content */}
+      <div className="relative z-10">
+        {isLoading && (
+          <div className="flex min-h-screen items-center justify-center bg-black text-white">
+            <div className="animate-pulse text-xl">Loading...</div>
+          </div>
+        )}
+
+        {!isLoading && !showContent && (
+          <div className="flex min-h-screen items-center justify-center bg-black text-white">
+            <div className="text-xl">Please log in to access this page</div>
+          </div>
+        )}
+
+      {showContent && (
       <div className="min-h-screen">
         <Navbar />
         <div className="container mx-auto px-4 pt-32 pb-16">
@@ -688,22 +707,22 @@ export default function AIStudioPage() {
               className="w-full"
             >
               <div className="flex justify-center mb-6">
-                <TabsList className="grid w-full max-w-3xl grid-cols-4">
-                  <TabsTrigger value="generate" className="flex items-center justify-center gap-2 px-4 py-3 rounded-md data-[state=active]:bg-indigo-600 data-[state=active]:text-white">
+                <TabsList className="grid w-full max-w-3xl grid-cols-2 md:grid-cols-4 gap-2">
+                  <TabsTrigger value="generate" className="flex items-center justify-center gap-1 px-2 md:px-4 py-3 rounded-md data-[state=active]:bg-indigo-600 data-[state=active]:text-white">
                     <Wand2 className="h-4 w-4" />
-                    <span>Generate Audio</span>
+                    <span className="text-xs md:text-sm">Generate Audio</span>
                   </TabsTrigger>
-                  <TabsTrigger value="music" className="flex items-center justify-center gap-2 px-4 py-3 rounded-md data-[state=active]:bg-indigo-600 data-[state=active]:text-white">
+                  <TabsTrigger value="music" className="flex items-center justify-center gap-1 px-2 md:px-4 py-3 rounded-md data-[state=active]:bg-indigo-600 data-[state=active]:text-white">
                     <Music className="h-4 w-4" />
-                    <span>Generate Music</span>
+                    <span className="text-xs md:text-sm">Generate Music</span>
                   </TabsTrigger>
-                  <TabsTrigger value="analyze" className="flex items-center justify-center gap-2 px-4 py-3 rounded-md data-[state=active]:bg-indigo-600 data-[state=active]:text-white">
+                  <TabsTrigger value="analyze" className="flex items-center justify-center gap-1 px-2 md:px-4 py-3 rounded-md data-[state=active]:bg-indigo-600 data-[state=active]:text-white">
                     <FileAudio className="h-4 w-4" />
-                    <span>Analyze</span>
+                    <span className="text-xs md:text-sm">Analyze</span>
                   </TabsTrigger>
-                  <TabsTrigger value="screenpipe" className="flex items-center justify-center gap-2 px-4 py-3 rounded-md data-[state=active]:bg-indigo-600 data-[state=active]:text-white">
+                  <TabsTrigger value="screenpipe" className="flex items-center justify-center gap-1 px-2 md:px-4 py-3 rounded-md data-[state=active]:bg-indigo-600 data-[state=active]:text-white">
                     <MonitorSmartphone className="h-4 w-4" />
-                    <span>ScreenPipe</span>
+                    <span className="text-xs md:text-sm">ScreenPipe</span>
                   </TabsTrigger>
                 </TabsList>
               </div>
@@ -1201,6 +1220,7 @@ export default function AIStudioPage() {
 
             {/* New Feature Cards Section */}
             <motion.div
+              id="feature-cards-section"
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, ease: "easeOut", delay: 0.2 }}
@@ -1261,7 +1281,7 @@ export default function AIStudioPage() {
                 {/* Environment Selection */}
                 <div className="bg-black/20 rounded-lg p-4 mb-5 border border-blue-800/30">
                   <h3 className="text-sm font-medium text-blue-300 mb-3">Popular Environments</h3>
-                  <div className="grid grid-cols-3 gap-2 mb-0">
+                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 mb-0">
                     {['Forest', 'Ocean', 'City', 'Cafe', 'Mountains', 'Rain'].map((env) => (
                       <Button
                         key={env}
@@ -1276,6 +1296,33 @@ export default function AIStudioPage() {
                       >
                         {env}
                       </Button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Suggested Audio Section */}
+                <div className="bg-black/20 rounded-lg p-4 mb-5 border border-blue-800/30">
+                  <h3 className="text-sm font-medium text-blue-300 mb-3">Suggested Audio</h3>
+                  <div className="space-y-2">
+                    {['Rainforest Ambience', 'Ocean Waves', 'City Soundscape'].map((audio, index) => (
+                      <div
+                        key={index}
+                        className="flex items-center justify-between p-2 rounded-lg bg-blue-900/20 hover:bg-blue-800/30 transition-all cursor-pointer border border-blue-800/30"
+                        onClick={() => {
+                          toast.success(`Playing: ${audio}`);
+                          // In a real implementation, this would play the audio
+                        }}
+                      >
+                        <div className="flex items-center">
+                          <div className="bg-blue-500/20 p-1.5 rounded-full mr-2">
+                            <Music className="h-4 w-4 text-blue-400" />
+                          </div>
+                          <span className="text-sm font-medium">{audio}</span>
+                        </div>
+                        <Button size="sm" variant="ghost" className="h-8 w-8 p-0 rounded-full">
+                          <Play className="h-4 w-4 text-blue-400" />
+                        </Button>
+                      </div>
                     ))}
                   </div>
                 </div>
@@ -1300,7 +1347,22 @@ export default function AIStudioPage() {
                     <span className="feature-card-list-item-text font-medium">Audio playback with controls</span>
                   </li>
                 </ul>
-                <div className="mt-auto">
+                <div className="mt-auto space-y-3">
+                  <Button
+                    variant="outline"
+                    className="w-full border-blue-800/30 hover:bg-blue-800/20 text-blue-300 hover:text-blue-100"
+                    onClick={() => {
+                      // Navigate back to main view
+                      const featureSection = document.getElementById('feature-cards-section');
+                      if (featureSection) {
+                        featureSection.scrollIntoView({ behavior: 'smooth' });
+                      }
+                    }}
+                  >
+                    <ArrowLeft className="h-4 w-4 mr-2" />
+                    Back to Features
+                  </Button>
+
                   <Button
                     className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-500 hover:to-blue-600 font-bold text-sm py-5 shadow-xl transform hover:scale-[1.03] transition-all duration-200 uppercase tracking-wider border-t border-blue-500/30 whitespace-normal h-auto"
                     onClick={() => {
@@ -1344,7 +1406,7 @@ export default function AIStudioPage() {
                 {/* Mood Selection */}
                 <div className="bg-black/20 rounded-lg p-4 mb-5 border border-purple-800/30">
                   <h3 className="text-sm font-medium text-purple-300 mb-3">Select a Mood</h3>
-                  <div className="grid grid-cols-3 gap-2 mb-0">
+                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 mb-0">
                     {['Relaxing', 'Energetic', 'Focused'].map((mood) => (
                       <Button
                         key={mood}
@@ -1360,6 +1422,33 @@ export default function AIStudioPage() {
                       >
                         {mood}
                       </Button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Suggested Audio Section */}
+                <div className="bg-black/20 rounded-lg p-4 mb-5 border border-purple-800/30">
+                  <h3 className="text-sm font-medium text-purple-300 mb-3">Suggested Audio</h3>
+                  <div className="space-y-2">
+                    {['Meditation Music', 'Focus Beats', 'Relaxation Sounds'].map((audio, index) => (
+                      <div
+                        key={index}
+                        className="flex items-center justify-between p-2 rounded-lg bg-purple-900/20 hover:bg-purple-800/30 transition-all cursor-pointer border border-purple-800/30"
+                        onClick={() => {
+                          toast.success(`Playing: ${audio}`);
+                          // In a real implementation, this would play the audio
+                        }}
+                      >
+                        <div className="flex items-center">
+                          <div className="bg-purple-500/20 p-1.5 rounded-full mr-2">
+                            <Music className="h-4 w-4 text-purple-400" />
+                          </div>
+                          <span className="text-sm font-medium">{audio}</span>
+                        </div>
+                        <Button size="sm" variant="ghost" className="h-8 w-8 p-0 rounded-full">
+                          <Play className="h-4 w-4 text-purple-400" />
+                        </Button>
+                      </div>
                     ))}
                   </div>
                 </div>
@@ -1384,7 +1473,22 @@ export default function AIStudioPage() {
                     <span className="feature-card-list-item-text font-medium">AI-enhanced emotional audio</span>
                   </li>
                 </ul>
-                <div className="mt-auto">
+                <div className="mt-auto space-y-3">
+                  <Button
+                    variant="outline"
+                    className="w-full border-purple-800/30 hover:bg-purple-800/20 text-purple-300 hover:text-purple-100"
+                    onClick={() => {
+                      // Navigate back to main view
+                      const featureSection = document.getElementById('feature-cards-section');
+                      if (featureSection) {
+                        featureSection.scrollIntoView({ behavior: 'smooth' });
+                      }
+                    }}
+                  >
+                    <ArrowLeft className="h-4 w-4 mr-2" />
+                    Back to Features
+                  </Button>
+
                   <Button
                     className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 font-bold text-sm py-5 shadow-xl transform hover:scale-[1.03] transition-all duration-200 uppercase tracking-wider border-t border-purple-500/30 whitespace-normal h-auto"
                     onClick={() => {
@@ -1432,7 +1536,7 @@ export default function AIStudioPage() {
                     Noise Control Features
                   </h3>
 
-                  <div className="grid grid-cols-2 gap-3 mb-0">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-0">
                     <div className="bg-green-900/20 rounded-lg p-3 border border-green-800/30 hover:bg-green-800/20 transition-all duration-300">
                       <div className="flex items-center mb-2">
                         <Headphones className="h-4 w-4 text-green-400 mr-2 feature-card-list-item-icon" />
@@ -1475,7 +1579,22 @@ export default function AIStudioPage() {
                     <span className="feature-card-list-item-text font-medium">Adaptive noise masking</span>
                   </li>
                 </ul>
-                <div className="mt-auto">
+                <div className="mt-auto space-y-3">
+                  <Button
+                    variant="outline"
+                    className="w-full border-green-800/30 hover:bg-green-800/20 text-green-300 hover:text-green-100"
+                    onClick={() => {
+                      // Navigate back to main view
+                      const featureSection = document.getElementById('feature-cards-section');
+                      if (featureSection) {
+                        featureSection.scrollIntoView({ behavior: 'smooth' });
+                      }
+                    }}
+                  >
+                    <ArrowLeft className="h-4 w-4 mr-2" />
+                    Back to Features
+                  </Button>
+
                   <Button
                     className="w-full bg-gradient-to-r from-green-600 to-teal-600 hover:from-green-500 hover:to-teal-500 font-bold text-sm py-5 shadow-xl transform hover:scale-[1.03] transition-all duration-200 uppercase tracking-wider border-t border-green-500/30 whitespace-normal h-auto"
                     onClick={() => {
@@ -1555,7 +1674,22 @@ export default function AIStudioPage() {
                     <span className="feature-card-list-item-text font-medium">Context-aware AI</span>
                   </li>
                 </ul>
-                <div className="mt-auto">
+                <div className="mt-auto space-y-3">
+                  <Button
+                    variant="outline"
+                    className="w-full border-cyan-800/30 hover:bg-cyan-800/20 text-cyan-300 hover:text-cyan-100"
+                    onClick={() => {
+                      // Navigate back to main view
+                      const featureSection = document.getElementById('feature-cards-section');
+                      if (featureSection) {
+                        featureSection.scrollIntoView({ behavior: 'smooth' });
+                      }
+                    }}
+                  >
+                    <ArrowLeft className="h-4 w-4 mr-2" />
+                    Back to Features
+                  </Button>
+
                   <Button
                     className="w-full bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 font-bold text-sm py-5 shadow-xl transform hover:scale-[1.03] transition-all duration-200 uppercase tracking-wider border-t border-cyan-500/30 whitespace-normal h-auto"
                     onClick={() => {
@@ -1573,6 +1707,6 @@ export default function AIStudioPage() {
           </div>
         </div>
       </div>
-    </ModernBackgroundLayout>
+    </div>
   );
 }
