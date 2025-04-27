@@ -550,7 +550,7 @@ export default function AIStudioPage() {
               }}
             >
               <MonitorSmartphone className="h-4 w-4 mr-2 text-cyan-400" />
-              Screenpipe Integration
+              ScreenPipe Bridge
             </Button>
           </div>
 
@@ -585,7 +585,7 @@ export default function AIStudioPage() {
                   </TabsTrigger>
                   <TabsTrigger value="screenpipe" className="flex items-center gap-2">
                     <MonitorSmartphone className="h-4 w-4" />
-                    <span>Screenpipe</span>
+                    <span>ScreenPipe</span>
                   </TabsTrigger>
                 </TabsList>
               </div>
@@ -1096,7 +1096,7 @@ export default function AIStudioPage() {
               </p>
             </motion.div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mt-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mt-6 auto-rows-fr">
               {/* Environment-Based Audio */}
               <motion.div
                 id="feature-environment"
@@ -1109,7 +1109,7 @@ export default function AIStudioPage() {
                   <Camera className="h-6 w-6 text-blue-400" />
                 </div>
                 <h3 className="text-xl font-semibold mb-3 text-white">Environment-Based Audio</h3>
-                <p className="text-gray-300 mb-4 line-clamp-3">
+                <p className="text-gray-300 mb-4 line-clamp-2">
                   Generate immersive soundscapes based on different environments like forests, oceans, cities, and cafes.
                 </p>
 
@@ -1135,7 +1135,7 @@ export default function AIStudioPage() {
                   </div>
                 </div>
 
-                <ul className="space-y-1 text-gray-400 text-sm mb-4">
+                <ul className="space-y-1 text-gray-400 text-sm mb-4 min-h-[80px]">
                   <li className="flex items-start gap-2">
                     <Sparkles className="h-4 w-4 text-blue-400 mt-0.5 shrink-0" />
                     <span>Camera environment detection</span>
@@ -1175,7 +1175,7 @@ export default function AIStudioPage() {
                   <Sparkles className="h-6 w-6 text-purple-400" />
                 </div>
                 <h3 className="text-xl font-semibold mb-3 text-white">Mood-Based Customization</h3>
-                <p className="text-gray-300 mb-4 line-clamp-3">
+                <p className="text-gray-300 mb-4 line-clamp-2">
                   Tailor audio to match your emotional state, whether relaxing, energetic, focused, or peaceful.
                 </p>
 
@@ -1202,7 +1202,7 @@ export default function AIStudioPage() {
                   </div>
                 </div>
 
-                <ul className="space-y-1 text-gray-400 text-sm mb-4">
+                <ul className="space-y-1 text-gray-400 text-sm mb-4 min-h-[80px]">
                   <li className="flex items-start gap-2">
                     <Sparkles className="h-4 w-4 text-purple-400 mt-0.5 shrink-0" />
                     <span>Mood-based audio generation</span>
@@ -1242,7 +1242,7 @@ export default function AIStudioPage() {
                   <Zap className="h-6 w-6 text-green-400" />
                 </div>
                 <h3 className="text-xl font-semibold mb-3 text-white">Real-Time Adaptation</h3>
-                <p className="text-gray-300 mb-4 line-clamp-3">
+                <p className="text-gray-300 mb-4 line-clamp-2">
                   Experience audio environments that adapt to your surroundings and context in real-time.
                 </p>
 
@@ -1276,7 +1276,7 @@ export default function AIStudioPage() {
                   </div>
                 </div>
 
-                <ul className="space-y-1 text-gray-400 text-sm mb-4">
+                <ul className="space-y-1 text-gray-400 text-sm mb-4 min-h-[80px]">
                   <li className="flex items-start gap-2">
                     <Sparkles className="h-4 w-4 text-green-400 mt-0.5 shrink-0" />
                     <span>Continuous environment analysis</span>
@@ -1315,9 +1315,9 @@ export default function AIStudioPage() {
                 <div className="bg-cyan-500/20 p-3 rounded-lg w-12 h-12 flex items-center justify-center mb-4">
                   <MonitorSmartphone className="h-6 w-6 text-cyan-400" />
                 </div>
-                <h3 className="text-xl font-semibold mb-3 text-white">Screenpipe Integration</h3>
-                <p className="text-gray-300 mb-4 line-clamp-3">
-                  Capture your screen and audio to automatically generate perfectly matched soundscapes.
+                <h3 className="text-xl font-semibold mb-3 text-white">ScreenPipe Bridge</h3>
+                <p className="text-gray-300 mb-4 line-clamp-2">
+                  Creates a direct channel between your screen analysis and dynamic soundscape generator.
                 </p>
 
                 {/* Features */}
@@ -1335,7 +1335,7 @@ export default function AIStudioPage() {
                   </div>
                 </div>
 
-                <ul className="space-y-1 text-gray-400 text-sm mb-4">
+                <ul className="space-y-1 text-gray-400 text-sm mb-4 min-h-[80px]">
                   <li className="flex items-start gap-2">
                     <Sparkles className="h-4 w-4 text-cyan-400 mt-0.5 shrink-0" />
                     <span>100% local processing</span>
@@ -1359,7 +1359,7 @@ export default function AIStudioPage() {
                     }}
                   >
                     <MonitorSmartphone className="h-4 w-4 mr-2" />
-                    Try Screenpipe Integration
+                    Activate ScreenPipe Bridge
                   </Button>
                 </div>
               </motion.div>
