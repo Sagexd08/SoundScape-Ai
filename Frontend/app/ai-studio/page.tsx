@@ -33,6 +33,145 @@ import { ModelSelector } from '@/components/ai/ModelSelector';
 import { generateAudio } from '@/lib/openai';
 import { aiService, generateAudioPrompt, AIModelType } from '@/lib/ai-integration';
 
+// Helper function to get mood-based audio suggestions
+interface SuggestedAudio {
+  id: string;
+  title: string;
+  artist: string;
+  mood: string;
+  duration: number;
+  url: string;
+  coverImage?: string;
+}
+
+// Get mood suggestions for audio playback
+const getMoodSuggestions = (mood: string): SuggestedAudio[] => {
+  const suggestions: Record<string, SuggestedAudio[]> = {
+    relaxing: [
+      {
+        id: '1',
+        title: 'Calm Waters',
+        artist: 'Ambient Dreams',
+        mood: 'relaxing',
+        duration: 183,
+        url: 'https://cdn.pixabay.com/download/audio/2022/01/18/audio_d0c6ff1bab.mp3?filename=relaxing-145038.mp3',
+        coverImage: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=200&auto=format&fit=crop'
+      },
+      {
+        id: '2',
+        title: 'Gentle Rain',
+        artist: 'Nature Sounds',
+        mood: 'relaxing',
+        duration: 240,
+        url: 'https://cdn.pixabay.com/download/audio/2022/03/10/audio_270f8b3d56.mp3?filename=relaxing-145803.mp3',
+        coverImage: 'https://images.unsplash.com/photo-1501691223387-dd0500403074?q=80&w=200&auto=format&fit=crop'
+      }
+    ],
+    energetic: [
+      {
+        id: '3',
+        title: 'Power Up',
+        artist: 'Workout Mix',
+        mood: 'energetic',
+        duration: 195,
+        url: 'https://cdn.pixabay.com/download/audio/2022/10/25/audio_946f4e8dc8.mp3?filename=energetic-indie-rock-jump-149636.mp3',
+        coverImage: 'https://images.unsplash.com/photo-1534258936925-c58bed479fcb?q=80&w=200&auto=format&fit=crop'
+      },
+      {
+        id: '4',
+        title: 'Morning Rush',
+        artist: 'Beats & Rhythm',
+        mood: 'energetic',
+        duration: 210,
+        url: 'https://cdn.pixabay.com/download/audio/2022/01/20/audio_d0c19c3ce0.mp3?filename=energetic-rock-trailer-150300.mp3',
+        coverImage: 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?q=80&w=200&auto=format&fit=crop'
+      }
+    ],
+    focused: [
+      {
+        id: '5',
+        title: 'Deep Focus',
+        artist: 'Study Session',
+        mood: 'focused',
+        duration: 225,
+        url: 'https://cdn.pixabay.com/download/audio/2022/04/27/audio_c8a901a418.mp3?filename=lofi-study-112191.mp3',
+        coverImage: 'https://images.unsplash.com/photo-1434030216411-0b793f4b4173?q=80&w=200&auto=format&fit=crop'
+      },
+      {
+        id: '6',
+        title: 'Concentration',
+        artist: 'Mind Waves',
+        mood: 'focused',
+        duration: 198,
+        url: 'https://cdn.pixabay.com/download/audio/2022/03/09/audio_c8d43425ca.mp3?filename=ambient-piano-logo-145504.mp3',
+        coverImage: 'https://images.unsplash.com/photo-1488190211105-8b0e65b80b4e?q=80&w=200&auto=format&fit=crop'
+      }
+    ],
+    peaceful: [
+      {
+        id: '7',
+        title: 'Tranquil Forest',
+        artist: 'Nature Harmony',
+        mood: 'peaceful',
+        duration: 215,
+        url: 'https://cdn.pixabay.com/download/audio/2022/01/26/audio_d0c5ed8d9a.mp3?filename=forest-with-small-river-birds-and-nature-field-recording-6735.mp3',
+        coverImage: 'https://images.unsplash.com/photo-1448375240586-882707db888b?q=80&w=200&auto=format&fit=crop'
+      },
+      {
+        id: '8',
+        title: 'Meditation Space',
+        artist: 'Zen Masters',
+        mood: 'peaceful',
+        duration: 230,
+        url: 'https://cdn.pixabay.com/download/audio/2022/04/13/audio_2957fb7fcf.mp3?filename=meditation-amp-relaxation-music-22165.mp3',
+        coverImage: 'https://images.unsplash.com/photo-1506126613408-eca07ce68773?q=80&w=200&auto=format&fit=crop'
+      }
+    ],
+    uplifting: [
+      {
+        id: '9',
+        title: 'Positive Vibes',
+        artist: 'Happy Tunes',
+        mood: 'uplifting',
+        duration: 190,
+        url: 'https://cdn.pixabay.com/download/audio/2022/01/18/audio_d0c6ff1bab.mp3?filename=uplifting-piano-112624.mp3',
+        coverImage: 'https://images.unsplash.com/photo-1464692805480-a69dfaafdb0d?q=80&w=200&auto=format&fit=crop'
+      },
+      {
+        id: '10',
+        title: 'New Beginnings',
+        artist: 'Inspiration',
+        mood: 'uplifting',
+        duration: 205,
+        url: 'https://cdn.pixabay.com/download/audio/2022/01/27/audio_d0c6a694b7.mp3?filename=uplifting-corporate-141170.mp3',
+        coverImage: 'https://images.unsplash.com/photo-1490750967868-88aa4486c946?q=80&w=200&auto=format&fit=crop'
+      }
+    ],
+    melancholic: [
+      {
+        id: '11',
+        title: 'Rainy Day',
+        artist: 'Melancholy',
+        mood: 'melancholic',
+        duration: 220,
+        url: 'https://cdn.pixabay.com/download/audio/2022/04/20/audio_1b1b9e8e0f.mp3?filename=sad-piano-theme-19799.mp3',
+        coverImage: 'https://images.unsplash.com/photo-1501999635878-71cb5379c2d8?q=80&w=200&auto=format&fit=crop'
+      },
+      {
+        id: '12',
+        title: 'Memories',
+        artist: 'Nostalgic Sounds',
+        mood: 'melancholic',
+        duration: 235,
+        url: 'https://cdn.pixabay.com/download/audio/2022/03/15/audio_c8e9d8d4a9.mp3?filename=sad-atmospheric-piano-147702.mp3',
+        coverImage: 'https://images.unsplash.com/photo-1459478309853-2c33a60058e7?q=80&w=200&auto=format&fit=crop'
+      }
+    ]
+  };
+
+  return suggestions[mood.toLowerCase()] || suggestions.relaxing;
+};
+
 // Simplified AI Studio page with functional audio demo
 export default function AIStudioPage() {
   const [activeTab, setActiveTab] = useState('generate');
@@ -1280,6 +1419,59 @@ export default function AIStudioPage() {
                   </div>
                 </div>
 
+                {/* Audio Suggestions Section */}
+                {environmentSongSuggestions && environmentSongSuggestions.length > 0 && (
+                  <div className="bg-black/20 rounded-lg p-4 mb-5 border border-blue-800/30">
+                    <h3 className="text-sm font-medium text-blue-300 mb-3 flex items-center">
+                      <Music className="h-4 w-4 mr-2" />
+                      Suggested Audio for {selectedEnvironment ? selectedEnvironment.charAt(0).toUpperCase() + selectedEnvironment.slice(1) : 'Environment'}
+                    </h3>
+                    <div className="space-y-2 max-h-[200px] overflow-y-auto pr-2 custom-scrollbar">
+                      {environmentSongSuggestions.map((song, index) => (
+                        <div
+                          key={index}
+                          className="bg-blue-900/20 rounded-lg p-2 border border-blue-800/30 hover:bg-blue-800/30 transition-all cursor-pointer flex items-center justify-between"
+                          onClick={() => {
+                            // Create a music track object
+                            const track: MusicTrack = {
+                              id: `env-${index}`,
+                              title: song.title,
+                              artist: song.artist,
+                              genre: song.genre,
+                              instruments: [],
+                              youtubeUrl: song.youtubeUrl || `https://www.youtube.com/embed/search?q=${encodeURIComponent(`${song.title} ${song.artist}`)}`,
+                              thumbnailUrl: '',
+                              duration: 180,
+                              description: `Suggested for ${selectedEnvironment} environment`
+                            };
+                            setSelectedMusicTrack(track);
+                            setActiveTab('music');
+                            window.scrollTo({ top: 0, behavior: 'smooth' });
+                            toast.success(`Playing "${song.title}" by ${song.artist}`);
+                          }}
+                        >
+                          <div className="flex items-center gap-2">
+                            <div className="w-8 h-8 bg-blue-800/50 rounded-full flex items-center justify-center">
+                              <Music className="h-4 w-4 text-blue-300" />
+                            </div>
+                            <div>
+                              <p className="text-sm font-medium text-white">{song.title}</p>
+                              <p className="text-xs text-gray-400">{song.artist}</p>
+                            </div>
+                          </div>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="h-7 w-7 rounded-full bg-blue-800/50 hover:bg-blue-700/50"
+                          >
+                            <Play className="h-3.5 w-3.5 text-blue-300" />
+                          </Button>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
                 <ul className="space-y-3 text-gray-300 text-sm mb-5 min-h-[100px]">
                   <li className="feature-card-list-item animate-shimmer bg-blue-900/20 border-blue-800/30 hover:bg-blue-800/30 hover:border-blue-700/40">
                     <div className="bg-blue-500/20 p-1.5 rounded-full">
@@ -1297,10 +1489,10 @@ export default function AIStudioPage() {
                     <div className="bg-blue-500/20 p-1.5 rounded-full">
                       <Sparkles className="h-4 w-4 text-blue-400 feature-card-list-item-icon" />
                     </div>
-                    <span className="feature-card-list-item-text font-medium">Audio playback with controls</span>
+                    <span className="feature-card-list-item-text font-medium">Audio suggestions with playback</span>
                   </li>
                 </ul>
-                <div className="mt-auto">
+                <div className="mt-auto flex flex-col gap-2">
                   <Button
                     className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-500 hover:to-blue-600 font-bold text-sm py-5 shadow-xl transform hover:scale-[1.03] transition-all duration-200 uppercase tracking-wider border-t border-blue-500/30 whitespace-normal h-auto"
                     onClick={() => {
@@ -1311,6 +1503,19 @@ export default function AIStudioPage() {
                     <Camera className="h-5 w-5 mr-2 flex-shrink-0" />
                     <span className="text-center">Scan Environment</span>
                   </Button>
+                  {selectedEnvironment && (
+                    <Button
+                      variant="outline"
+                      className="w-full border-blue-700/50 hover:bg-blue-800/30 text-blue-300 hover:text-blue-200 font-medium text-sm py-2"
+                      onClick={() => {
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                        handleGenerateAudio();
+                      }}
+                    >
+                      <Play className="h-4 w-4 mr-2 flex-shrink-0" />
+                      <span className="text-center">Generate {selectedEnvironment} Audio</span>
+                    </Button>
+                  )}
                 </div>
               </motion.div>
 
@@ -1345,17 +1550,15 @@ export default function AIStudioPage() {
                 <div className="bg-black/20 rounded-lg p-4 mb-5 border border-purple-800/30">
                   <h3 className="text-sm font-medium text-purple-300 mb-3">Select a Mood</h3>
                   <div className="grid grid-cols-3 gap-2 mb-0">
-                    {['Relaxing', 'Energetic', 'Focused'].map((mood) => (
+                    {['Relaxing', 'Energetic', 'Focused', 'Peaceful', 'Uplifting', 'Melancholic'].map((mood) => (
                       <Button
                         key={mood}
                         variant="outline"
                         size="sm"
-                        className="h-auto py-1.5 px-2 border-purple-800/30 hover:bg-purple-800/30 transition-all text-xs truncate"
+                        className={`h-auto py-1.5 px-2 border-purple-800/30 hover:bg-purple-800/30 transition-all text-xs truncate ${selectedMood === mood.toLowerCase() ? 'bg-purple-800/50 text-white' : ''}`}
                         onClick={() => {
-                          setSelectedMoodForSuggestions(mood.toLowerCase());
-                          setShowMoodSuggestions(true);
+                          handleMoodSelected(mood.toLowerCase());
                           toast.success(`Mood set to: ${mood}`);
-                          window.scrollTo({ top: 0, behavior: 'smooth' });
                         }}
                       >
                         {mood}
@@ -1363,6 +1566,125 @@ export default function AIStudioPage() {
                     ))}
                   </div>
                 </div>
+
+                {/* Mood-Based Audio Suggestions */}
+                {selectedMood && (
+                  <div className="bg-black/20 rounded-lg p-4 mb-5 border border-purple-800/30">
+                    <h3 className="text-sm font-medium text-purple-300 mb-3 flex items-center">
+                      <Music className="h-4 w-4 mr-2" />
+                      Suggested Audio for {selectedMood.charAt(0).toUpperCase() + selectedMood.slice(1)} Mood
+                    </h3>
+
+                    <div className="space-y-2 max-h-[200px] overflow-y-auto pr-2 custom-scrollbar">
+                      {/* Sample mood-based audio suggestions */}
+                      {getMoodSuggestions(selectedMood).slice(0, 3).map((suggestion, index) => (
+                        <div
+                          key={index}
+                          className="bg-purple-900/20 rounded-lg p-2 border border-purple-800/30 hover:bg-purple-800/30 transition-all cursor-pointer flex items-center justify-between"
+                          onClick={() => {
+                            // Create an audio element and play it
+                            if (audioRef.current) {
+                              audioRef.current.src = suggestion.url;
+                              audioRef.current.volume = volume / 100;
+                              audioRef.current.play().catch(err => {
+                                console.error('Error playing audio:', err);
+                                toast.error('Could not play audio. Please try again.');
+                              });
+                              setIsPlaying(true);
+                              setAudioTitle(`${suggestion.title} - ${suggestion.artist}`);
+                              setDuration(suggestion.duration);
+                              toast.success(`Playing "${suggestion.title}" by ${suggestion.artist}`);
+                            }
+                          }}
+                        >
+                          <div className="flex items-center gap-2">
+                            <div className="w-8 h-8 bg-purple-800/50 rounded-full flex items-center justify-center">
+                              <Music className="h-4 w-4 text-purple-300" />
+                            </div>
+                            <div>
+                              <p className="text-sm font-medium text-white">{suggestion.title}</p>
+                              <p className="text-xs text-gray-400">{suggestion.artist}</p>
+                            </div>
+                          </div>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="h-7 w-7 rounded-full bg-purple-800/50 hover:bg-purple-700/50"
+                          >
+                            <Play className="h-3.5 w-3.5 text-purple-300" />
+                          </Button>
+                        </div>
+                      ))}
+                    </div>
+
+                    {/* Audio Player */}
+                    {isPlaying && (
+                      <div className="mt-3 bg-purple-900/30 rounded-lg p-3 border border-purple-800/30">
+                        <div className="flex items-center justify-between mb-2">
+                          <div className="truncate">
+                            <p className="text-sm font-medium text-white truncate">{audioTitle}</p>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              className="h-8 w-8 rounded-full bg-purple-800/50 hover:bg-purple-700/50"
+                              onClick={togglePlayPause}
+                            >
+                              {isPlaying ? (
+                                <Pause className="h-4 w-4 text-purple-300" />
+                              ) : (
+                                <Play className="h-4 w-4 text-purple-300" />
+                              )}
+                            </Button>
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              className="h-8 w-8 rounded-full bg-purple-800/50 hover:bg-purple-700/50"
+                              onClick={toggleMute}
+                            >
+                              {isMuted ? (
+                                <VolumeX className="h-4 w-4 text-purple-300" />
+                              ) : (
+                                <Volume2 className="h-4 w-4 text-purple-300" />
+                              )}
+                            </Button>
+                          </div>
+                        </div>
+
+                        <div className="space-y-1">
+                          <Slider
+                            value={[currentTime]}
+                            min={0}
+                            max={duration}
+                            step={0.1}
+                            onValueChange={handleProgressChange}
+                            className="cursor-pointer"
+                          />
+                          <div className="flex justify-between text-xs text-gray-400">
+                            <span>{formatTime(currentTime)}</span>
+                            <span>{formatTime(duration)}</span>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+
+                    <div className="mt-2 text-center">
+                      <Button
+                        variant="link"
+                        size="sm"
+                        className="text-purple-300 hover:text-purple-200 text-xs"
+                        onClick={() => {
+                          setSelectedMoodForSuggestions(selectedMood);
+                          setShowMoodSuggestions(true);
+                          window.scrollTo({ top: 0, behavior: 'smooth' });
+                        }}
+                      >
+                        View All Suggested Tracks
+                      </Button>
+                    </div>
+                  </div>
+                )}
 
                 <ul className="space-y-3 text-gray-300 text-sm mb-5 min-h-[100px]">
                   <li className="feature-card-list-item animate-shimmer bg-purple-900/20 border-purple-800/30 hover:bg-purple-800/30 hover:border-purple-700/40">
@@ -1375,7 +1697,7 @@ export default function AIStudioPage() {
                     <div className="bg-purple-500/20 p-1.5 rounded-full">
                       <Sparkles className="h-4 w-4 text-purple-400 feature-card-list-item-icon" />
                     </div>
-                    <span className="feature-card-list-item-text font-medium">Suggested tracks for each mood</span>
+                    <span className="feature-card-list-item-text font-medium">Suggested tracks with playback</span>
                   </li>
                   <li className="feature-card-list-item animate-shimmer bg-purple-900/20 border-purple-800/30 hover:bg-purple-800/30 hover:border-purple-700/40">
                     <div className="bg-purple-500/20 p-1.5 rounded-full">
@@ -1384,7 +1706,7 @@ export default function AIStudioPage() {
                     <span className="feature-card-list-item-text font-medium">AI-enhanced emotional audio</span>
                   </li>
                 </ul>
-                <div className="mt-auto">
+                <div className="mt-auto flex flex-col gap-2">
                   <Button
                     className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 font-bold text-sm py-5 shadow-xl transform hover:scale-[1.03] transition-all duration-200 uppercase tracking-wider border-t border-purple-500/30 whitespace-normal h-auto"
                     onClick={() => {
@@ -1395,6 +1717,19 @@ export default function AIStudioPage() {
                     <Sparkles className="h-5 w-5 mr-2 flex-shrink-0" />
                     <span className="text-center">Advanced Mood Selection</span>
                   </Button>
+                  {selectedMood && (
+                    <Button
+                      variant="outline"
+                      className="w-full border-purple-700/50 hover:bg-purple-800/30 text-purple-300 hover:text-purple-200 font-medium text-sm py-2"
+                      onClick={() => {
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                        handleGenerateAudio();
+                      }}
+                    >
+                      <Play className="h-4 w-4 mr-2 flex-shrink-0" />
+                      <span className="text-center">Generate {selectedMood} Audio</span>
+                    </Button>
+                  )}
                 </div>
               </motion.div>
 
