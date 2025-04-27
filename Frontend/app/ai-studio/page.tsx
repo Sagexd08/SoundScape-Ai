@@ -1103,26 +1103,26 @@ export default function AIStudioPage() {
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, ease: "easeOut", delay: 0.2 }}
-                className="bg-gradient-to-br from-blue-900/40 to-indigo-900/40 border border-blue-800/50 hover:border-blue-700/50 transition-colors shadow-lg shadow-blue-900/20 rounded-xl p-6 backdrop-blur-sm"
+                className="bg-gradient-to-br from-blue-900/40 to-indigo-900/40 border border-blue-800/50 hover:border-blue-700/50 transition-colors shadow-lg shadow-blue-900/20 rounded-xl p-6 backdrop-blur-sm flex flex-col h-full"
               >
                 <div className="bg-blue-500/20 p-3 rounded-lg w-12 h-12 flex items-center justify-center mb-4">
                   <Camera className="h-6 w-6 text-blue-400" />
                 </div>
                 <h3 className="text-xl font-semibold mb-3 text-white">Environment-Based Audio</h3>
-                <p className="text-gray-300 mb-4">
+                <p className="text-gray-300 mb-4 line-clamp-3">
                   Generate immersive soundscapes based on different environments like forests, oceans, cities, and cafes.
                 </p>
 
                 {/* Environment Selection */}
                 <div className="bg-black/20 rounded-lg p-3 mb-4 border border-blue-800/30">
                   <h3 className="text-sm font-medium text-blue-300 mb-2">Popular Environments</h3>
-                  <div className="grid grid-cols-3 gap-2 mb-2">
+                  <div className="grid grid-cols-3 gap-2 mb-0">
                     {['Forest', 'Ocean', 'City', 'Cafe', 'Mountains', 'Rain'].map((env) => (
                       <Button
                         key={env}
                         variant="outline"
                         size="sm"
-                        className="h-auto py-1 border-blue-800/30 hover:bg-blue-800/30 transition-all text-xs"
+                        className="h-auto py-1 border-blue-800/30 hover:bg-blue-800/30 transition-all text-xs truncate"
                         onClick={() => {
                           handleEnvironmentDetected(env.toLowerCase());
                           toast.success(`Environment set to: ${env}`);
@@ -1135,30 +1135,32 @@ export default function AIStudioPage() {
                   </div>
                 </div>
 
-                <ul className="space-y-2 text-gray-400">
+                <ul className="space-y-1 text-gray-400 text-sm mb-4">
                   <li className="flex items-start gap-2">
-                    <Sparkles className="h-4 w-4 text-blue-400 mt-1 shrink-0" />
+                    <Sparkles className="h-4 w-4 text-blue-400 mt-0.5 shrink-0" />
                     <span>Camera environment detection</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <Sparkles className="h-4 w-4 text-blue-400 mt-1 shrink-0" />
+                    <Sparkles className="h-4 w-4 text-blue-400 mt-0.5 shrink-0" />
                     <span>Gemini AI image analysis</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <Sparkles className="h-4 w-4 text-blue-400 mt-1 shrink-0" />
+                    <Sparkles className="h-4 w-4 text-blue-400 mt-0.5 shrink-0" />
                     <span>Audio playback with controls</span>
                   </li>
                 </ul>
-                <Button
-                  className="mt-4 w-full bg-blue-600 hover:bg-blue-700"
-                  onClick={() => {
-                    setShowEnvironmentScanner(true);
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
-                  }}
-                >
-                  <Camera className="h-4 w-4 mr-2" />
-                  Scan Environment
-                </Button>
+                <div className="mt-auto">
+                  <Button
+                    className="w-full bg-blue-600 hover:bg-blue-700"
+                    onClick={() => {
+                      setShowEnvironmentScanner(true);
+                      window.scrollTo({ top: 0, behavior: 'smooth' });
+                    }}
+                  >
+                    <Camera className="h-4 w-4 mr-2" />
+                    Scan Environment
+                  </Button>
+                </div>
               </motion.div>
 
               {/* Mood-Based Customization */}
@@ -1167,26 +1169,26 @@ export default function AIStudioPage() {
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, ease: "easeOut", delay: 0.3 }}
-                className="bg-gradient-to-br from-purple-900/40 to-pink-900/40 border border-purple-800/50 hover:border-purple-700/50 transition-colors shadow-lg shadow-purple-900/20 rounded-xl p-6 backdrop-blur-sm"
+                className="bg-gradient-to-br from-purple-900/40 to-pink-900/40 border border-purple-800/50 hover:border-purple-700/50 transition-colors shadow-lg shadow-purple-900/20 rounded-xl p-6 backdrop-blur-sm flex flex-col h-full"
               >
                 <div className="bg-purple-500/20 p-3 rounded-lg w-12 h-12 flex items-center justify-center mb-4">
                   <Sparkles className="h-6 w-6 text-purple-400" />
                 </div>
                 <h3 className="text-xl font-semibold mb-3 text-white">Mood-Based Customization</h3>
-                <p className="text-gray-300 mb-4">
+                <p className="text-gray-300 mb-4 line-clamp-3">
                   Tailor audio to match your emotional state, whether relaxing, energetic, focused, or peaceful.
                 </p>
 
                 {/* Mood Selection */}
                 <div className="bg-black/20 rounded-lg p-3 mb-4 border border-purple-800/30">
                   <h3 className="text-sm font-medium text-purple-300 mb-2">Select a Mood</h3>
-                  <div className="grid grid-cols-3 gap-2 mb-2">
+                  <div className="grid grid-cols-3 gap-2 mb-0">
                     {['Relaxing', 'Energetic', 'Focused'].map((mood) => (
                       <Button
                         key={mood}
                         variant="outline"
                         size="sm"
-                        className="h-auto py-1 border-purple-800/30 hover:bg-purple-800/30 transition-all text-xs"
+                        className="h-auto py-1 border-purple-800/30 hover:bg-purple-800/30 transition-all text-xs truncate"
                         onClick={() => {
                           setSelectedMoodForSuggestions(mood.toLowerCase());
                           setShowMoodSuggestions(true);
@@ -1200,30 +1202,32 @@ export default function AIStudioPage() {
                   </div>
                 </div>
 
-                <ul className="space-y-2 text-gray-400">
+                <ul className="space-y-1 text-gray-400 text-sm mb-4">
                   <li className="flex items-start gap-2">
-                    <Sparkles className="h-4 w-4 text-purple-400 mt-1 shrink-0" />
+                    <Sparkles className="h-4 w-4 text-purple-400 mt-0.5 shrink-0" />
                     <span>Mood-based audio generation</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <Sparkles className="h-4 w-4 text-purple-400 mt-1 shrink-0" />
+                    <Sparkles className="h-4 w-4 text-purple-400 mt-0.5 shrink-0" />
                     <span>Suggested tracks for each mood</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <Sparkles className="h-4 w-4 text-purple-400 mt-1 shrink-0" />
+                    <Sparkles className="h-4 w-4 text-purple-400 mt-0.5 shrink-0" />
                     <span>AI-enhanced emotional audio</span>
                   </li>
                 </ul>
-                <Button
-                  className="mt-4 w-full bg-purple-600 hover:bg-purple-700"
-                  onClick={() => {
-                    setShowMoodSelector(true);
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
-                  }}
-                >
-                  <Sparkles className="h-4 w-4 mr-2" />
-                  Advanced Mood Selection
-                </Button>
+                <div className="mt-auto">
+                  <Button
+                    className="w-full bg-purple-600 hover:bg-purple-700"
+                    onClick={() => {
+                      setShowMoodSelector(true);
+                      window.scrollTo({ top: 0, behavior: 'smooth' });
+                    }}
+                  >
+                    <Sparkles className="h-4 w-4 mr-2" />
+                    Advanced Mood Selection
+                  </Button>
+                </div>
               </motion.div>
 
               {/* Real-Time Adaptation */}
@@ -1232,13 +1236,13 @@ export default function AIStudioPage() {
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, ease: "easeOut", delay: 0.4 }}
-                className="bg-gradient-to-br from-green-900/40 to-teal-900/40 border border-green-800/50 hover:border-green-700/50 transition-colors shadow-lg shadow-green-900/20 rounded-xl p-6 backdrop-blur-sm"
+                className="bg-gradient-to-br from-green-900/40 to-teal-900/40 border border-green-800/50 hover:border-green-700/50 transition-colors shadow-lg shadow-green-900/20 rounded-xl p-6 backdrop-blur-sm flex flex-col h-full"
               >
                 <div className="bg-green-500/20 p-3 rounded-lg w-12 h-12 flex items-center justify-center mb-4">
                   <Zap className="h-6 w-6 text-green-400" />
                 </div>
                 <h3 className="text-xl font-semibold mb-3 text-white">Real-Time Adaptation</h3>
-                <p className="text-gray-300 mb-4">
+                <p className="text-gray-300 mb-4 line-clamp-3">
                   Experience audio environments that adapt to your surroundings and context in real-time.
                 </p>
 
@@ -1249,7 +1253,7 @@ export default function AIStudioPage() {
                     Noise Control Features
                   </h3>
 
-                  <div className="grid grid-cols-2 gap-3 mb-3">
+                  <div className="grid grid-cols-2 gap-3 mb-0">
                     <div className="bg-green-900/20 rounded-lg p-2 border border-green-800/30">
                       <div className="flex items-center mb-1">
                         <Headphones className="h-4 w-4 text-green-400 mr-1.5" />
@@ -1272,30 +1276,32 @@ export default function AIStudioPage() {
                   </div>
                 </div>
 
-                <ul className="space-y-2 text-gray-400">
+                <ul className="space-y-1 text-gray-400 text-sm mb-4">
                   <li className="flex items-start gap-2">
-                    <Sparkles className="h-4 w-4 text-green-400 mt-1 shrink-0" />
+                    <Sparkles className="h-4 w-4 text-green-400 mt-0.5 shrink-0" />
                     <span>Continuous environment analysis</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <Sparkles className="h-4 w-4 text-green-400 mt-1 shrink-0" />
+                    <Sparkles className="h-4 w-4 text-green-400 mt-0.5 shrink-0" />
                     <span>Dynamic audio transitions</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <Sparkles className="h-4 w-4 text-green-400 mt-1 shrink-0" />
+                    <Sparkles className="h-4 w-4 text-green-400 mt-0.5 shrink-0" />
                     <span>Adaptive noise masking</span>
                   </li>
                 </ul>
-                <Button
-                  className="mt-4 w-full bg-green-600 hover:bg-green-700"
-                  onClick={() => {
-                    setShowRealTimeAdapter(true);
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
-                  }}
-                >
-                  <Zap className="h-4 w-4 mr-2" />
-                  Activate Real-Time
-                </Button>
+                <div className="mt-auto">
+                  <Button
+                    className="w-full bg-green-600 hover:bg-green-700"
+                    onClick={() => {
+                      setShowRealTimeAdapter(true);
+                      window.scrollTo({ top: 0, behavior: 'smooth' });
+                    }}
+                  >
+                    <Zap className="h-4 w-4 mr-2" />
+                    Activate Real-Time
+                  </Button>
+                </div>
               </motion.div>
 
               {/* Screenpipe Integration */}
@@ -1304,13 +1310,13 @@ export default function AIStudioPage() {
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, ease: "easeOut", delay: 0.5 }}
-                className="bg-gradient-to-br from-cyan-900/40 to-blue-900/40 border border-cyan-800/50 hover:border-cyan-700/50 transition-colors shadow-lg shadow-cyan-900/20 rounded-xl p-6 backdrop-blur-sm"
+                className="bg-gradient-to-br from-cyan-900/40 to-blue-900/40 border border-cyan-800/50 hover:border-cyan-700/50 transition-colors shadow-lg shadow-cyan-900/20 rounded-xl p-6 backdrop-blur-sm flex flex-col h-full"
               >
                 <div className="bg-cyan-500/20 p-3 rounded-lg w-12 h-12 flex items-center justify-center mb-4">
                   <MonitorSmartphone className="h-6 w-6 text-cyan-400" />
                 </div>
                 <h3 className="text-xl font-semibold mb-3 text-white">Screenpipe Integration</h3>
-                <p className="text-gray-300 mb-4">
+                <p className="text-gray-300 mb-4 line-clamp-3">
                   Capture your screen and audio to automatically generate perfectly matched soundscapes.
                 </p>
 
@@ -1329,31 +1335,33 @@ export default function AIStudioPage() {
                   </div>
                 </div>
 
-                <ul className="space-y-2 text-gray-400">
+                <ul className="space-y-1 text-gray-400 text-sm mb-4">
                   <li className="flex items-start gap-2">
-                    <Sparkles className="h-4 w-4 text-cyan-400 mt-1 shrink-0" />
+                    <Sparkles className="h-4 w-4 text-cyan-400 mt-0.5 shrink-0" />
                     <span>100% local processing</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <Sparkles className="h-4 w-4 text-cyan-400 mt-1 shrink-0" />
+                    <Sparkles className="h-4 w-4 text-cyan-400 mt-0.5 shrink-0" />
                     <span>Privacy-first design</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <Sparkles className="h-4 w-4 text-cyan-400 mt-1 shrink-0" />
+                    <Sparkles className="h-4 w-4 text-cyan-400 mt-0.5 shrink-0" />
                     <span>Context-aware AI</span>
                   </li>
                 </ul>
-                <Button
-                  className="mt-4 w-full bg-cyan-600 hover:bg-cyan-700"
-                  onClick={() => {
-                    // Add a new tab for Screenpipe
-                    setActiveTab('screenpipe');
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
-                  }}
-                >
-                  <MonitorSmartphone className="h-4 w-4 mr-2" />
-                  Try Screenpipe Integration
-                </Button>
+                <div className="mt-auto">
+                  <Button
+                    className="w-full bg-cyan-600 hover:bg-cyan-700"
+                    onClick={() => {
+                      // Add a new tab for Screenpipe
+                      setActiveTab('screenpipe');
+                      window.scrollTo({ top: 0, behavior: 'smooth' });
+                    }}
+                  >
+                    <MonitorSmartphone className="h-4 w-4 mr-2" />
+                    Try Screenpipe Integration
+                  </Button>
+                </div>
               </motion.div>
             </div>
           </div>
