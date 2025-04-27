@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Check, ChevronsUpDown, Sparkles, Zap, Combine } from 'lucide-react';
+import { Check, ChevronsUpDown, Sparkles, Zap, Layers } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import {
@@ -39,7 +39,7 @@ const models = [
   {
     value: 'both',
     label: 'Both Models',
-    icon: Combine,
+    icon: Layers,
     description: 'Combine Grok and Gemini for enhanced results'
   },
 ];
