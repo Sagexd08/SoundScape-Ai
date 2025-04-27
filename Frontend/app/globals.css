@@ -55,6 +55,11 @@ body {
   background-image: linear-gradient(to bottom, #000, #1e1b4b);
 }
 
+/* Apply Montserrat to all text elements */
+h1, h2, h3, h4, h5, h6, p, span, a, button, input, textarea, select, li, label {
+  @apply font-montserrat;
+}
+
 html {
   scroll-behavior: smooth;
 }
@@ -87,6 +92,108 @@ html {
 
 .gradient-text {
   @apply bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 to-purple-600 animate-gradient bg-[length:200%_auto];
+}
+
+/* Standardized Card Styles */
+.standard-card {
+  @apply bg-gray-900/80 backdrop-blur-lg border border-gray-800 rounded-xl overflow-hidden
+         transition-all duration-300 shadow-lg p-6 md:p-8 flex flex-col;
+  min-height: 300px;
+}
+
+.standard-card:hover {
+  @apply border-indigo-500/50 shadow-indigo-500/20;
+  transform: translateY(-5px);
+}
+
+.standard-card-title {
+  @apply text-xl font-semibold mb-3 text-white;
+}
+
+.standard-card-description {
+  @apply text-gray-300 text-base leading-relaxed mb-4;
+}
+
+/* Feature Card Styles */
+.feature-card {
+  @apply bg-gray-900/80 backdrop-blur-lg border border-gray-800 rounded-xl
+         transition-all duration-300 shadow-lg p-6 md:p-8 w-full;
+  min-height: 450px;
+  max-width: 100%;
+  margin: 0 auto;
+}
+
+.feature-card:hover {
+  @apply border-indigo-500/50 shadow-indigo-500/20;
+  transform: translateY(-5px);
+}
+
+.feature-card-icon {
+  @apply p-4 rounded-lg flex items-center justify-center mb-5 text-white;
+  background: linear-gradient(to right bottom, rgba(99, 102, 241, 0.2), rgba(139, 92, 246, 0.2));
+}
+
+.feature-card-title {
+  @apply text-2xl font-bold mb-3 bg-clip-text text-transparent bg-gradient-to-r;
+}
+
+.feature-card-description {
+  @apply text-gray-300 text-base leading-relaxed mb-4;
+}
+
+.feature-card-list {
+  @apply space-y-3 text-gray-300 text-sm mb-5;
+  min-height: 100px;
+}
+
+.feature-card-list-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  background-color: rgba(79, 70, 229, 0.2);
+  padding: 0.75rem;
+  border-radius: 0.5rem;
+  border: 1px solid rgba(99, 102, 241, 0.3);
+  transition: all 0.3s ease;
+}
+
+.feature-card-list-item:hover {
+  background-color: rgba(99, 102, 241, 0.3);
+  border-color: rgba(109, 112, 251, 0.4);
+}
+
+/* Add group behavior without using @apply */
+.feature-card-list-item-icon {
+  transition: color 0.3s ease;
+}
+
+.feature-card-list-item:hover .feature-card-list-item-icon {
+  color: rgba(129, 140, 248, 1);
+}
+
+.feature-card-list-item-text {
+  transition: color 0.3s ease;
+}
+
+.feature-card-list-item:hover .feature-card-list-item-text {
+  color: white;
+}
+
+/* Text handling utilities */
+.text-ellipsis-custom {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+}
+
+.text-ellipsis-2-custom {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
 }
 
 /* Enhanced Animations */
@@ -157,4 +264,21 @@ html {
 .animate-gradient {
   animation: gradient 8s ease infinite;
   background-size: 200% 200%;
+}
+
+/* Button text wrapping */
+button span {
+  white-space: normal;
+  word-break: break-word;
+  text-align: center;
+}
+
+/* Button text wrapping */
+.button-text-wrap {
+  white-space: normal;
+  word-break: break-word;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
 }
