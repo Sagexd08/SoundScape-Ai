@@ -97,15 +97,26 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const { data, error } = await supabase.auth.signInWithPassword({
         email,
         password,
+        options: {
+          captchaToken: undefined // Let Supabase handle CAPTCHA internally
+        }
       });
 
       if (error) {
         // Log detailed error for debugging
         console.error('Sign in error details:', error);
 
-        // If error is "Invalid login credentials", provide a more helpful message
+        // Handle specific error cases
         if (error.message === 'Invalid login credentials') {
           const customError = new Error('Email or password is incorrect. Please try again.') as AuthError;
+          customError.status = error.status;
+          customError.name = error.name;
+          throw customError;
+        }
+
+        // Handle CAPTCHA verification errors
+        if (error.message.includes('captcha') || error.message.includes('CAPTCHA')) {
+          const customError = new Error('CAPTCHA verification failed. Please try again or use a social login method.') as AuthError;
           customError.status = error.status;
           customError.name = error.name;
           throw customError;
@@ -141,6 +152,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         options: {
           data: metadata,
           emailRedirectTo: `${window.location.origin}/auth/callback`,
+          captchaToken: undefined // Let Supabase handle CAPTCHA internally
         },
       });
 
@@ -151,6 +163,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         // Handle specific error cases
         if (error.message.includes('already registered')) {
           const customError = new Error('This email is already registered. Please sign in instead.') as AuthError;
+          customError.status = error.status;
+          customError.name = error.name;
+          throw customError;
+        }
+
+        // Handle CAPTCHA verification errors
+        if (error.message.includes('captcha') || error.message.includes('CAPTCHA')) {
+          const customError = new Error('CAPTCHA verification failed. Please try again or use a social login method.') as AuthError;
           customError.status = error.status;
           customError.name = error.name;
           throw customError;
