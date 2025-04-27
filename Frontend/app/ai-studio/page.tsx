@@ -4,8 +4,10 @@ import { useState, useRef, useEffect } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Wand2, FileAudio, Sparkles, Music, AlertCircle, Play, Pause, Volume2, VolumeX, Loader2, Download, Camera, Zap, Shield, Headphones, MonitorSmartphone, Mic } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { useRouter } from 'next/navigation';
 import Navbar from '@/components/navbar';
 import ModernBackgroundLayout from '@/components/layouts/ModernBackgroundLayout';
+import { useAuth } from '@/components/auth/auth-provider';
 import MusicSelection from '@/components/music/MusicSelection';
 import YouTubePlayer from '@/components/music/YouTubePlayer';
 import SoundEffectsSelection from '@/components/audio/SoundEffectsSelection';
@@ -34,6 +36,29 @@ import { aiService, generateAudioPrompt, AIModelType } from '@/lib/ai-integratio
 // Simplified AI Studio page with functional audio demo
 export default function AIStudioPage() {
   const [activeTab, setActiveTab] = useState('generate');
+  const { user, isLoading } = useAuth();
+  const router = useRouter();
+
+  // Check authentication
+  useEffect(() => {
+    if (!isLoading && !user) {
+      router.push("/login");
+    }
+  }, [user, isLoading, router]);
+
+  // Show loading state while checking authentication
+  if (isLoading) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-black text-white">
+        <div className="animate-pulse text-xl">Loading...</div>
+      </div>
+    );
+  }
+
+  // Only render the page if user is authenticated
+  if (!user) {
+    return null;
+  }
 
   // Audio generator state
   const [prompt, setPrompt] = useState('');
