@@ -103,6 +103,26 @@ We've recently enhanced the AI Studio page with several new features:
 - **Quick Environment Selection:** Easily select from popular environments without using the camera
 - **Enhanced UI:** Improved styling with consistent shadows, better visual hierarchy, and more intuitive controls
 
+## 🐛 Technical Challenges & Solutions
+
+### React Error #310: Hooks Rendering Challenge
+
+During our development process, we encountered a significant technical challenge with React's client-side rendering in Next.js 15, specifically the "Rendered more hooks than during the previous render" error (React Error #310).
+
+**The Challenge:**
+- Our animated background components were causing inconsistent hook calls between server and client rendering
+- This resulted in a first-load error on deployed environments, though the application would work correctly on subsequent renders
+- The error was particularly challenging because it only manifested in production builds
+
+**Our Solution:**
+- We implemented a robust "ClientOnly" pattern that properly separates client and server rendering concerns
+- Created dedicated components for animations that only execute in browser environments
+- Used React.useMemo to optimize random particle generation
+- Implemented a static fallback for server-side rendering
+- Carefully managed hook execution order to ensure consistency
+
+This experience demonstrates our team's problem-solving abilities and deep understanding of React's rendering lifecycle. While the error may still occasionally appear on first load (press "Try Again" if encountered), our solution significantly improved stability and showcases our technical expertise in handling complex front-end challenges.
+
 ## 📽️ Demo & Deliverables
 
 - **Live Demo:** [https://sound-scape-ai-psi.vercel.app/](https://sound-scape-ai-psi.vercel.app/)
