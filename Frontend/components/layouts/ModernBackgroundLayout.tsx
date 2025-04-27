@@ -6,16 +6,83 @@ interface BackgroundLayoutProps {
   children: ReactNode;
 }
 
-export default function ModernBackgroundLayout({ children }: BackgroundLayoutProps) {
-  const [mounted, setMounted] = useState(false);
+// Create a client-only wrapper component
+function ClientOnly({ children }: { children: React.ReactNode }) {
+  const [isMounted, setIsMounted] = useState(false);
 
-  // Only run animations after component is mounted to prevent hydration issues
   useEffect(() => {
-    setMounted(true);
+    setIsMounted(true);
   }, []);
 
+  if (!isMounted) {
+    return null;
+  }
+
+  return <>{children}</>;
+}
+
+// Create a client-only component for the animated background
+function AnimatedBackground() {
+  // Generate stars once on component mount
+  const stars = React.useMemo(() => {
+    return Array.from({ length: 150 }).map((_, i) => ({
+      id: i,
+      width: Math.random() * 3 + 1,
+      height: Math.random() * 3 + 1,
+      top: Math.random() * 100,
+      left: Math.random() * 100,
+      opacity: Math.random() * 0.7 + 0.3,
+      duration: Math.random() * 5 + 5,
+      delay: Math.random() * 5
+    }));
+  }, []);
+
+  // Generate floating particles once on component mount
+  const particles = React.useMemo(() => [
+    {
+      id: 1,
+      className: "absolute w-2 h-2 rounded-full bg-indigo-400/60",
+      top: '15%',
+      left: '25%',
+      boxShadow: '0 0 15px 4px rgba(99, 102, 241, 0.4)',
+      animation: 'float 18s ease-in-out infinite'
+    },
+    {
+      id: 2,
+      className: "absolute w-2.5 h-2.5 rounded-full bg-purple-400/60",
+      top: '60%',
+      left: '70%',
+      boxShadow: '0 0 15px 4px rgba(168, 85, 247, 0.4)',
+      animation: 'float 22s ease-in-out infinite 3s'
+    },
+    {
+      id: 3,
+      className: "absolute w-2 h-2 rounded-full bg-blue-400/60",
+      top: '35%',
+      left: '55%',
+      boxShadow: '0 0 15px 4px rgba(59, 130, 246, 0.4)',
+      animation: 'float 16s ease-in-out infinite 2s'
+    },
+    {
+      id: 4,
+      className: "absolute w-1.5 h-1.5 rounded-full bg-pink-400/60",
+      top: '75%',
+      left: '30%',
+      boxShadow: '0 0 15px 4px rgba(236, 72, 153, 0.4)',
+      animation: 'float 20s ease-in-out infinite 4s'
+    },
+    {
+      id: 5,
+      className: "absolute w-1.5 h-1.5 rounded-full bg-cyan-400/60",
+      top: '25%',
+      left: '80%',
+      boxShadow: '0 0 15px 4px rgba(34, 211, 238, 0.4)',
+      animation: 'float 24s ease-in-out infinite 1s'
+    }
+  ], []);
+
   return (
-    <div className="min-h-screen bg-gradient-to-b from-black via-indigo-950 to-purple-950 text-white relative overflow-hidden">
+    <>
       {/* Enhanced background elements */}
       <div className="absolute inset-0 z-0">
         {/* Deep space gradient */}
@@ -23,17 +90,17 @@ export default function ModernBackgroundLayout({ children }: BackgroundLayoutPro
 
         {/* Vibrant stars pattern */}
         <div className="absolute inset-0">
-          {mounted && Array.from({ length: 150 }).map((_, i) => (
+          {stars.map((star) => (
             <div
-              key={i}
+              key={star.id}
               className="absolute rounded-full bg-white"
               style={{
-                width: Math.random() * 3 + 1 + 'px',
-                height: Math.random() * 3 + 1 + 'px',
-                top: Math.random() * 100 + '%',
-                left: Math.random() * 100 + '%',
-                opacity: Math.random() * 0.7 + 0.3,
-                animation: `twinkle ${Math.random() * 5 + 5}s ease-in-out infinite ${Math.random() * 5}s`
+                width: star.width + 'px',
+                height: star.height + 'px',
+                top: star.top + '%',
+                left: star.left + '%',
+                opacity: star.opacity,
+                animation: `twinkle ${star.duration}s ease-in-out infinite ${star.delay}s`
               }}
             />
           ))}
@@ -44,7 +111,7 @@ export default function ModernBackgroundLayout({ children }: BackgroundLayoutPro
           className="absolute inset-0 opacity-10"
           style={{
             backgroundImage: `linear-gradient(to right, rgba(99, 102, 241, 0.1) 1px, transparent 1px),
-                             linear-gradient(to bottom, rgba(139, 92, 246, 0.1) 1px, transparent 1px)`,
+                           linear-gradient(to bottom, rgba(139, 92, 246, 0.1) 1px, transparent 1px)`,
             backgroundSize: '120px 120px'
           }}
         />
@@ -67,7 +134,7 @@ export default function ModernBackgroundLayout({ children }: BackgroundLayoutPro
           style={{
             background: 'radial-gradient(circle at 50% 50%, rgba(79, 70, 229, 0.2), rgba(0, 0, 0, 0.4))',
             backgroundSize: '150% 150%',
-            animation: mounted ? 'gradientShift 12s ease-in-out infinite alternate' : 'none'
+            animation: 'gradientShift 12s ease-in-out infinite alternate'
           }}
         ></div>
       </div>
@@ -79,55 +146,34 @@ export default function ModernBackgroundLayout({ children }: BackgroundLayoutPro
       <div className="absolute bottom-1/3 left-1/4 w-72 h-72 rounded-full bg-pink-600/10 filter blur-[90px]" style={{ animation: 'pulse 20s ease-in-out infinite alternate-reverse' }}></div>
 
       {/* Enhanced floating particles */}
-      {mounted && (
-        <>
-          <div
-            className="absolute w-2 h-2 rounded-full bg-indigo-400/60"
-            style={{
-              top: '15%',
-              left: '25%',
-              boxShadow: '0 0 15px 4px rgba(99, 102, 241, 0.4)',
-              animation: 'float 18s ease-in-out infinite'
-            }}
-          ></div>
-          <div
-            className="absolute w-2.5 h-2.5 rounded-full bg-purple-400/60"
-            style={{
-              top: '60%',
-              left: '70%',
-              boxShadow: '0 0 15px 4px rgba(168, 85, 247, 0.4)',
-              animation: 'float 22s ease-in-out infinite 3s'
-            }}
-          ></div>
-          <div
-            className="absolute w-2 h-2 rounded-full bg-blue-400/60"
-            style={{
-              top: '35%',
-              left: '55%',
-              boxShadow: '0 0 15px 4px rgba(59, 130, 246, 0.4)',
-              animation: 'float 16s ease-in-out infinite 2s'
-            }}
-          ></div>
-          <div
-            className="absolute w-1.5 h-1.5 rounded-full bg-pink-400/60"
-            style={{
-              top: '75%',
-              left: '30%',
-              boxShadow: '0 0 15px 4px rgba(236, 72, 153, 0.4)',
-              animation: 'float 20s ease-in-out infinite 4s'
-            }}
-          ></div>
-          <div
-            className="absolute w-1.5 h-1.5 rounded-full bg-cyan-400/60"
-            style={{
-              top: '25%',
-              left: '80%',
-              boxShadow: '0 0 15px 4px rgba(34, 211, 238, 0.4)',
-              animation: 'float 24s ease-in-out infinite 1s'
-            }}
-          ></div>
-        </>
-      )}
+      {particles.map((particle) => (
+        <div
+          key={particle.id}
+          className={particle.className}
+          style={{
+            top: particle.top,
+            left: particle.left,
+            boxShadow: particle.boxShadow,
+            animation: particle.animation
+          }}
+        ></div>
+      ))}
+    </>
+  );
+}
+
+export default function ModernBackgroundLayout({ children }: BackgroundLayoutProps) {
+  return (
+    <div className="min-h-screen bg-gradient-to-b from-black via-indigo-950 to-purple-950 text-white relative overflow-hidden">
+      {/* Static background for server-side rendering */}
+      <div className="absolute inset-0 z-0 bg-gradient-to-br from-black via-indigo-950/40 to-black">
+        <div className="absolute inset-0 bg-[url('/noise.svg')] opacity-15 mix-blend-overlay"></div>
+      </div>
+
+      {/* Animated background only on client-side */}
+      <ClientOnly>
+        <AnimatedBackground />
+      </ClientOnly>
 
       {/* Content */}
       <div className="relative z-10">
