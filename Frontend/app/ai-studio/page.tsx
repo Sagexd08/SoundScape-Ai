@@ -1088,30 +1088,30 @@ export default function AIStudioPage() {
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, ease: "easeOut", delay: 0.2 }}
-                className="bg-gray-900 border border-gray-800 rounded-lg p-6"
+                className="bg-gradient-to-br from-gray-900 to-gray-950 border border-indigo-800/30 rounded-xl p-8 shadow-lg min-h-[280px]"
               >
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="bg-indigo-500/20 p-2 rounded-lg">
-                    <Wand2 className="h-5 w-5 text-indigo-400" />
+                <div className="flex items-center gap-4 mb-5">
+                  <div className="bg-indigo-500/20 p-3 rounded-lg border border-indigo-500/20 shadow-md">
+                    <Wand2 className="h-6 w-6 text-indigo-400" />
                   </div>
-                  <h3 className="text-xl font-medium">OpenAI Audio API</h3>
+                  <h3 className="text-2xl font-semibold bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 to-blue-400">OpenAI Audio API</h3>
                 </div>
-                <p className="text-gray-400 mb-4">
+                <p className="text-gray-300 mb-5 text-base leading-relaxed">
                   Our platform uses OpenAI's advanced audio generation capabilities to create realistic
                   environmental sounds and custom audio experiences.
                 </p>
-                <ul className="space-y-2 text-gray-400">
-                  <li className="flex items-start gap-2">
-                    <Sparkles className="h-4 w-4 text-indigo-400 mt-1 shrink-0" />
-                    <span>Ultra-fast audio processing</span>
+                <ul className="space-y-3 text-gray-300">
+                  <li className="flex items-start gap-3 bg-indigo-900/10 p-2.5 rounded-lg border border-indigo-800/20 transition-all duration-300 hover:bg-indigo-800/20 group">
+                    <Sparkles className="h-5 w-5 text-indigo-400 mt-0.5 shrink-0 group-hover:text-indigo-300 transition-colors duration-300" />
+                    <span className="text-base group-hover:text-white transition-colors duration-300">Ultra-fast audio processing</span>
                   </li>
-                  <li className="flex items-start gap-2">
-                    <Sparkles className="h-4 w-4 text-indigo-400 mt-1 shrink-0" />
-                    <span>Detailed acoustic feature extraction</span>
+                  <li className="flex items-start gap-3 bg-indigo-900/10 p-2.5 rounded-lg border border-indigo-800/20 transition-all duration-300 hover:bg-indigo-800/20 group">
+                    <Sparkles className="h-5 w-5 text-indigo-400 mt-0.5 shrink-0 group-hover:text-indigo-300 transition-colors duration-300" />
+                    <span className="text-base group-hover:text-white transition-colors duration-300">Detailed acoustic feature extraction</span>
                   </li>
-                  <li className="flex items-start gap-2">
-                    <Sparkles className="h-4 w-4 text-indigo-400 mt-1 shrink-0" />
-                    <span>Realistic environmental sound generation</span>
+                  <li className="flex items-start gap-3 bg-indigo-900/10 p-2.5 rounded-lg border border-indigo-800/20 transition-all duration-300 hover:bg-indigo-800/20 group">
+                    <Sparkles className="h-5 w-5 text-indigo-400 mt-0.5 shrink-0 group-hover:text-indigo-300 transition-colors duration-300" />
+                    <span className="text-base group-hover:text-white transition-colors duration-300">Realistic environmental sound generation</span>
                   </li>
                 </ul>
               </motion.div>
@@ -1120,30 +1120,30 @@ export default function AIStudioPage() {
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, ease: "easeOut", delay: 0.4 }}
-                className="bg-gray-900 border border-gray-800 rounded-lg p-6"
+                className="bg-gradient-to-br from-gray-900 to-gray-950 border border-purple-800/30 rounded-xl p-8 shadow-lg min-h-[280px]"
               >
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="bg-purple-500/20 p-2 rounded-lg">
-                    <FileAudio className="h-5 w-5 text-purple-400" />
+                <div className="flex items-center gap-4 mb-5">
+                  <div className="bg-purple-500/20 p-3 rounded-lg border border-purple-500/20 shadow-md">
+                    <FileAudio className="h-6 w-6 text-purple-400" />
                   </div>
-                  <h3 className="text-xl font-medium">Eleven Labs Voice AI</h3>
+                  <h3 className="text-2xl font-semibold bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-400">Eleven Labs Voice AI</h3>
                 </div>
-                <p className="text-gray-400 mb-4">
+                <p className="text-gray-300 mb-5 text-base leading-relaxed">
                   We integrate with Eleven Labs' state-of-the-art voice technology for natural-sounding
                   narration and custom voice generation in your audio environments.
                 </p>
-                <ul className="space-y-2 text-gray-400">
-                  <li className="flex items-start gap-2">
-                    <Sparkles className="h-4 w-4 text-purple-400 mt-1 shrink-0" />
-                    <span>Lifelike voice synthesis</span>
+                <ul className="space-y-3 text-gray-300">
+                  <li className="flex items-start gap-3 bg-purple-900/10 p-2.5 rounded-lg border border-purple-800/20 transition-all duration-300 hover:bg-purple-800/20 group">
+                    <Sparkles className="h-5 w-5 text-purple-400 mt-0.5 shrink-0 group-hover:text-purple-300 transition-colors duration-300" />
+                    <span className="text-base group-hover:text-white transition-colors duration-300">Lifelike voice synthesis</span>
                   </li>
-                  <li className="flex items-start gap-2">
-                    <Sparkles className="h-4 w-4 text-purple-400 mt-1 shrink-0" />
-                    <span>Multilingual capabilities</span>
+                  <li className="flex items-start gap-3 bg-purple-900/10 p-2.5 rounded-lg border border-purple-800/20 transition-all duration-300 hover:bg-purple-800/20 group">
+                    <Sparkles className="h-5 w-5 text-purple-400 mt-0.5 shrink-0 group-hover:text-purple-300 transition-colors duration-300" />
+                    <span className="text-base group-hover:text-white transition-colors duration-300">Multilingual capabilities</span>
                   </li>
-                  <li className="flex items-start gap-2">
-                    <Sparkles className="h-4 w-4 text-purple-400 mt-1 shrink-0" />
-                    <span>Emotional tone control and customization</span>
+                  <li className="flex items-start gap-3 bg-purple-900/10 p-2.5 rounded-lg border border-purple-800/20 transition-all duration-300 hover:bg-purple-800/20 group">
+                    <Sparkles className="h-5 w-5 text-purple-400 mt-0.5 shrink-0 group-hover:text-purple-300 transition-colors duration-300" />
+                    <span className="text-base group-hover:text-white transition-colors duration-300">Emotional tone control and customization</span>
                   </li>
                 </ul>
               </motion.div>
@@ -1187,7 +1187,7 @@ export default function AIStudioPage() {
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, ease: "easeOut", delay: 0.2 }}
-                className="bg-gradient-to-br from-blue-900/50 to-indigo-900/50 border border-blue-700/60 hover:border-blue-500/70 transition-all duration-500 shadow-xl shadow-blue-900/30 hover:shadow-blue-700/40 rounded-xl p-6 backdrop-blur-sm flex flex-col h-full min-h-[520px] relative transform hover:translate-y-[-8px] hover:scale-[1.02]"
+                className="bg-gradient-to-br from-blue-900/50 to-indigo-900/50 border border-blue-700/60 hover:border-blue-500/70 transition-all duration-500 shadow-xl shadow-blue-900/30 hover:shadow-blue-700/40 rounded-xl p-8 backdrop-blur-sm flex flex-col h-full min-h-[600px] relative transform hover:translate-y-[-8px] hover:scale-[1.02]"
               >
                 {isCardsLoading && (
                   <div className="absolute inset-0 flex items-center justify-center bg-gray-900/80 backdrop-blur-sm rounded-xl z-10">
@@ -1204,20 +1204,20 @@ export default function AIStudioPage() {
                   <Camera className="h-8 w-8 text-blue-400 group-hover:text-blue-300 transition-all duration-300 relative z-10" />
                 </div>
                 <h3 className="text-2xl font-bold mb-3 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-indigo-400">Environment-Based Audio</h3>
-                <p className="text-gray-300 mb-4 text-sm leading-relaxed">
+                <p className="text-gray-300 mb-4 text-base leading-relaxed">
                   Generate immersive soundscapes based on different environments like forests, oceans, cities, and cafes.
                 </p>
 
                 {/* Environment Selection */}
-                <div className="bg-black/20 rounded-lg p-3 mb-4 border border-blue-800/30">
-                  <h3 className="text-xs font-medium text-blue-300 mb-2">Popular Environments</h3>
-                  <div className="grid grid-cols-3 gap-1 mb-0">
+                <div className="bg-black/20 rounded-lg p-4 mb-5 border border-blue-800/30">
+                  <h3 className="text-sm font-medium text-blue-300 mb-3">Popular Environments</h3>
+                  <div className="grid grid-cols-3 gap-2 mb-0">
                     {['Forest', 'Ocean', 'City', 'Cafe', 'Mountains', 'Rain'].map((env) => (
                       <Button
                         key={env}
                         variant="outline"
                         size="sm"
-                        className="h-auto py-0.5 px-1 border-blue-800/30 hover:bg-blue-800/30 transition-all text-[10px] truncate"
+                        className="h-auto py-1.5 px-2 border-blue-800/30 hover:bg-blue-800/30 transition-all text-xs truncate"
                         onClick={() => {
                           handleEnvironmentDetected(env.toLowerCase());
                           toast.success(`Environment set to: ${env}`);
@@ -1230,22 +1230,22 @@ export default function AIStudioPage() {
                   </div>
                 </div>
 
-                <ul className="space-y-3 text-gray-300 text-xs mb-5 min-h-[80px]">
-                  <li className="flex items-start gap-2 bg-blue-900/20 p-2 rounded-lg border border-blue-800/30 transition-all duration-300 hover:bg-blue-800/30 hover:border-blue-700/40 group">
-                    <div className="bg-blue-500/20 p-1 rounded-full">
-                      <Sparkles className="h-3 w-3 text-blue-400 shrink-0 group-hover:text-blue-300 transition-colors duration-300" />
+                <ul className="space-y-3 text-gray-300 text-sm mb-5 min-h-[100px]">
+                  <li className="flex items-start gap-3 bg-blue-900/20 p-3 rounded-lg border border-blue-800/30 transition-all duration-300 hover:bg-blue-800/30 hover:border-blue-700/40 group">
+                    <div className="bg-blue-500/20 p-1.5 rounded-full">
+                      <Sparkles className="h-4 w-4 text-blue-400 shrink-0 group-hover:text-blue-300 transition-colors duration-300" />
                     </div>
                     <span className="group-hover:text-white transition-colors duration-300">Camera environment detection</span>
                   </li>
-                  <li className="flex items-start gap-2 bg-blue-900/20 p-2 rounded-lg border border-blue-800/30 transition-all duration-300 hover:bg-blue-800/30 hover:border-blue-700/40 group">
-                    <div className="bg-blue-500/20 p-1 rounded-full">
-                      <Sparkles className="h-3 w-3 text-blue-400 shrink-0 group-hover:text-blue-300 transition-colors duration-300" />
+                  <li className="flex items-start gap-3 bg-blue-900/20 p-3 rounded-lg border border-blue-800/30 transition-all duration-300 hover:bg-blue-800/30 hover:border-blue-700/40 group">
+                    <div className="bg-blue-500/20 p-1.5 rounded-full">
+                      <Sparkles className="h-4 w-4 text-blue-400 shrink-0 group-hover:text-blue-300 transition-colors duration-300" />
                     </div>
                     <span className="group-hover:text-white transition-colors duration-300">Gemini AI image analysis</span>
                   </li>
-                  <li className="flex items-start gap-2 bg-blue-900/20 p-2 rounded-lg border border-blue-800/30 transition-all duration-300 hover:bg-blue-800/30 hover:border-blue-700/40 group">
-                    <div className="bg-blue-500/20 p-1 rounded-full">
-                      <Sparkles className="h-3 w-3 text-blue-400 shrink-0 group-hover:text-blue-300 transition-colors duration-300" />
+                  <li className="flex items-start gap-3 bg-blue-900/20 p-3 rounded-lg border border-blue-800/30 transition-all duration-300 hover:bg-blue-800/30 hover:border-blue-700/40 group">
+                    <div className="bg-blue-500/20 p-1.5 rounded-full">
+                      <Sparkles className="h-4 w-4 text-blue-400 shrink-0 group-hover:text-blue-300 transition-colors duration-300" />
                     </div>
                     <span className="group-hover:text-white transition-colors duration-300">Audio playback with controls</span>
                   </li>
@@ -1270,7 +1270,7 @@ export default function AIStudioPage() {
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, ease: "easeOut", delay: 0.3 }}
-                className="bg-gradient-to-br from-purple-900/50 to-pink-900/50 border border-purple-700/60 hover:border-purple-500/70 transition-all duration-500 shadow-xl shadow-purple-900/30 hover:shadow-purple-700/40 rounded-xl p-6 backdrop-blur-sm flex flex-col h-full min-h-[520px] relative transform hover:translate-y-[-8px] hover:scale-[1.02]"
+                className="bg-gradient-to-br from-purple-900/50 to-pink-900/50 border border-purple-700/60 hover:border-purple-500/70 transition-all duration-500 shadow-xl shadow-purple-900/30 hover:shadow-purple-700/40 rounded-xl p-8 backdrop-blur-sm flex flex-col h-full min-h-[600px] relative transform hover:translate-y-[-8px] hover:scale-[1.02]"
               >
                 {isCardsLoading && (
                   <div className="absolute inset-0 flex items-center justify-center bg-gray-900/80 backdrop-blur-sm rounded-xl z-10">
@@ -1287,20 +1287,20 @@ export default function AIStudioPage() {
                   <Sparkles className="h-8 w-8 text-purple-400 group-hover:text-purple-300 transition-all duration-300 relative z-10" />
                 </div>
                 <h3 className="text-2xl font-bold mb-3 bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-400">Mood-Based Customization</h3>
-                <p className="text-gray-300 mb-4 text-sm leading-relaxed">
+                <p className="text-gray-300 mb-4 text-base leading-relaxed">
                   Tailor audio to match your emotional state, whether relaxing, energetic, focused, or peaceful.
                 </p>
 
                 {/* Mood Selection */}
-                <div className="bg-black/20 rounded-lg p-3 mb-4 border border-purple-800/30">
-                  <h3 className="text-xs font-medium text-purple-300 mb-2">Select a Mood</h3>
-                  <div className="grid grid-cols-3 gap-1 mb-0">
+                <div className="bg-black/20 rounded-lg p-4 mb-5 border border-purple-800/30">
+                  <h3 className="text-sm font-medium text-purple-300 mb-3">Select a Mood</h3>
+                  <div className="grid grid-cols-3 gap-2 mb-0">
                     {['Relaxing', 'Energetic', 'Focused'].map((mood) => (
                       <Button
                         key={mood}
                         variant="outline"
                         size="sm"
-                        className="h-auto py-0.5 px-1 border-purple-800/30 hover:bg-purple-800/30 transition-all text-[10px] truncate"
+                        className="h-auto py-1.5 px-2 border-purple-800/30 hover:bg-purple-800/30 transition-all text-xs truncate"
                         onClick={() => {
                           setSelectedMoodForSuggestions(mood.toLowerCase());
                           setShowMoodSuggestions(true);
@@ -1314,22 +1314,22 @@ export default function AIStudioPage() {
                   </div>
                 </div>
 
-                <ul className="space-y-3 text-gray-300 text-xs mb-5 min-h-[80px]">
-                  <li className="flex items-start gap-2 bg-purple-900/20 p-2 rounded-lg border border-purple-800/30 transition-all duration-300 hover:bg-purple-800/30 hover:border-purple-700/40 group">
-                    <div className="bg-purple-500/20 p-1 rounded-full">
-                      <Sparkles className="h-3 w-3 text-purple-400 shrink-0 group-hover:text-purple-300 transition-colors duration-300" />
+                <ul className="space-y-3 text-gray-300 text-sm mb-5 min-h-[100px]">
+                  <li className="flex items-start gap-3 bg-purple-900/20 p-3 rounded-lg border border-purple-800/30 transition-all duration-300 hover:bg-purple-800/30 hover:border-purple-700/40 group">
+                    <div className="bg-purple-500/20 p-1.5 rounded-full">
+                      <Sparkles className="h-4 w-4 text-purple-400 shrink-0 group-hover:text-purple-300 transition-colors duration-300" />
                     </div>
                     <span className="group-hover:text-white transition-colors duration-300">Mood-based audio generation</span>
                   </li>
-                  <li className="flex items-start gap-2 bg-purple-900/20 p-2 rounded-lg border border-purple-800/30 transition-all duration-300 hover:bg-purple-800/30 hover:border-purple-700/40 group">
-                    <div className="bg-purple-500/20 p-1 rounded-full">
-                      <Sparkles className="h-3 w-3 text-purple-400 shrink-0 group-hover:text-purple-300 transition-colors duration-300" />
+                  <li className="flex items-start gap-3 bg-purple-900/20 p-3 rounded-lg border border-purple-800/30 transition-all duration-300 hover:bg-purple-800/30 hover:border-purple-700/40 group">
+                    <div className="bg-purple-500/20 p-1.5 rounded-full">
+                      <Sparkles className="h-4 w-4 text-purple-400 shrink-0 group-hover:text-purple-300 transition-colors duration-300" />
                     </div>
                     <span className="group-hover:text-white transition-colors duration-300">Suggested tracks for each mood</span>
                   </li>
-                  <li className="flex items-start gap-2 bg-purple-900/20 p-2 rounded-lg border border-purple-800/30 transition-all duration-300 hover:bg-purple-800/30 hover:border-purple-700/40 group">
-                    <div className="bg-purple-500/20 p-1 rounded-full">
-                      <Sparkles className="h-3 w-3 text-purple-400 shrink-0 group-hover:text-purple-300 transition-colors duration-300" />
+                  <li className="flex items-start gap-3 bg-purple-900/20 p-3 rounded-lg border border-purple-800/30 transition-all duration-300 hover:bg-purple-800/30 hover:border-purple-700/40 group">
+                    <div className="bg-purple-500/20 p-1.5 rounded-full">
+                      <Sparkles className="h-4 w-4 text-purple-400 shrink-0 group-hover:text-purple-300 transition-colors duration-300" />
                     </div>
                     <span className="group-hover:text-white transition-colors duration-300">AI-enhanced emotional audio</span>
                   </li>
@@ -1354,7 +1354,7 @@ export default function AIStudioPage() {
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, ease: "easeOut", delay: 0.4 }}
-                className="bg-gradient-to-br from-green-900/50 to-teal-900/50 border border-green-700/60 hover:border-green-500/70 transition-all duration-500 shadow-xl shadow-green-900/30 hover:shadow-green-700/40 rounded-xl p-6 backdrop-blur-sm flex flex-col h-full min-h-[520px] relative transform hover:translate-y-[-8px] hover:scale-[1.02]"
+                className="bg-gradient-to-br from-green-900/50 to-teal-900/50 border border-green-700/60 hover:border-green-500/70 transition-all duration-500 shadow-xl shadow-green-900/30 hover:shadow-green-700/40 rounded-xl p-8 backdrop-blur-sm flex flex-col h-full min-h-[600px] relative transform hover:translate-y-[-8px] hover:scale-[1.02]"
               >
                 {isCardsLoading && (
                   <div className="absolute inset-0 flex items-center justify-center bg-gray-900/80 backdrop-blur-sm rounded-xl z-10">
@@ -1371,56 +1371,56 @@ export default function AIStudioPage() {
                   <Zap className="h-8 w-8 text-green-400 group-hover:text-green-300 transition-all duration-300 relative z-10" />
                 </div>
                 <h3 className="text-2xl font-bold mb-3 bg-clip-text text-transparent bg-gradient-to-r from-green-400 to-teal-400">Real-Time Adaptation</h3>
-                <p className="text-gray-300 mb-4 text-sm leading-relaxed">
+                <p className="text-gray-300 mb-4 text-base leading-relaxed">
                   Experience audio environments that adapt to your surroundings and context in real-time.
                 </p>
 
                 {/* ANC and ENC Features */}
-                <div className="bg-black/20 rounded-lg p-3 mb-4 border border-green-800/30">
-                  <h3 className="text-xs font-medium text-green-300 mb-2 flex items-center">
-                    <Shield className="h-3 w-3 mr-1" />
+                <div className="bg-black/20 rounded-lg p-4 mb-5 border border-green-800/30">
+                  <h3 className="text-sm font-medium text-green-300 mb-3 flex items-center">
+                    <Shield className="h-4 w-4 mr-2" />
                     Noise Control Features
                   </h3>
 
-                  <div className="grid grid-cols-2 gap-2 mb-0">
-                    <div className="bg-green-900/20 rounded-lg p-2 border border-green-800/30">
-                      <div className="flex items-center mb-1">
-                        <Headphones className="h-3 w-3 text-green-400 mr-1" />
-                        <span className="text-xs font-medium text-white">ANC</span>
+                  <div className="grid grid-cols-2 gap-3 mb-0">
+                    <div className="bg-green-900/20 rounded-lg p-3 border border-green-800/30 hover:bg-green-800/20 transition-all duration-300 group">
+                      <div className="flex items-center mb-2">
+                        <Headphones className="h-4 w-4 text-green-400 mr-2 group-hover:text-green-300 transition-colors duration-300" />
+                        <span className="text-sm font-medium text-white">ANC</span>
                       </div>
-                      <p className="text-[10px] text-gray-400">
+                      <p className="text-xs text-gray-300 group-hover:text-white transition-colors duration-300">
                         Active Noise Cancellation
                       </p>
                     </div>
 
-                    <div className="bg-green-900/20 rounded-lg p-2 border border-green-800/30">
-                      <div className="flex items-center mb-1">
-                        <Volume2 className="h-3 w-3 text-green-400 mr-1" />
-                        <span className="text-xs font-medium text-white">ENC</span>
+                    <div className="bg-green-900/20 rounded-lg p-3 border border-green-800/30 hover:bg-green-800/20 transition-all duration-300 group">
+                      <div className="flex items-center mb-2">
+                        <Volume2 className="h-4 w-4 text-green-400 mr-2 group-hover:text-green-300 transition-colors duration-300" />
+                        <span className="text-sm font-medium text-white">ENC</span>
                       </div>
-                      <p className="text-[10px] text-gray-400">
+                      <p className="text-xs text-gray-300 group-hover:text-white transition-colors duration-300">
                         Environmental Noise Control
                       </p>
                     </div>
                   </div>
                 </div>
 
-                <ul className="space-y-3 text-gray-300 text-xs mb-5 min-h-[80px]">
-                  <li className="flex items-start gap-2 bg-green-900/20 p-2 rounded-lg border border-green-800/30 transition-all duration-300 hover:bg-green-800/30 hover:border-green-700/40 group">
-                    <div className="bg-green-500/20 p-1 rounded-full">
-                      <Sparkles className="h-3 w-3 text-green-400 shrink-0 group-hover:text-green-300 transition-colors duration-300" />
+                <ul className="space-y-3 text-gray-300 text-sm mb-5 min-h-[100px]">
+                  <li className="flex items-start gap-3 bg-green-900/20 p-3 rounded-lg border border-green-800/30 transition-all duration-300 hover:bg-green-800/30 hover:border-green-700/40 group">
+                    <div className="bg-green-500/20 p-1.5 rounded-full">
+                      <Sparkles className="h-4 w-4 text-green-400 shrink-0 group-hover:text-green-300 transition-colors duration-300" />
                     </div>
                     <span className="group-hover:text-white transition-colors duration-300">Continuous environment analysis</span>
                   </li>
-                  <li className="flex items-start gap-2 bg-green-900/20 p-2 rounded-lg border border-green-800/30 transition-all duration-300 hover:bg-green-800/30 hover:border-green-700/40 group">
-                    <div className="bg-green-500/20 p-1 rounded-full">
-                      <Sparkles className="h-3 w-3 text-green-400 shrink-0 group-hover:text-green-300 transition-colors duration-300" />
+                  <li className="flex items-start gap-3 bg-green-900/20 p-3 rounded-lg border border-green-800/30 transition-all duration-300 hover:bg-green-800/30 hover:border-green-700/40 group">
+                    <div className="bg-green-500/20 p-1.5 rounded-full">
+                      <Sparkles className="h-4 w-4 text-green-400 shrink-0 group-hover:text-green-300 transition-colors duration-300" />
                     </div>
                     <span className="group-hover:text-white transition-colors duration-300">Dynamic audio transitions</span>
                   </li>
-                  <li className="flex items-start gap-2 bg-green-900/20 p-2 rounded-lg border border-green-800/30 transition-all duration-300 hover:bg-green-800/30 hover:border-green-700/40 group">
-                    <div className="bg-green-500/20 p-1 rounded-full">
-                      <Sparkles className="h-3 w-3 text-green-400 shrink-0 group-hover:text-green-300 transition-colors duration-300" />
+                  <li className="flex items-start gap-3 bg-green-900/20 p-3 rounded-lg border border-green-800/30 transition-all duration-300 hover:bg-green-800/30 hover:border-green-700/40 group">
+                    <div className="bg-green-500/20 p-1.5 rounded-full">
+                      <Sparkles className="h-4 w-4 text-green-400 shrink-0 group-hover:text-green-300 transition-colors duration-300" />
                     </div>
                     <span className="group-hover:text-white transition-colors duration-300">Adaptive noise masking</span>
                   </li>
@@ -1445,7 +1445,7 @@ export default function AIStudioPage() {
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, ease: "easeOut", delay: 0.5 }}
-                className="bg-gradient-to-br from-cyan-900/50 to-blue-900/50 border border-cyan-700/60 hover:border-cyan-500/70 transition-all duration-500 shadow-xl shadow-cyan-900/30 hover:shadow-cyan-700/40 rounded-xl p-6 backdrop-blur-sm flex flex-col h-full min-h-[520px] relative transform hover:translate-y-[-8px] hover:scale-[1.02]"
+                className="bg-gradient-to-br from-cyan-900/50 to-blue-900/50 border border-cyan-700/60 hover:border-cyan-500/70 transition-all duration-500 shadow-xl shadow-cyan-900/30 hover:shadow-cyan-700/40 rounded-xl p-8 backdrop-blur-sm flex flex-col h-full min-h-[600px] relative transform hover:translate-y-[-8px] hover:scale-[1.02]"
               >
                 {isCardsLoading && (
                   <div className="absolute inset-0 flex items-center justify-center bg-gray-900/80 backdrop-blur-sm rounded-xl z-10">
@@ -1462,41 +1462,45 @@ export default function AIStudioPage() {
                   <MonitorSmartphone className="h-8 w-8 text-cyan-400 group-hover:text-cyan-300 transition-all duration-300 relative z-10" />
                 </div>
                 <h3 className="text-2xl font-bold mb-3 bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-blue-400">ScreenPipe Bridge</h3>
-                <p className="text-gray-300 mb-4 text-sm leading-relaxed">
+                <p className="text-gray-300 mb-4 text-base leading-relaxed">
                   Creates a direct channel between your screen analysis and dynamic soundscape generator.
                 </p>
 
                 {/* Features */}
-                <div className="bg-black/20 rounded-lg p-3 mb-4 border border-cyan-800/30">
-                  <h3 className="text-xs font-medium text-cyan-300 mb-2">Key Features</h3>
-                  <div className="space-y-2">
-                    <div className="flex items-center gap-2">
-                      <Camera className="h-3 w-3 text-cyan-400" />
-                      <span className="text-xs">24/7 Screen Recording</span>
+                <div className="bg-black/20 rounded-lg p-4 mb-5 border border-cyan-800/30">
+                  <h3 className="text-sm font-medium text-cyan-300 mb-3">Key Features</h3>
+                  <div className="space-y-3">
+                    <div className="flex items-center gap-3 bg-cyan-900/20 p-2 rounded-lg border border-cyan-800/20 transition-all duration-300 hover:bg-cyan-800/20 group">
+                      <div className="bg-cyan-500/20 p-1 rounded-full">
+                        <Camera className="h-4 w-4 text-cyan-400 group-hover:text-cyan-300 transition-colors duration-300" />
+                      </div>
+                      <span className="text-sm text-gray-300 group-hover:text-white transition-colors duration-300">24/7 Screen Recording</span>
                     </div>
-                    <div className="flex items-center gap-2">
-                      <Mic className="h-3 w-3 text-cyan-400" />
-                      <span className="text-xs">Ambient Audio Capture</span>
+                    <div className="flex items-center gap-3 bg-cyan-900/20 p-2 rounded-lg border border-cyan-800/20 transition-all duration-300 hover:bg-cyan-800/20 group">
+                      <div className="bg-cyan-500/20 p-1 rounded-full">
+                        <Mic className="h-4 w-4 text-cyan-400 group-hover:text-cyan-300 transition-colors duration-300" />
+                      </div>
+                      <span className="text-sm text-gray-300 group-hover:text-white transition-colors duration-300">Ambient Audio Capture</span>
                     </div>
                   </div>
                 </div>
 
-                <ul className="space-y-3 text-gray-300 text-xs mb-5 min-h-[80px]">
-                  <li className="flex items-start gap-2 bg-cyan-900/20 p-2 rounded-lg border border-cyan-800/30 transition-all duration-300 hover:bg-cyan-800/30 hover:border-cyan-700/40 group">
-                    <div className="bg-cyan-500/20 p-1 rounded-full">
-                      <Sparkles className="h-3 w-3 text-cyan-400 shrink-0 group-hover:text-cyan-300 transition-colors duration-300" />
+                <ul className="space-y-3 text-gray-300 text-sm mb-5 min-h-[100px]">
+                  <li className="flex items-start gap-3 bg-cyan-900/20 p-3 rounded-lg border border-cyan-800/30 transition-all duration-300 hover:bg-cyan-800/30 hover:border-cyan-700/40 group">
+                    <div className="bg-cyan-500/20 p-1.5 rounded-full">
+                      <Sparkles className="h-4 w-4 text-cyan-400 shrink-0 group-hover:text-cyan-300 transition-colors duration-300" />
                     </div>
                     <span className="group-hover:text-white transition-colors duration-300">100% local processing</span>
                   </li>
-                  <li className="flex items-start gap-2 bg-cyan-900/20 p-2 rounded-lg border border-cyan-800/30 transition-all duration-300 hover:bg-cyan-800/30 hover:border-cyan-700/40 group">
-                    <div className="bg-cyan-500/20 p-1 rounded-full">
-                      <Sparkles className="h-3 w-3 text-cyan-400 shrink-0 group-hover:text-cyan-300 transition-colors duration-300" />
+                  <li className="flex items-start gap-3 bg-cyan-900/20 p-3 rounded-lg border border-cyan-800/30 transition-all duration-300 hover:bg-cyan-800/30 hover:border-cyan-700/40 group">
+                    <div className="bg-cyan-500/20 p-1.5 rounded-full">
+                      <Sparkles className="h-4 w-4 text-cyan-400 shrink-0 group-hover:text-cyan-300 transition-colors duration-300" />
                     </div>
                     <span className="group-hover:text-white transition-colors duration-300">Privacy-first design</span>
                   </li>
-                  <li className="flex items-start gap-2 bg-cyan-900/20 p-2 rounded-lg border border-cyan-800/30 transition-all duration-300 hover:bg-cyan-800/30 hover:border-cyan-700/40 group">
-                    <div className="bg-cyan-500/20 p-1 rounded-full">
-                      <Sparkles className="h-3 w-3 text-cyan-400 shrink-0 group-hover:text-cyan-300 transition-colors duration-300" />
+                  <li className="flex items-start gap-3 bg-cyan-900/20 p-3 rounded-lg border border-cyan-800/30 transition-all duration-300 hover:bg-cyan-800/30 hover:border-cyan-700/40 group">
+                    <div className="bg-cyan-500/20 p-1.5 rounded-full">
+                      <Sparkles className="h-4 w-4 text-cyan-400 shrink-0 group-hover:text-cyan-300 transition-colors duration-300" />
                     </div>
                     <span className="group-hover:text-white transition-colors duration-300">Context-aware AI</span>
                   </li>
