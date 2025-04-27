@@ -6,7 +6,6 @@ import { Wand2, FileAudio, Sparkles, Music, AlertCircle, Play, Pause, Volume2, V
 import { motion } from 'framer-motion';
 import { useRouter } from 'next/navigation';
 import Navbar from '@/components/navbar';
-import ModernBackgroundLayout from '@/components/layouts/ModernBackgroundLayout';
 import { useAuth } from '@/components/auth/auth-provider';
 import MusicSelection from '@/components/music/MusicSelection';
 import YouTubePlayer from '@/components/music/YouTubePlayer';
@@ -495,18 +494,27 @@ export default function AIStudioPage() {
   }, []);
 
   return (
-    <ModernBackgroundLayout>
-      {isLoading && (
-        <div className="flex min-h-screen items-center justify-center bg-black text-white">
-          <div className="animate-pulse text-xl">Loading...</div>
-        </div>
-      )}
+    <div className="min-h-screen bg-gradient-to-b from-black via-indigo-950 to-purple-950 text-white relative overflow-hidden">
+      {/* Simple background elements */}
+      <div className="absolute inset-0 z-0">
+        <div className="absolute inset-0 bg-gradient-to-br from-black via-indigo-950/40 to-black"></div>
+        <div className="absolute top-[10%] left-[5%] w-80 h-80 rounded-full bg-indigo-600/10 filter blur-[80px]"></div>
+        <div className="absolute bottom-[5%] right-[3%] w-96 h-96 rounded-full bg-purple-600/10 filter blur-[100px]"></div>
+      </div>
 
-      {!isLoading && !showContent && (
-        <div className="flex min-h-screen items-center justify-center bg-black text-white">
-          <div className="text-xl">Please log in to access this page</div>
-        </div>
-      )}
+      {/* Content */}
+      <div className="relative z-10">
+        {isLoading && (
+          <div className="flex min-h-screen items-center justify-center bg-black text-white">
+            <div className="animate-pulse text-xl">Loading...</div>
+          </div>
+        )}
+
+        {!isLoading && !showContent && (
+          <div className="flex min-h-screen items-center justify-center bg-black text-white">
+            <div className="text-xl">Please log in to access this page</div>
+          </div>
+        )}
 
       {showContent && (
       <div className="min-h-screen">
@@ -1699,6 +1707,6 @@ export default function AIStudioPage() {
           </div>
         </div>
       </div>
-    </ModernBackgroundLayout>
+    </div>
   );
 }
