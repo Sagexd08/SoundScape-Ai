@@ -492,76 +492,135 @@ export default function AIStudioPage() {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, ease: "easeOut" }}
-            className="mb-8 text-center"
+            transition={{ duration: 0.8, ease: "easeOut" }}
+            className="mb-12 text-center relative"
           >
-            <h1 className="text-3xl md:text-4xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500">
-              AI Audio Studio
-            </h1>
-            <p className="text-gray-400 max-w-2xl mx-auto">
+            <div className="absolute -top-20 left-1/2 transform -translate-x-1/2 w-40 h-40 rounded-full bg-indigo-600/20 filter blur-[80px] animate-pulse-slow"></div>
+            <div className="absolute -top-10 left-1/3 transform -translate-x-1/2 w-32 h-32 rounded-full bg-purple-600/20 filter blur-[60px] animate-pulse-slower"></div>
+            <div className="absolute -top-15 right-1/3 transform translate-x-1/2 w-36 h-36 rounded-full bg-blue-600/20 filter blur-[70px] animate-pulse-slow"></div>
+
+            <motion.h1
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1, ease: "easeOut", delay: 0.2 }}
+              className="text-4xl md:text-5xl font-extrabold mb-6 relative z-10"
+            >
+              <span className="bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 via-purple-500 to-pink-500 animate-gradient bg-[length:200%_auto]">
+                AI Audio Studio
+              </span>
+              <div className="w-40 h-1 bg-gradient-to-r from-indigo-500 to-purple-500 mx-auto mt-4 rounded-full"></div>
+            </motion.h1>
+
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1, ease: "easeOut", delay: 0.4 }}
+              className="text-gray-300 max-w-2xl mx-auto text-lg leading-relaxed"
+            >
               Create and analyze audio using state-of-the-art AI models from Grok and Gemini.
               Generate custom soundscapes or gain insights from your audio files.
-            </p>
+            </motion.p>
           </motion.div>
 
-          {/* Quick Feature Links */}
-          <div className="flex flex-wrap justify-center gap-3 mb-8">
-            <Button
-              variant="outline"
-              className="bg-gradient-to-br from-blue-900/40 to-indigo-900/40 border-blue-800/50 hover:border-blue-700/50 transition-colors shadow-md"
-              onClick={() => {
-                const featureSection = document.getElementById('feature-environment');
-                if (featureSection) {
-                  featureSection.scrollIntoView({ behavior: 'smooth' });
-                }
-              }}
+          {/* Enhanced Quick Feature Links */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, ease: "easeOut", delay: 0.6 }}
+            className="flex flex-wrap justify-center gap-4 mb-12 max-w-4xl mx-auto"
+          >
+            <motion.div
+              whileHover={{ y: -5, scale: 1.05 }}
+              transition={{ duration: 0.2 }}
             >
-              <Camera className="h-4 w-4 mr-2 text-blue-400" />
-              Environment-Based Audio
-            </Button>
+              <Button
+                variant="outline"
+                className="bg-gradient-to-br from-blue-900/60 to-indigo-900/60 border-blue-700/70 hover:border-blue-500/80 transition-all duration-300 shadow-lg shadow-blue-900/20 hover:shadow-blue-600/30 py-6 px-6 rounded-xl"
+                onClick={() => {
+                  const featureSection = document.getElementById('feature-environment');
+                  if (featureSection) {
+                    featureSection.scrollIntoView({ behavior: 'smooth' });
+                  }
+                }}
+              >
+                <div className="flex flex-col items-center">
+                  <div className="bg-blue-500/20 p-2 rounded-lg mb-2">
+                    <Camera className="h-5 w-5 text-blue-400" />
+                  </div>
+                  <span className="font-medium">Environment Audio</span>
+                </div>
+              </Button>
+            </motion.div>
 
-            <Button
-              variant="outline"
-              className="bg-gradient-to-br from-purple-900/40 to-pink-900/40 border-purple-800/50 hover:border-purple-700/50 transition-colors shadow-md"
-              onClick={() => {
-                const featureSection = document.getElementById('feature-mood');
-                if (featureSection) {
-                  featureSection.scrollIntoView({ behavior: 'smooth' });
-                }
-              }}
+            <motion.div
+              whileHover={{ y: -5, scale: 1.05 }}
+              transition={{ duration: 0.2 }}
             >
-              <Sparkles className="h-4 w-4 mr-2 text-purple-400" />
-              Mood-Based Customization
-            </Button>
+              <Button
+                variant="outline"
+                className="bg-gradient-to-br from-purple-900/60 to-pink-900/60 border-purple-700/70 hover:border-purple-500/80 transition-all duration-300 shadow-lg shadow-purple-900/20 hover:shadow-purple-600/30 py-6 px-6 rounded-xl"
+                onClick={() => {
+                  const featureSection = document.getElementById('feature-mood');
+                  if (featureSection) {
+                    featureSection.scrollIntoView({ behavior: 'smooth' });
+                  }
+                }}
+              >
+                <div className="flex flex-col items-center">
+                  <div className="bg-purple-500/20 p-2 rounded-lg mb-2">
+                    <Sparkles className="h-5 w-5 text-purple-400" />
+                  </div>
+                  <span className="font-medium">Mood Customization</span>
+                </div>
+              </Button>
+            </motion.div>
 
-            <Button
-              variant="outline"
-              className="bg-gradient-to-br from-green-900/40 to-teal-900/40 border-green-800/50 hover:border-green-700/50 transition-colors shadow-md"
-              onClick={() => {
-                const featureSection = document.getElementById('feature-realtime');
-                if (featureSection) {
-                  featureSection.scrollIntoView({ behavior: 'smooth' });
-                }
-              }}
+            <motion.div
+              whileHover={{ y: -5, scale: 1.05 }}
+              transition={{ duration: 0.2 }}
             >
-              <Zap className="h-4 w-4 mr-2 text-green-400" />
-              Real-Time Adaptation
-            </Button>
+              <Button
+                variant="outline"
+                className="bg-gradient-to-br from-green-900/60 to-teal-900/60 border-green-700/70 hover:border-green-500/80 transition-all duration-300 shadow-lg shadow-green-900/20 hover:shadow-green-600/30 py-6 px-6 rounded-xl"
+                onClick={() => {
+                  const featureSection = document.getElementById('feature-realtime');
+                  if (featureSection) {
+                    featureSection.scrollIntoView({ behavior: 'smooth' });
+                  }
+                }}
+              >
+                <div className="flex flex-col items-center">
+                  <div className="bg-green-500/20 p-2 rounded-lg mb-2">
+                    <Zap className="h-5 w-5 text-green-400" />
+                  </div>
+                  <span className="font-medium">Real-Time Adaptation</span>
+                </div>
+              </Button>
+            </motion.div>
 
-            <Button
-              variant="outline"
-              className="bg-gradient-to-br from-cyan-900/40 to-blue-900/40 border-cyan-800/50 hover:border-cyan-700/50 transition-colors shadow-md"
-              onClick={() => {
-                const featureSection = document.getElementById('feature-screenpipe');
-                if (featureSection) {
-                  featureSection.scrollIntoView({ behavior: 'smooth' });
-                }
-              }}
+            <motion.div
+              whileHover={{ y: -5, scale: 1.05 }}
+              transition={{ duration: 0.2 }}
             >
-              <MonitorSmartphone className="h-4 w-4 mr-2 text-cyan-400" />
-              ScreenPipe Bridge
-            </Button>
-          </div>
+              <Button
+                variant="outline"
+                className="bg-gradient-to-br from-cyan-900/60 to-blue-900/60 border-cyan-700/70 hover:border-cyan-500/80 transition-all duration-300 shadow-lg shadow-cyan-900/20 hover:shadow-cyan-600/30 py-6 px-6 rounded-xl"
+                onClick={() => {
+                  const featureSection = document.getElementById('feature-screenpipe');
+                  if (featureSection) {
+                    featureSection.scrollIntoView({ behavior: 'smooth' });
+                  }
+                }}
+              >
+                <div className="flex flex-col items-center">
+                  <div className="bg-cyan-500/20 p-2 rounded-lg mb-2">
+                    <MonitorSmartphone className="h-5 w-5 text-cyan-400" />
+                  </div>
+                  <span className="font-medium">ScreenPipe Bridge</span>
+                </div>
+              </Button>
+            </motion.div>
+          </motion.div>
 
           <Alert className="mb-8 border-blue-500 bg-blue-500/10">
             <AlertCircle className="h-4 w-4 text-blue-500" />
@@ -1094,15 +1153,31 @@ export default function AIStudioPage() {
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, ease: "easeOut", delay: 0.2 }}
-              className="mt-12 mb-8 text-center"
+              transition={{ duration: 0.8, ease: "easeOut", delay: 0.2 }}
+              className="mt-16 mb-12 text-center relative"
             >
-              <h2 className="text-2xl md:text-3xl font-bold mb-2 bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 to-purple-400">
-                Advanced Audio Features
-              </h2>
-              <p className="text-gray-400 max-w-2xl mx-auto mb-8">
+              <div className="absolute -top-10 left-1/2 transform -translate-x-1/2 w-48 h-48 rounded-full bg-indigo-600/15 filter blur-[80px] animate-pulse-slow"></div>
+
+              <motion.h2
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 1, ease: "easeOut", delay: 0.3 }}
+                className="text-3xl md:text-4xl font-extrabold mb-4 relative z-10"
+              >
+                <span className="bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 animate-gradient bg-[length:200%_auto]">
+                  Advanced Audio Features
+                </span>
+                <div className="w-32 h-1 bg-gradient-to-r from-indigo-500 to-purple-500 mx-auto mt-4 rounded-full"></div>
+              </motion.h2>
+
+              <motion.p
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, ease: "easeOut", delay: 0.5 }}
+                className="text-gray-300 max-w-2xl mx-auto mb-10 text-lg leading-relaxed"
+              >
                 Experience our cutting-edge audio technology with these powerful features
-              </p>
+              </motion.p>
             </motion.div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mt-8 auto-rows-fr">
@@ -1112,7 +1187,7 @@ export default function AIStudioPage() {
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, ease: "easeOut", delay: 0.2 }}
-                className="bg-gradient-to-br from-blue-900/40 to-indigo-900/40 border border-blue-800/50 hover:border-blue-700/50 transition-colors shadow-lg shadow-blue-900/20 rounded-xl p-6 backdrop-blur-sm flex flex-col h-full min-h-[520px] relative"
+                className="bg-gradient-to-br from-blue-900/50 to-indigo-900/50 border border-blue-700/60 hover:border-blue-500/70 transition-all duration-500 shadow-xl shadow-blue-900/30 hover:shadow-blue-700/40 rounded-xl p-6 backdrop-blur-sm flex flex-col h-full min-h-[520px] relative transform hover:translate-y-[-8px] hover:scale-[1.02]"
               >
                 {isCardsLoading && (
                   <div className="absolute inset-0 flex items-center justify-center bg-gray-900/80 backdrop-blur-sm rounded-xl z-10">
@@ -1124,10 +1199,11 @@ export default function AIStudioPage() {
                     />
                   </div>
                 )}
-                <div className="bg-blue-500/20 p-3 rounded-lg w-12 h-12 flex items-center justify-center mb-4">
-                  <Camera className="h-6 w-6 text-blue-400" />
+                <div className="bg-gradient-to-br from-blue-500/30 to-indigo-500/30 p-4 rounded-lg w-16 h-16 flex items-center justify-center mb-5 border border-blue-500/30 shadow-lg shadow-blue-500/20 relative group">
+                  <div className="absolute inset-0 bg-blue-500/10 rounded-lg filter blur-sm group-hover:blur-md transition-all duration-300"></div>
+                  <Camera className="h-8 w-8 text-blue-400 group-hover:text-blue-300 transition-all duration-300 relative z-10" />
                 </div>
-                <h3 className="text-xl font-semibold mb-3 text-white">Environment-Based Audio</h3>
+                <h3 className="text-2xl font-bold mb-3 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-indigo-400">Environment-Based Audio</h3>
                 <p className="text-gray-300 mb-4 text-sm leading-relaxed">
                   Generate immersive soundscapes based on different environments like forests, oceans, cities, and cafes.
                 </p>
@@ -1154,18 +1230,24 @@ export default function AIStudioPage() {
                   </div>
                 </div>
 
-                <ul className="space-y-2 text-gray-400 text-xs mb-4 min-h-[80px]">
-                  <li className="flex items-start gap-2">
-                    <Sparkles className="h-3 w-3 text-blue-400 mt-0.5 shrink-0" />
-                    <span>Camera environment detection</span>
+                <ul className="space-y-3 text-gray-300 text-xs mb-5 min-h-[80px]">
+                  <li className="flex items-start gap-2 bg-blue-900/20 p-2 rounded-lg border border-blue-800/30 transition-all duration-300 hover:bg-blue-800/30 hover:border-blue-700/40 group">
+                    <div className="bg-blue-500/20 p-1 rounded-full">
+                      <Sparkles className="h-3 w-3 text-blue-400 shrink-0 group-hover:text-blue-300 transition-colors duration-300" />
+                    </div>
+                    <span className="group-hover:text-white transition-colors duration-300">Camera environment detection</span>
                   </li>
-                  <li className="flex items-start gap-2">
-                    <Sparkles className="h-3 w-3 text-blue-400 mt-0.5 shrink-0" />
-                    <span>Gemini AI image analysis</span>
+                  <li className="flex items-start gap-2 bg-blue-900/20 p-2 rounded-lg border border-blue-800/30 transition-all duration-300 hover:bg-blue-800/30 hover:border-blue-700/40 group">
+                    <div className="bg-blue-500/20 p-1 rounded-full">
+                      <Sparkles className="h-3 w-3 text-blue-400 shrink-0 group-hover:text-blue-300 transition-colors duration-300" />
+                    </div>
+                    <span className="group-hover:text-white transition-colors duration-300">Gemini AI image analysis</span>
                   </li>
-                  <li className="flex items-start gap-2">
-                    <Sparkles className="h-3 w-3 text-blue-400 mt-0.5 shrink-0" />
-                    <span>Audio playback with controls</span>
+                  <li className="flex items-start gap-2 bg-blue-900/20 p-2 rounded-lg border border-blue-800/30 transition-all duration-300 hover:bg-blue-800/30 hover:border-blue-700/40 group">
+                    <div className="bg-blue-500/20 p-1 rounded-full">
+                      <Sparkles className="h-3 w-3 text-blue-400 shrink-0 group-hover:text-blue-300 transition-colors duration-300" />
+                    </div>
+                    <span className="group-hover:text-white transition-colors duration-300">Audio playback with controls</span>
                   </li>
                 </ul>
                 <div className="mt-auto">
@@ -1176,7 +1258,7 @@ export default function AIStudioPage() {
                       window.scrollTo({ top: 0, behavior: 'smooth' });
                     }}
                   >
-                    <Camera className="h-4 w-4 mr-2" />
+                    <Camera className="h-5 w-5 mr-2" />
                     Scan Environment
                   </Button>
                 </div>
@@ -1188,7 +1270,7 @@ export default function AIStudioPage() {
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, ease: "easeOut", delay: 0.3 }}
-                className="bg-gradient-to-br from-purple-900/40 to-pink-900/40 border border-purple-800/50 hover:border-purple-700/50 transition-colors shadow-lg shadow-purple-900/20 rounded-xl p-6 backdrop-blur-sm flex flex-col h-full min-h-[520px] relative"
+                className="bg-gradient-to-br from-purple-900/50 to-pink-900/50 border border-purple-700/60 hover:border-purple-500/70 transition-all duration-500 shadow-xl shadow-purple-900/30 hover:shadow-purple-700/40 rounded-xl p-6 backdrop-blur-sm flex flex-col h-full min-h-[520px] relative transform hover:translate-y-[-8px] hover:scale-[1.02]"
               >
                 {isCardsLoading && (
                   <div className="absolute inset-0 flex items-center justify-center bg-gray-900/80 backdrop-blur-sm rounded-xl z-10">
@@ -1200,10 +1282,11 @@ export default function AIStudioPage() {
                     />
                   </div>
                 )}
-                <div className="bg-purple-500/20 p-3 rounded-lg w-12 h-12 flex items-center justify-center mb-4">
-                  <Sparkles className="h-6 w-6 text-purple-400" />
+                <div className="bg-gradient-to-br from-purple-500/30 to-pink-500/30 p-4 rounded-lg w-16 h-16 flex items-center justify-center mb-5 border border-purple-500/30 shadow-lg shadow-purple-500/20 relative group">
+                  <div className="absolute inset-0 bg-purple-500/10 rounded-lg filter blur-sm group-hover:blur-md transition-all duration-300"></div>
+                  <Sparkles className="h-8 w-8 text-purple-400 group-hover:text-purple-300 transition-all duration-300 relative z-10" />
                 </div>
-                <h3 className="text-xl font-semibold mb-3 text-white">Mood-Based Customization</h3>
+                <h3 className="text-2xl font-bold mb-3 bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-400">Mood-Based Customization</h3>
                 <p className="text-gray-300 mb-4 text-sm leading-relaxed">
                   Tailor audio to match your emotional state, whether relaxing, energetic, focused, or peaceful.
                 </p>
@@ -1231,18 +1314,24 @@ export default function AIStudioPage() {
                   </div>
                 </div>
 
-                <ul className="space-y-2 text-gray-400 text-xs mb-4 min-h-[80px]">
-                  <li className="flex items-start gap-2">
-                    <Sparkles className="h-3 w-3 text-purple-400 mt-0.5 shrink-0" />
-                    <span>Mood-based audio generation</span>
+                <ul className="space-y-3 text-gray-300 text-xs mb-5 min-h-[80px]">
+                  <li className="flex items-start gap-2 bg-purple-900/20 p-2 rounded-lg border border-purple-800/30 transition-all duration-300 hover:bg-purple-800/30 hover:border-purple-700/40 group">
+                    <div className="bg-purple-500/20 p-1 rounded-full">
+                      <Sparkles className="h-3 w-3 text-purple-400 shrink-0 group-hover:text-purple-300 transition-colors duration-300" />
+                    </div>
+                    <span className="group-hover:text-white transition-colors duration-300">Mood-based audio generation</span>
                   </li>
-                  <li className="flex items-start gap-2">
-                    <Sparkles className="h-3 w-3 text-purple-400 mt-0.5 shrink-0" />
-                    <span>Suggested tracks for each mood</span>
+                  <li className="flex items-start gap-2 bg-purple-900/20 p-2 rounded-lg border border-purple-800/30 transition-all duration-300 hover:bg-purple-800/30 hover:border-purple-700/40 group">
+                    <div className="bg-purple-500/20 p-1 rounded-full">
+                      <Sparkles className="h-3 w-3 text-purple-400 shrink-0 group-hover:text-purple-300 transition-colors duration-300" />
+                    </div>
+                    <span className="group-hover:text-white transition-colors duration-300">Suggested tracks for each mood</span>
                   </li>
-                  <li className="flex items-start gap-2">
-                    <Sparkles className="h-3 w-3 text-purple-400 mt-0.5 shrink-0" />
-                    <span>AI-enhanced emotional audio</span>
+                  <li className="flex items-start gap-2 bg-purple-900/20 p-2 rounded-lg border border-purple-800/30 transition-all duration-300 hover:bg-purple-800/30 hover:border-purple-700/40 group">
+                    <div className="bg-purple-500/20 p-1 rounded-full">
+                      <Sparkles className="h-3 w-3 text-purple-400 shrink-0 group-hover:text-purple-300 transition-colors duration-300" />
+                    </div>
+                    <span className="group-hover:text-white transition-colors duration-300">AI-enhanced emotional audio</span>
                   </li>
                 </ul>
                 <div className="mt-auto">
@@ -1253,7 +1342,7 @@ export default function AIStudioPage() {
                       window.scrollTo({ top: 0, behavior: 'smooth' });
                     }}
                   >
-                    <Sparkles className="h-4 w-4 mr-2" />
+                    <Sparkles className="h-5 w-5 mr-2" />
                     Advanced Mood Selection
                   </Button>
                 </div>
@@ -1265,7 +1354,7 @@ export default function AIStudioPage() {
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, ease: "easeOut", delay: 0.4 }}
-                className="bg-gradient-to-br from-green-900/40 to-teal-900/40 border border-green-800/50 hover:border-green-700/50 transition-colors shadow-lg shadow-green-900/20 rounded-xl p-6 backdrop-blur-sm flex flex-col h-full min-h-[520px] relative"
+                className="bg-gradient-to-br from-green-900/50 to-teal-900/50 border border-green-700/60 hover:border-green-500/70 transition-all duration-500 shadow-xl shadow-green-900/30 hover:shadow-green-700/40 rounded-xl p-6 backdrop-blur-sm flex flex-col h-full min-h-[520px] relative transform hover:translate-y-[-8px] hover:scale-[1.02]"
               >
                 {isCardsLoading && (
                   <div className="absolute inset-0 flex items-center justify-center bg-gray-900/80 backdrop-blur-sm rounded-xl z-10">
@@ -1277,10 +1366,11 @@ export default function AIStudioPage() {
                     />
                   </div>
                 )}
-                <div className="bg-green-500/20 p-3 rounded-lg w-12 h-12 flex items-center justify-center mb-4">
-                  <Zap className="h-6 w-6 text-green-400" />
+                <div className="bg-gradient-to-br from-green-500/30 to-teal-500/30 p-4 rounded-lg w-16 h-16 flex items-center justify-center mb-5 border border-green-500/30 shadow-lg shadow-green-500/20 relative group">
+                  <div className="absolute inset-0 bg-green-500/10 rounded-lg filter blur-sm group-hover:blur-md transition-all duration-300"></div>
+                  <Zap className="h-8 w-8 text-green-400 group-hover:text-green-300 transition-all duration-300 relative z-10" />
                 </div>
-                <h3 className="text-xl font-semibold mb-3 text-white">Real-Time Adaptation</h3>
+                <h3 className="text-2xl font-bold mb-3 bg-clip-text text-transparent bg-gradient-to-r from-green-400 to-teal-400">Real-Time Adaptation</h3>
                 <p className="text-gray-300 mb-4 text-sm leading-relaxed">
                   Experience audio environments that adapt to your surroundings and context in real-time.
                 </p>
@@ -1315,18 +1405,24 @@ export default function AIStudioPage() {
                   </div>
                 </div>
 
-                <ul className="space-y-2 text-gray-400 text-xs mb-4 min-h-[80px]">
-                  <li className="flex items-start gap-2">
-                    <Sparkles className="h-3 w-3 text-green-400 mt-0.5 shrink-0" />
-                    <span>Continuous environment analysis</span>
+                <ul className="space-y-3 text-gray-300 text-xs mb-5 min-h-[80px]">
+                  <li className="flex items-start gap-2 bg-green-900/20 p-2 rounded-lg border border-green-800/30 transition-all duration-300 hover:bg-green-800/30 hover:border-green-700/40 group">
+                    <div className="bg-green-500/20 p-1 rounded-full">
+                      <Sparkles className="h-3 w-3 text-green-400 shrink-0 group-hover:text-green-300 transition-colors duration-300" />
+                    </div>
+                    <span className="group-hover:text-white transition-colors duration-300">Continuous environment analysis</span>
                   </li>
-                  <li className="flex items-start gap-2">
-                    <Sparkles className="h-3 w-3 text-green-400 mt-0.5 shrink-0" />
-                    <span>Dynamic audio transitions</span>
+                  <li className="flex items-start gap-2 bg-green-900/20 p-2 rounded-lg border border-green-800/30 transition-all duration-300 hover:bg-green-800/30 hover:border-green-700/40 group">
+                    <div className="bg-green-500/20 p-1 rounded-full">
+                      <Sparkles className="h-3 w-3 text-green-400 shrink-0 group-hover:text-green-300 transition-colors duration-300" />
+                    </div>
+                    <span className="group-hover:text-white transition-colors duration-300">Dynamic audio transitions</span>
                   </li>
-                  <li className="flex items-start gap-2">
-                    <Sparkles className="h-3 w-3 text-green-400 mt-0.5 shrink-0" />
-                    <span>Adaptive noise masking</span>
+                  <li className="flex items-start gap-2 bg-green-900/20 p-2 rounded-lg border border-green-800/30 transition-all duration-300 hover:bg-green-800/30 hover:border-green-700/40 group">
+                    <div className="bg-green-500/20 p-1 rounded-full">
+                      <Sparkles className="h-3 w-3 text-green-400 shrink-0 group-hover:text-green-300 transition-colors duration-300" />
+                    </div>
+                    <span className="group-hover:text-white transition-colors duration-300">Adaptive noise masking</span>
                   </li>
                 </ul>
                 <div className="mt-auto">
@@ -1337,7 +1433,7 @@ export default function AIStudioPage() {
                       window.scrollTo({ top: 0, behavior: 'smooth' });
                     }}
                   >
-                    <Zap className="h-4 w-4 mr-2" />
+                    <Zap className="h-5 w-5 mr-2" />
                     Activate Real-Time
                   </Button>
                 </div>
@@ -1349,7 +1445,7 @@ export default function AIStudioPage() {
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, ease: "easeOut", delay: 0.5 }}
-                className="bg-gradient-to-br from-cyan-900/40 to-blue-900/40 border border-cyan-800/50 hover:border-cyan-700/50 transition-colors shadow-lg shadow-cyan-900/20 rounded-xl p-6 backdrop-blur-sm flex flex-col h-full min-h-[520px] relative"
+                className="bg-gradient-to-br from-cyan-900/50 to-blue-900/50 border border-cyan-700/60 hover:border-cyan-500/70 transition-all duration-500 shadow-xl shadow-cyan-900/30 hover:shadow-cyan-700/40 rounded-xl p-6 backdrop-blur-sm flex flex-col h-full min-h-[520px] relative transform hover:translate-y-[-8px] hover:scale-[1.02]"
               >
                 {isCardsLoading && (
                   <div className="absolute inset-0 flex items-center justify-center bg-gray-900/80 backdrop-blur-sm rounded-xl z-10">
@@ -1361,10 +1457,11 @@ export default function AIStudioPage() {
                     />
                   </div>
                 )}
-                <div className="bg-cyan-500/20 p-3 rounded-lg w-12 h-12 flex items-center justify-center mb-4">
-                  <MonitorSmartphone className="h-6 w-6 text-cyan-400" />
+                <div className="bg-gradient-to-br from-cyan-500/30 to-blue-500/30 p-4 rounded-lg w-16 h-16 flex items-center justify-center mb-5 border border-cyan-500/30 shadow-lg shadow-cyan-500/20 relative group">
+                  <div className="absolute inset-0 bg-cyan-500/10 rounded-lg filter blur-sm group-hover:blur-md transition-all duration-300"></div>
+                  <MonitorSmartphone className="h-8 w-8 text-cyan-400 group-hover:text-cyan-300 transition-all duration-300 relative z-10" />
                 </div>
-                <h3 className="text-xl font-semibold mb-3 text-white">ScreenPipe Bridge</h3>
+                <h3 className="text-2xl font-bold mb-3 bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-blue-400">ScreenPipe Bridge</h3>
                 <p className="text-gray-300 mb-4 text-sm leading-relaxed">
                   Creates a direct channel between your screen analysis and dynamic soundscape generator.
                 </p>
@@ -1384,18 +1481,24 @@ export default function AIStudioPage() {
                   </div>
                 </div>
 
-                <ul className="space-y-2 text-gray-400 text-xs mb-4 min-h-[80px]">
-                  <li className="flex items-start gap-2">
-                    <Sparkles className="h-3 w-3 text-cyan-400 mt-0.5 shrink-0" />
-                    <span>100% local processing</span>
+                <ul className="space-y-3 text-gray-300 text-xs mb-5 min-h-[80px]">
+                  <li className="flex items-start gap-2 bg-cyan-900/20 p-2 rounded-lg border border-cyan-800/30 transition-all duration-300 hover:bg-cyan-800/30 hover:border-cyan-700/40 group">
+                    <div className="bg-cyan-500/20 p-1 rounded-full">
+                      <Sparkles className="h-3 w-3 text-cyan-400 shrink-0 group-hover:text-cyan-300 transition-colors duration-300" />
+                    </div>
+                    <span className="group-hover:text-white transition-colors duration-300">100% local processing</span>
                   </li>
-                  <li className="flex items-start gap-2">
-                    <Sparkles className="h-3 w-3 text-cyan-400 mt-0.5 shrink-0" />
-                    <span>Privacy-first design</span>
+                  <li className="flex items-start gap-2 bg-cyan-900/20 p-2 rounded-lg border border-cyan-800/30 transition-all duration-300 hover:bg-cyan-800/30 hover:border-cyan-700/40 group">
+                    <div className="bg-cyan-500/20 p-1 rounded-full">
+                      <Sparkles className="h-3 w-3 text-cyan-400 shrink-0 group-hover:text-cyan-300 transition-colors duration-300" />
+                    </div>
+                    <span className="group-hover:text-white transition-colors duration-300">Privacy-first design</span>
                   </li>
-                  <li className="flex items-start gap-2">
-                    <Sparkles className="h-3 w-3 text-cyan-400 mt-0.5 shrink-0" />
-                    <span>Context-aware AI</span>
+                  <li className="flex items-start gap-2 bg-cyan-900/20 p-2 rounded-lg border border-cyan-800/30 transition-all duration-300 hover:bg-cyan-800/30 hover:border-cyan-700/40 group">
+                    <div className="bg-cyan-500/20 p-1 rounded-full">
+                      <Sparkles className="h-3 w-3 text-cyan-400 shrink-0 group-hover:text-cyan-300 transition-colors duration-300" />
+                    </div>
+                    <span className="group-hover:text-white transition-colors duration-300">Context-aware AI</span>
                   </li>
                 </ul>
                 <div className="mt-auto">
@@ -1407,7 +1510,7 @@ export default function AIStudioPage() {
                       window.scrollTo({ top: 0, behavior: 'smooth' });
                     }}
                   >
-                    <MonitorSmartphone className="h-4 w-4 mr-2" />
+                    <MonitorSmartphone className="h-5 w-5 mr-2" />
                     Activate ScreenPipe Bridge
                   </Button>
                 </div>
