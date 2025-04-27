@@ -448,39 +448,18 @@ export default function AIStudioPage() {
 
 
 
-  // State for loading animations
-  const [isPageLoading, setIsPageLoading] = useState(true);
+  // State for card loading animations
   const [isCardsLoading, setIsCardsLoading] = useState(true);
 
   // Additional initialization if needed
   useEffect(() => {
-    // Simulate page loading
-    const pageTimer = setTimeout(() => {
-      setIsPageLoading(false);
-    }, 1000);
-
     // Simulate loading delay for cards
-    const cardsTimer = setTimeout(() => {
+    const timer = setTimeout(() => {
       setIsCardsLoading(false);
-    }, 2500);
+    }, 1500);
 
-    return () => {
-      clearTimeout(pageTimer);
-      clearTimeout(cardsTimer);
-    };
+    return () => clearTimeout(timer);
   }, []);
-
-  if (isPageLoading) {
-    return (
-      <div className="min-h-screen bg-black">
-        <AnimatedLoader
-          variant="fullscreen"
-          text="Loading AI Studio..."
-          iconType="wand"
-        />
-      </div>
-    );
-  }
 
   return (
     <ModernBackgroundLayout>
@@ -1133,7 +1112,7 @@ export default function AIStudioPage() {
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, ease: "easeOut", delay: 0.2 }}
-                className="bg-gradient-to-br from-blue-900/40 to-indigo-900/40 border border-blue-800/50 hover:border-blue-700/50 transition-colors shadow-lg shadow-blue-900/20 rounded-xl p-7 backdrop-blur-sm flex flex-col h-full min-h-[500px] relative"
+                className="bg-gradient-to-br from-blue-900/40 to-indigo-900/40 border border-blue-800/50 hover:border-blue-700/50 transition-colors shadow-lg shadow-blue-900/20 rounded-xl p-8 backdrop-blur-sm flex flex-col h-full min-h-[550px] relative"
               >
                 {isCardsLoading && (
                   <div className="absolute inset-0 flex items-center justify-center bg-gray-900/80 backdrop-blur-sm rounded-xl z-10">
@@ -1149,7 +1128,7 @@ export default function AIStudioPage() {
                   <Camera className="h-6 w-6 text-blue-400" />
                 </div>
                 <h3 className="text-xl font-semibold mb-3 text-white">Environment-Based Audio</h3>
-                <p className="text-gray-300 mb-4 line-clamp-2">
+                <p className="text-gray-300 mb-4 line-clamp-3 text-base">
                   Generate immersive soundscapes based on different environments like forests, oceans, cities, and cafes.
                 </p>
 
@@ -1191,7 +1170,7 @@ export default function AIStudioPage() {
                 </ul>
                 <div className="mt-auto">
                   <Button
-                    className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-500 hover:to-blue-600 font-bold text-base py-6 shadow-lg transform hover:scale-[1.02] transition-all duration-200 uppercase tracking-wide"
+                    className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-500 hover:to-blue-600 font-extrabold text-lg py-6 shadow-xl transform hover:scale-[1.03] transition-all duration-200 uppercase tracking-wider border-t border-blue-500/30"
                     onClick={() => {
                       setShowEnvironmentScanner(true);
                       window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -1209,7 +1188,7 @@ export default function AIStudioPage() {
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, ease: "easeOut", delay: 0.3 }}
-                className="bg-gradient-to-br from-purple-900/40 to-pink-900/40 border border-purple-800/50 hover:border-purple-700/50 transition-colors shadow-lg shadow-purple-900/20 rounded-xl p-7 backdrop-blur-sm flex flex-col h-full min-h-[500px] relative"
+                className="bg-gradient-to-br from-purple-900/40 to-pink-900/40 border border-purple-800/50 hover:border-purple-700/50 transition-colors shadow-lg shadow-purple-900/20 rounded-xl p-8 backdrop-blur-sm flex flex-col h-full min-h-[550px] relative"
               >
                 {isCardsLoading && (
                   <div className="absolute inset-0 flex items-center justify-center bg-gray-900/80 backdrop-blur-sm rounded-xl z-10">
@@ -1225,7 +1204,7 @@ export default function AIStudioPage() {
                   <Sparkles className="h-6 w-6 text-purple-400" />
                 </div>
                 <h3 className="text-xl font-semibold mb-3 text-white">Mood-Based Customization</h3>
-                <p className="text-gray-300 mb-4 line-clamp-2">
+                <p className="text-gray-300 mb-4 line-clamp-3 text-base">
                   Tailor audio to match your emotional state, whether relaxing, energetic, focused, or peaceful.
                 </p>
 
@@ -1268,7 +1247,7 @@ export default function AIStudioPage() {
                 </ul>
                 <div className="mt-auto">
                   <Button
-                    className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 font-bold text-base py-6 shadow-lg transform hover:scale-[1.02] transition-all duration-200 uppercase tracking-wide"
+                    className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 font-extrabold text-lg py-6 shadow-xl transform hover:scale-[1.03] transition-all duration-200 uppercase tracking-wider border-t border-purple-500/30"
                     onClick={() => {
                       setShowMoodSelector(true);
                       window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -1286,7 +1265,7 @@ export default function AIStudioPage() {
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, ease: "easeOut", delay: 0.4 }}
-                className="bg-gradient-to-br from-green-900/40 to-teal-900/40 border border-green-800/50 hover:border-green-700/50 transition-colors shadow-lg shadow-green-900/20 rounded-xl p-7 backdrop-blur-sm flex flex-col h-full min-h-[500px] relative"
+                className="bg-gradient-to-br from-green-900/40 to-teal-900/40 border border-green-800/50 hover:border-green-700/50 transition-colors shadow-lg shadow-green-900/20 rounded-xl p-8 backdrop-blur-sm flex flex-col h-full min-h-[550px] relative"
               >
                 {isCardsLoading && (
                   <div className="absolute inset-0 flex items-center justify-center bg-gray-900/80 backdrop-blur-sm rounded-xl z-10">
@@ -1302,7 +1281,7 @@ export default function AIStudioPage() {
                   <Zap className="h-6 w-6 text-green-400" />
                 </div>
                 <h3 className="text-xl font-semibold mb-3 text-white">Real-Time Adaptation</h3>
-                <p className="text-gray-300 mb-4 line-clamp-2">
+                <p className="text-gray-300 mb-4 line-clamp-3 text-base">
                   Experience audio environments that adapt to your surroundings and context in real-time.
                 </p>
 
@@ -1352,7 +1331,7 @@ export default function AIStudioPage() {
                 </ul>
                 <div className="mt-auto">
                   <Button
-                    className="w-full bg-gradient-to-r from-green-600 to-teal-600 hover:from-green-500 hover:to-teal-500 font-bold text-base py-6 shadow-lg transform hover:scale-[1.02] transition-all duration-200 uppercase tracking-wide"
+                    className="w-full bg-gradient-to-r from-green-600 to-teal-600 hover:from-green-500 hover:to-teal-500 font-extrabold text-lg py-6 shadow-xl transform hover:scale-[1.03] transition-all duration-200 uppercase tracking-wider border-t border-green-500/30"
                     onClick={() => {
                       setShowRealTimeAdapter(true);
                       window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -1370,7 +1349,7 @@ export default function AIStudioPage() {
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, ease: "easeOut", delay: 0.5 }}
-                className="bg-gradient-to-br from-cyan-900/40 to-blue-900/40 border border-cyan-800/50 hover:border-cyan-700/50 transition-colors shadow-lg shadow-cyan-900/20 rounded-xl p-7 backdrop-blur-sm flex flex-col h-full min-h-[500px] relative"
+                className="bg-gradient-to-br from-cyan-900/40 to-blue-900/40 border border-cyan-800/50 hover:border-cyan-700/50 transition-colors shadow-lg shadow-cyan-900/20 rounded-xl p-8 backdrop-blur-sm flex flex-col h-full min-h-[550px] relative"
               >
                 {isCardsLoading && (
                   <div className="absolute inset-0 flex items-center justify-center bg-gray-900/80 backdrop-blur-sm rounded-xl z-10">
@@ -1386,7 +1365,7 @@ export default function AIStudioPage() {
                   <MonitorSmartphone className="h-6 w-6 text-cyan-400" />
                 </div>
                 <h3 className="text-xl font-semibold mb-3 text-white">ScreenPipe Bridge</h3>
-                <p className="text-gray-300 mb-4 line-clamp-2">
+                <p className="text-gray-300 mb-4 line-clamp-3 text-base">
                   Creates a direct channel between your screen analysis and dynamic soundscape generator.
                 </p>
 
@@ -1421,7 +1400,7 @@ export default function AIStudioPage() {
                 </ul>
                 <div className="mt-auto">
                   <Button
-                    className="w-full bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 font-bold text-base py-6 shadow-lg transform hover:scale-[1.02] transition-all duration-200 uppercase tracking-wide"
+                    className="w-full bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 font-extrabold text-lg py-6 shadow-xl transform hover:scale-[1.03] transition-all duration-200 uppercase tracking-wider border-t border-cyan-500/30"
                     onClick={() => {
                       // Add a new tab for Screenpipe
                       setActiveTab('screenpipe');
