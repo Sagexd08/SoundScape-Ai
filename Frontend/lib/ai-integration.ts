@@ -295,43 +295,80 @@ class GeminiAI {
   }
 }
 
+// Define AI model types
+export type AIModelType = 'grok' | 'gemini' | 'both';
+
 // Unified AI Service that combines multiple models
 export class AIService {
   private grokAI: GrokAI;
   private geminiAI: GeminiAI;
+  private preferredModel: AIModelType = 'both';
 
   constructor(grokApiKey?: string, geminiApiKey?: string) {
     this.grokAI = new GrokAI(grokApiKey);
     this.geminiAI = new GeminiAI(geminiApiKey);
   }
 
-  // Generate an audio prompt using both Grok and Gemini
+  // Set preferred AI model
+  setPreferredModel(model: AIModelType): void {
+    this.preferredModel = model;
+    console.log(`Preferred AI model set to: ${model}`);
+    toast.success(`AI model preference set to: ${model.toUpperCase()}`);
+  }
+
+  // Get current preferred model
+  getPreferredModel(): AIModelType {
+    return this.preferredModel;
+  }
+
+  // Generate an audio prompt using the preferred AI model(s)
   async generateEnhancedAudioPrompt(options: AudioGenerationPrompt): Promise<string> {
     try {
-      // First, use Grok to generate a base prompt
-      const basePrompt = await this.grokAI.generatePrompt(options);
+      let basePrompt = '';
+      let enhancedPrompt = '';
 
-      // Then, use Gemini to enhance the prompt with creative details
-      const enhancedPrompt = await this.geminiAI.enhanceAudioPrompt(basePrompt);
+      // Use the preferred model(s)
+      switch (this.preferredModel) {
+        case 'grok':
+          basePrompt = await this.grokAI.generatePrompt(options);
+          return basePrompt;
 
-      return enhancedPrompt;
+        case 'gemini':
+          // Generate a simple base prompt
+          basePrompt = this.generateBasicPrompt(options);
+          enhancedPrompt = await this.geminiAI.enhanceAudioPrompt(basePrompt);
+          return enhancedPrompt;
+
+        case 'both':
+        default:
+          // First, use Grok to generate a base prompt
+          basePrompt = await this.grokAI.generatePrompt(options);
+          // Then, use Gemini to enhance the prompt with creative details
+          enhancedPrompt = await this.geminiAI.enhanceAudioPrompt(basePrompt);
+          return enhancedPrompt;
+      }
     } catch (error) {
       console.error('Error generating enhanced audio prompt:', error);
       toast.error('Failed to generate enhanced prompt. Using basic prompt instead.');
 
       // Fallback to a basic prompt if the AI services fail
-      let fallbackPrompt = 'Create an audio environment';
-
-      if (options.environment) {
-        fallbackPrompt += ` set in a ${options.environment}`;
-      }
-
-      if (options.mood) {
-        fallbackPrompt += ` with a ${options.mood} mood`;
-      }
-
-      return fallbackPrompt + '.';
+      return this.generateBasicPrompt(options) + '.';
     }
+  }
+
+  // Helper method to generate a basic prompt
+  private generateBasicPrompt(options: AudioGenerationPrompt): string {
+    let fallbackPrompt = 'Create an audio environment';
+
+    if (options.environment) {
+      fallbackPrompt += ` set in a ${options.environment}`;
+    }
+
+    if (options.mood) {
+      fallbackPrompt += ` with a ${options.mood} mood`;
+    }
+
+    return fallbackPrompt;
   }
 
   // Analyze audio using Grok
