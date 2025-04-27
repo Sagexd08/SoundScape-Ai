@@ -24,6 +24,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Slider } from '@/components/ui/slider';
 import { toast } from 'sonner';
+import { AnimatedLoader } from '@/components/ui/animated-loader';
 
 // Import AI utilities
 import { generateAudio } from '@/lib/openai';
@@ -447,10 +448,39 @@ export default function AIStudioPage() {
 
 
 
+  // State for loading animations
+  const [isPageLoading, setIsPageLoading] = useState(true);
+  const [isCardsLoading, setIsCardsLoading] = useState(true);
+
   // Additional initialization if needed
   useEffect(() => {
-    // Any initialization logic can go here
+    // Simulate page loading
+    const pageTimer = setTimeout(() => {
+      setIsPageLoading(false);
+    }, 1000);
+
+    // Simulate loading delay for cards
+    const cardsTimer = setTimeout(() => {
+      setIsCardsLoading(false);
+    }, 2500);
+
+    return () => {
+      clearTimeout(pageTimer);
+      clearTimeout(cardsTimer);
+    };
   }, []);
+
+  if (isPageLoading) {
+    return (
+      <div className="min-h-screen bg-black">
+        <AnimatedLoader
+          variant="fullscreen"
+          text="Loading AI Studio..."
+          iconType="wand"
+        />
+      </div>
+    );
+  }
 
   return (
     <ModernBackgroundLayout>
@@ -1096,15 +1126,25 @@ export default function AIStudioPage() {
               </p>
             </motion.div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mt-6 auto-rows-fr">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mt-8 auto-rows-fr">
               {/* Environment-Based Audio */}
               <motion.div
                 id="feature-environment"
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, ease: "easeOut", delay: 0.2 }}
-                className="bg-gradient-to-br from-blue-900/40 to-indigo-900/40 border border-blue-800/50 hover:border-blue-700/50 transition-colors shadow-lg shadow-blue-900/20 rounded-xl p-6 backdrop-blur-sm flex flex-col h-full"
+                className="bg-gradient-to-br from-blue-900/40 to-indigo-900/40 border border-blue-800/50 hover:border-blue-700/50 transition-colors shadow-lg shadow-blue-900/20 rounded-xl p-7 backdrop-blur-sm flex flex-col h-full min-h-[500px] relative"
               >
+                {isCardsLoading && (
+                  <div className="absolute inset-0 flex items-center justify-center bg-gray-900/80 backdrop-blur-sm rounded-xl z-10">
+                    <AnimatedLoader
+                      variant="card"
+                      text="Loading Environment Audio..."
+                      iconType="audio"
+                      className="w-64"
+                    />
+                  </div>
+                )}
                 <div className="bg-blue-500/20 p-3 rounded-lg w-12 h-12 flex items-center justify-center mb-4">
                   <Camera className="h-6 w-6 text-blue-400" />
                 </div>
@@ -1151,7 +1191,7 @@ export default function AIStudioPage() {
                 </ul>
                 <div className="mt-auto">
                   <Button
-                    className="w-full bg-blue-600 hover:bg-blue-700"
+                    className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-500 hover:to-blue-600 font-bold text-base py-6 shadow-lg transform hover:scale-[1.02] transition-all duration-200 uppercase tracking-wide"
                     onClick={() => {
                       setShowEnvironmentScanner(true);
                       window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -1169,8 +1209,18 @@ export default function AIStudioPage() {
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, ease: "easeOut", delay: 0.3 }}
-                className="bg-gradient-to-br from-purple-900/40 to-pink-900/40 border border-purple-800/50 hover:border-purple-700/50 transition-colors shadow-lg shadow-purple-900/20 rounded-xl p-6 backdrop-blur-sm flex flex-col h-full"
+                className="bg-gradient-to-br from-purple-900/40 to-pink-900/40 border border-purple-800/50 hover:border-purple-700/50 transition-colors shadow-lg shadow-purple-900/20 rounded-xl p-7 backdrop-blur-sm flex flex-col h-full min-h-[500px] relative"
               >
+                {isCardsLoading && (
+                  <div className="absolute inset-0 flex items-center justify-center bg-gray-900/80 backdrop-blur-sm rounded-xl z-10">
+                    <AnimatedLoader
+                      variant="card"
+                      text="Loading Mood Customization..."
+                      iconType="sparkles"
+                      className="w-64"
+                    />
+                  </div>
+                )}
                 <div className="bg-purple-500/20 p-3 rounded-lg w-12 h-12 flex items-center justify-center mb-4">
                   <Sparkles className="h-6 w-6 text-purple-400" />
                 </div>
@@ -1218,7 +1268,7 @@ export default function AIStudioPage() {
                 </ul>
                 <div className="mt-auto">
                   <Button
-                    className="w-full bg-purple-600 hover:bg-purple-700"
+                    className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 font-bold text-base py-6 shadow-lg transform hover:scale-[1.02] transition-all duration-200 uppercase tracking-wide"
                     onClick={() => {
                       setShowMoodSelector(true);
                       window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -1236,8 +1286,18 @@ export default function AIStudioPage() {
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, ease: "easeOut", delay: 0.4 }}
-                className="bg-gradient-to-br from-green-900/40 to-teal-900/40 border border-green-800/50 hover:border-green-700/50 transition-colors shadow-lg shadow-green-900/20 rounded-xl p-6 backdrop-blur-sm flex flex-col h-full"
+                className="bg-gradient-to-br from-green-900/40 to-teal-900/40 border border-green-800/50 hover:border-green-700/50 transition-colors shadow-lg shadow-green-900/20 rounded-xl p-7 backdrop-blur-sm flex flex-col h-full min-h-[500px] relative"
               >
+                {isCardsLoading && (
+                  <div className="absolute inset-0 flex items-center justify-center bg-gray-900/80 backdrop-blur-sm rounded-xl z-10">
+                    <AnimatedLoader
+                      variant="card"
+                      text="Loading Real-Time Adaptation..."
+                      iconType="zap"
+                      className="w-64"
+                    />
+                  </div>
+                )}
                 <div className="bg-green-500/20 p-3 rounded-lg w-12 h-12 flex items-center justify-center mb-4">
                   <Zap className="h-6 w-6 text-green-400" />
                 </div>
@@ -1292,7 +1352,7 @@ export default function AIStudioPage() {
                 </ul>
                 <div className="mt-auto">
                   <Button
-                    className="w-full bg-green-600 hover:bg-green-700"
+                    className="w-full bg-gradient-to-r from-green-600 to-teal-600 hover:from-green-500 hover:to-teal-500 font-bold text-base py-6 shadow-lg transform hover:scale-[1.02] transition-all duration-200 uppercase tracking-wide"
                     onClick={() => {
                       setShowRealTimeAdapter(true);
                       window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -1310,8 +1370,18 @@ export default function AIStudioPage() {
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, ease: "easeOut", delay: 0.5 }}
-                className="bg-gradient-to-br from-cyan-900/40 to-blue-900/40 border border-cyan-800/50 hover:border-cyan-700/50 transition-colors shadow-lg shadow-cyan-900/20 rounded-xl p-6 backdrop-blur-sm flex flex-col h-full"
+                className="bg-gradient-to-br from-cyan-900/40 to-blue-900/40 border border-cyan-800/50 hover:border-cyan-700/50 transition-colors shadow-lg shadow-cyan-900/20 rounded-xl p-7 backdrop-blur-sm flex flex-col h-full min-h-[500px] relative"
               >
+                {isCardsLoading && (
+                  <div className="absolute inset-0 flex items-center justify-center bg-gray-900/80 backdrop-blur-sm rounded-xl z-10">
+                    <AnimatedLoader
+                      variant="card"
+                      text="Loading ScreenPipe Bridge..."
+                      iconType="headphones"
+                      className="w-64"
+                    />
+                  </div>
+                )}
                 <div className="bg-cyan-500/20 p-3 rounded-lg w-12 h-12 flex items-center justify-center mb-4">
                   <MonitorSmartphone className="h-6 w-6 text-cyan-400" />
                 </div>
@@ -1351,7 +1421,7 @@ export default function AIStudioPage() {
                 </ul>
                 <div className="mt-auto">
                   <Button
-                    className="w-full bg-cyan-600 hover:bg-cyan-700"
+                    className="w-full bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 font-bold text-base py-6 shadow-lg transform hover:scale-[1.02] transition-all duration-200 uppercase tracking-wide"
                     onClick={() => {
                       // Add a new tab for Screenpipe
                       setActiveTab('screenpipe');
