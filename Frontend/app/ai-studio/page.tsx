@@ -535,13 +535,15 @@ export default function AIStudioPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 1, ease: "easeOut", delay: 0.6 }}
-              className="max-w-xs mx-auto mb-6"
+              className="max-w-md mx-auto mb-8"
             >
-              <div className="flex items-center gap-3 mb-2 justify-center">
+              <div className="flex items-center gap-3 mb-3 justify-center">
                 <Sparkles className="h-5 w-5 text-indigo-400" />
                 <h3 className="text-lg font-semibold text-gray-200">Select AI Model</h3>
               </div>
-              <ModelSelector onModelChange={handleAIModelChange} />
+              <div className="bg-gray-900/30 border border-gray-800 rounded-xl p-4">
+                <ModelSelector onModelChange={handleAIModelChange} />
+              </div>
             </motion.div>
           </motion.div>
 
