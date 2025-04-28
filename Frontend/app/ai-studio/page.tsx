@@ -651,7 +651,7 @@ export default function AIStudioPage() {
     <ModernBackgroundLayout>
       <div className="min-h-screen">
         <Navbar />
-        <div className="container mx-auto px-3 sm:px-4 pt-24 sm:pt-32 pb-16">
+        <div className="container mx-auto px-3 sm:px-4 pt-24 sm:pt-32 pb-12 sm:pb-16">
           {/* Environment Scanner Modal */}
           {showEnvironmentScanner && (
             <CameraEnvironmentScanner
@@ -689,19 +689,19 @@ export default function AIStudioPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 1, ease: "easeOut", delay: 0.2 }}
-              className="text-4xl md:text-5xl font-extrabold mb-6 relative z-10"
+              className="text-3xl sm:text-4xl md:text-5xl font-extrabold mb-4 sm:mb-6 relative z-10 px-2"
             >
               <span className="bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 via-purple-500 to-pink-500 animate-gradient bg-[length:200%_auto]">
                 AI Audio Studio
               </span>
-              <div className="w-40 h-1 bg-gradient-to-r from-indigo-500 to-purple-500 mx-auto mt-4 rounded-full"></div>
+              <div className="w-32 sm:w-40 h-1 bg-gradient-to-r from-indigo-500 to-purple-500 mx-auto mt-3 sm:mt-4 rounded-full"></div>
             </motion.h1>
 
             <motion.p
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 1, ease: "easeOut", delay: 0.4 }}
-              className="text-gray-300 max-w-2xl mx-auto text-lg leading-relaxed mb-8"
+              className="text-gray-300 max-w-2xl mx-auto text-base sm:text-lg leading-relaxed mb-6 sm:mb-8 px-4 sm:px-2"
             >
               Create and analyze audio using state-of-the-art AI models from Grok and Gemini.
               Generate custom soundscapes or gain insights from your audio files.
@@ -711,13 +711,13 @@ export default function AIStudioPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 1, ease: "easeOut", delay: 0.6 }}
-              className="max-w-md mx-auto mb-8"
+              className="max-w-md mx-auto mb-6 sm:mb-8 px-4 sm:px-0"
             >
-              <div className="flex items-center gap-3 mb-3 justify-center">
-                <Sparkles className="h-5 w-5 text-indigo-400" />
-                <h3 className="text-lg font-semibold text-gray-200">Select AI Model</h3>
+              <div className="flex items-center gap-2 sm:gap-3 mb-2 sm:mb-3 justify-center">
+                <Sparkles className="h-4 w-4 sm:h-5 sm:w-5 text-indigo-400" />
+                <h3 className="text-base sm:text-lg font-semibold text-gray-200">Select AI Model</h3>
               </div>
-              <div className="bg-gray-900/30 border border-gray-800 rounded-xl p-4">
+              <div className="bg-gray-900/30 border border-gray-800 rounded-xl p-3 sm:p-4">
                 <ModelSelector onModelChange={handleAIModelChange} />
               </div>
             </motion.div>
@@ -728,7 +728,7 @@ export default function AIStudioPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, ease: "easeOut", delay: 0.6 }}
-            className="flex flex-wrap justify-center gap-6 mb-12 max-w-4xl mx-auto"
+            className="flex flex-wrap justify-center gap-3 sm:gap-6 mb-8 sm:mb-12 max-w-4xl mx-auto px-2 sm:px-0"
           >
             <motion.div
               whileHover={{ y: -5, scale: 1.05 }}
@@ -736,7 +736,7 @@ export default function AIStudioPage() {
             >
               <Button
                 variant="outline"
-                className="bg-gradient-to-br from-blue-900/60 to-indigo-900/60 border-blue-700/70 hover:border-blue-500/80 transition-all duration-300 shadow-lg shadow-blue-900/20 hover:shadow-blue-600/30 py-6 px-8 rounded-xl min-w-[180px] h-auto"
+                className="bg-gradient-to-br from-blue-900/60 to-indigo-900/60 border-blue-700/70 hover:border-blue-500/80 transition-all duration-300 shadow-lg shadow-blue-900/20 hover:shadow-blue-600/30 py-4 sm:py-6 px-4 sm:px-8 rounded-xl min-w-[140px] sm:min-w-[180px] h-auto"
                 onClick={() => {
                   const featureSection = document.getElementById('feature-environment');
                   if (featureSection) {
@@ -745,10 +745,10 @@ export default function AIStudioPage() {
                 }}
               >
                 <div className="flex flex-col items-center">
-                  <div className="bg-blue-500/20 p-2 rounded-lg mb-3">
-                    <Camera className="h-5 w-5 text-blue-400" />
+                  <div className="bg-blue-500/20 p-2 rounded-lg mb-2 sm:mb-3">
+                    <Camera className="h-4 w-4 sm:h-5 sm:w-5 text-blue-400" />
                   </div>
-                  <span className="font-medium text-sm whitespace-nowrap">Environment Audio</span>
+                  <span className="font-medium text-xs sm:text-sm whitespace-nowrap">Environment Audio</span>
                 </div>
               </Button>
             </motion.div>
@@ -759,7 +759,7 @@ export default function AIStudioPage() {
             >
               <Button
                 variant="outline"
-                className="bg-gradient-to-br from-purple-900/60 to-pink-900/60 border-purple-700/70 hover:border-purple-500/80 transition-all duration-300 shadow-lg shadow-purple-900/20 hover:shadow-purple-600/30 py-6 px-8 rounded-xl min-w-[180px] h-auto"
+                className="bg-gradient-to-br from-purple-900/60 to-pink-900/60 border-purple-700/70 hover:border-purple-500/80 transition-all duration-300 shadow-lg shadow-purple-900/20 hover:shadow-purple-600/30 py-4 sm:py-6 px-4 sm:px-8 rounded-xl min-w-[140px] sm:min-w-[180px] h-auto"
                 onClick={() => {
                   const featureSection = document.getElementById('feature-mood');
                   if (featureSection) {
@@ -768,10 +768,10 @@ export default function AIStudioPage() {
                 }}
               >
                 <div className="flex flex-col items-center">
-                  <div className="bg-purple-500/20 p-2 rounded-lg mb-3">
-                    <Sparkles className="h-5 w-5 text-purple-400" />
+                  <div className="bg-purple-500/20 p-2 rounded-lg mb-2 sm:mb-3">
+                    <Sparkles className="h-4 w-4 sm:h-5 sm:w-5 text-purple-400" />
                   </div>
-                  <span className="font-medium text-sm whitespace-nowrap">Mood Customization</span>
+                  <span className="font-medium text-xs sm:text-sm whitespace-nowrap">Mood Customization</span>
                 </div>
               </Button>
             </motion.div>
@@ -782,7 +782,7 @@ export default function AIStudioPage() {
             >
               <Button
                 variant="outline"
-                className="bg-gradient-to-br from-green-900/60 to-teal-900/60 border-green-700/70 hover:border-green-500/80 transition-all duration-300 shadow-lg shadow-green-900/20 hover:shadow-green-600/30 py-6 px-8 rounded-xl min-w-[180px] h-auto"
+                className="bg-gradient-to-br from-green-900/60 to-teal-900/60 border-green-700/70 hover:border-green-500/80 transition-all duration-300 shadow-lg shadow-green-900/20 hover:shadow-green-600/30 py-4 sm:py-6 px-4 sm:px-8 rounded-xl min-w-[140px] sm:min-w-[180px] h-auto"
                 onClick={() => {
                   const featureSection = document.getElementById('feature-realtime');
                   if (featureSection) {
@@ -791,10 +791,10 @@ export default function AIStudioPage() {
                 }}
               >
                 <div className="flex flex-col items-center">
-                  <div className="bg-green-500/20 p-2 rounded-lg mb-3">
-                    <Zap className="h-5 w-5 text-green-400" />
+                  <div className="bg-green-500/20 p-2 rounded-lg mb-2 sm:mb-3">
+                    <Zap className="h-4 w-4 sm:h-5 sm:w-5 text-green-400" />
                   </div>
-                  <span className="font-medium text-sm whitespace-nowrap">Real-Time Adaptation</span>
+                  <span className="font-medium text-xs sm:text-sm whitespace-nowrap">Real-Time Adaptation</span>
                 </div>
               </Button>
             </motion.div>
@@ -805,7 +805,7 @@ export default function AIStudioPage() {
             >
               <Button
                 variant="outline"
-                className="bg-gradient-to-br from-cyan-900/60 to-blue-900/60 border-cyan-700/70 hover:border-cyan-500/80 transition-all duration-300 shadow-lg shadow-cyan-900/20 hover:shadow-cyan-600/30 py-6 px-8 rounded-xl min-w-[180px] h-auto"
+                className="bg-gradient-to-br from-cyan-900/60 to-blue-900/60 border-cyan-700/70 hover:border-cyan-500/80 transition-all duration-300 shadow-lg shadow-cyan-900/20 hover:shadow-cyan-600/30 py-4 sm:py-6 px-4 sm:px-8 rounded-xl min-w-[140px] sm:min-w-[180px] h-auto"
                 onClick={() => {
                   const featureSection = document.getElementById('feature-screenpipe');
                   if (featureSection) {
@@ -814,19 +814,19 @@ export default function AIStudioPage() {
                 }}
               >
                 <div className="flex flex-col items-center">
-                  <div className="bg-cyan-500/20 p-2 rounded-lg mb-3">
-                    <MonitorSmartphone className="h-5 w-5 text-cyan-400" />
+                  <div className="bg-cyan-500/20 p-2 rounded-lg mb-2 sm:mb-3">
+                    <MonitorSmartphone className="h-4 w-4 sm:h-5 sm:w-5 text-cyan-400" />
                   </div>
-                  <span className="font-medium text-sm whitespace-nowrap">ScreenPipe Bridge</span>
+                  <span className="font-medium text-xs sm:text-sm whitespace-nowrap">ScreenPipe Bridge</span>
                 </div>
               </Button>
             </motion.div>
           </motion.div>
 
-          <Alert className="mb-8 border-blue-500 bg-blue-500/10">
+          <Alert className="mb-6 sm:mb-8 border-blue-500 bg-blue-500/10 mx-2 sm:mx-0">
             <AlertCircle className="h-4 w-4 text-blue-500" />
-            <AlertTitle>AI Integration Active: {selectedAIModel === 'both' ? 'Grok & Gemini' : selectedAIModel === 'grok' ? 'Grok' : 'Gemini'}</AlertTitle>
-            <AlertDescription>
+            <AlertTitle className="text-sm sm:text-base">AI Integration Active: {selectedAIModel === 'both' ? 'Grok & Gemini' : selectedAIModel === 'grok' ? 'Grok' : 'Gemini'}</AlertTitle>
+            <AlertDescription className="text-xs sm:text-sm">
               The AI Studio uses OpenAI's Text-to-Speech API with prompts generated by {selectedAIModel === 'both' ? 'both Grok and Gemini' : selectedAIModel === 'grok' ? 'Grok' : 'Gemini'}. Enter a prompt or select an environment type and mood, then click "Generate Audio". If no API key is provided, sample audio files will be used instead.
             </AlertDescription>
           </Alert>
@@ -838,22 +838,22 @@ export default function AIStudioPage() {
               onValueChange={setActiveTab}
               className="w-full"
             >
-              <div className="flex justify-center mb-6">
-                <TabsList className="grid w-full max-w-3xl grid-cols-4">
-                  <TabsTrigger value="generate" className="flex items-center justify-center gap-2 px-4 py-3 rounded-md data-[state=active]:bg-indigo-600 data-[state=active]:text-white">
-                    <Wand2 className="h-4 w-4" />
+              <div className="flex justify-center mb-4 sm:mb-6 px-2 sm:px-0">
+                <TabsList className="grid w-full max-w-3xl grid-cols-2 sm:grid-cols-4 gap-1 sm:gap-0">
+                  <TabsTrigger value="generate" className="flex items-center justify-center gap-1 sm:gap-2 px-2 sm:px-4 py-2 sm:py-3 rounded-md data-[state=active]:bg-indigo-600 data-[state=active]:text-white text-xs sm:text-sm">
+                    <Wand2 className="h-3 w-3 sm:h-4 sm:w-4" />
                     <span>Generate Audio</span>
                   </TabsTrigger>
-                  <TabsTrigger value="music" className="flex items-center justify-center gap-2 px-4 py-3 rounded-md data-[state=active]:bg-indigo-600 data-[state=active]:text-white">
-                    <Music className="h-4 w-4" />
+                  <TabsTrigger value="music" className="flex items-center justify-center gap-1 sm:gap-2 px-2 sm:px-4 py-2 sm:py-3 rounded-md data-[state=active]:bg-indigo-600 data-[state=active]:text-white text-xs sm:text-sm">
+                    <Music className="h-3 w-3 sm:h-4 sm:w-4" />
                     <span>Generate Music</span>
                   </TabsTrigger>
-                  <TabsTrigger value="analyze" className="flex items-center justify-center gap-2 px-4 py-3 rounded-md data-[state=active]:bg-indigo-600 data-[state=active]:text-white">
-                    <FileAudio className="h-4 w-4" />
+                  <TabsTrigger value="analyze" className="flex items-center justify-center gap-1 sm:gap-2 px-2 sm:px-4 py-2 sm:py-3 rounded-md data-[state=active]:bg-indigo-600 data-[state=active]:text-white text-xs sm:text-sm">
+                    <FileAudio className="h-3 w-3 sm:h-4 sm:w-4" />
                     <span>Analyze</span>
                   </TabsTrigger>
-                  <TabsTrigger value="screenpipe" className="flex items-center justify-center gap-2 px-4 py-3 rounded-md data-[state=active]:bg-indigo-600 data-[state=active]:text-white">
-                    <MonitorSmartphone className="h-4 w-4" />
+                  <TabsTrigger value="screenpipe" className="flex items-center justify-center gap-1 sm:gap-2 px-2 sm:px-4 py-2 sm:py-3 rounded-md data-[state=active]:bg-indigo-600 data-[state=active]:text-white text-xs sm:text-sm">
+                    <MonitorSmartphone className="h-3 w-3 sm:h-4 sm:w-4" />
                     <span>ScreenPipe</span>
                   </TabsTrigger>
                 </TabsList>
