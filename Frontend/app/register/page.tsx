@@ -11,6 +11,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Separator } from "@/components/ui/separator"
 import { GoogleButton } from "@/components/auth/google-button"
 import { GitHubButton } from "@/components/auth/github-button"
+import { Captcha } from "@/components/auth/captcha"
 import Link from "next/link"
 import SimpleBackgroundLayout from "@/components/layouts/SimpleBackgroundLayout"
 
@@ -20,6 +21,9 @@ interface FormData {
   confirmPassword: string;
   displayName: string;
 }
+
+// CAPTCHA site key
+const CAPTCHA_SITE_KEY = "98041460-15a4-4c7e-9b2e-f158b69227a2";
 
 function RegisterForm() {
   const { user, signUp, error, isLoading } = useAuth()
@@ -32,6 +36,8 @@ function RegisterForm() {
   })
   const [formErrors, setFormErrors] = useState<Partial<FormData>>({})
   const [registrationSuccess, setRegistrationSuccess] = useState(false)
+  const [captchaToken, setCaptchaToken] = useState<string | null>(null)
+  const [captchaError, setCaptchaError] = useState<string | null>(null)
 
   // Redirect to home page if already logged in
   useEffect(() => {
@@ -52,6 +58,7 @@ function RegisterForm() {
 
   const validateForm = (): boolean => {
     const errors: Partial<FormData> = {}
+    setCaptchaError(null)
 
     if (!formData.displayName.trim()) {
       errors.displayName = "Name is required"
@@ -73,8 +80,31 @@ function RegisterForm() {
       errors.confirmPassword = "Passwords do not match"
     }
 
+    // Validate CAPTCHA
+    if (!captchaToken) {
+      setCaptchaError("Please complete the CAPTCHA verification")
+      return false
+    }
+
     setFormErrors(errors)
     return Object.keys(errors).length === 0
+  }
+
+  // Handle CAPTCHA verification
+  const handleCaptchaVerify = (token: string) => {
+    setCaptchaToken(token)
+    setCaptchaError(null)
+  }
+
+  // Handle CAPTCHA expiration
+  const handleCaptchaExpire = () => {
+    setCaptchaToken(null)
+  }
+
+  // Handle CAPTCHA error
+  const handleCaptchaError = () => {
+    setCaptchaToken(null)
+    setCaptchaError("CAPTCHA verification failed. Please try again.")
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -87,7 +117,7 @@ function RegisterForm() {
     try {
       await signUp(formData.email, formData.password, {
         display_name: formData.displayName
-      })
+      }, captchaToken || undefined)
       setRegistrationSuccess(true)
     } catch (err) {
       console.error("Registration error:", err)
@@ -226,6 +256,18 @@ function RegisterForm() {
                           <p className="text-red-500 text-xs mt-1">{formErrors.confirmPassword}</p>
                         )}
                       </div>
+
+                      {/* CAPTCHA */}
+                      <Captcha
+                        siteKey={CAPTCHA_SITE_KEY}
+                        onVerify={handleCaptchaVerify}
+                        onExpire={handleCaptchaExpire}
+                        onError={handleCaptchaError}
+                      />
+
+                      {captchaError && (
+                        <p className="text-red-500 text-xs mt-1">{captchaError}</p>
+                      )}
 
                       <Button
                         type="submit"

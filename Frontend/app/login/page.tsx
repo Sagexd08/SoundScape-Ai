@@ -11,6 +11,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Separator } from "@/components/ui/separator"
 import { GoogleButton } from "@/components/auth/google-button"
 import { GitHubButton } from "@/components/auth/github-button"
+import { Captcha } from "@/components/auth/captcha"
 import Link from "next/link"
 import Navbar from "@/components/navbar"
 import SimpleBackgroundLayout from "@/components/layouts/SimpleBackgroundLayout"
@@ -19,6 +20,9 @@ interface FormData {
   email: string;
   password: string;
 }
+
+// CAPTCHA site key
+const CAPTCHA_SITE_KEY = "98041460-15a4-4c7e-9b2e-f158b69227a2";
 
 function LoginForm() {
   const { user, signIn, resetPassword, error, isLoading } = useAuth()
@@ -29,6 +33,8 @@ function LoginForm() {
   })
   const [isPasswordReset, setIsPasswordReset] = useState(false)
   const [resetSent, setResetSent] = useState(false)
+  const [captchaToken, setCaptchaToken] = useState<string | null>(null)
+  const [captchaError, setCaptchaError] = useState<string | null>(null)
 
   // Redirect to home page if already logged in
   useEffect(() => {
@@ -44,6 +50,13 @@ function LoginForm() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    setCaptchaError(null)
+
+    // Validate CAPTCHA
+    if (!captchaToken && !isPasswordReset) {
+      setCaptchaError("Please complete the CAPTCHA verification")
+      return
+    }
 
     // Handle password reset flow
     if (isPasswordReset) {
@@ -52,8 +65,25 @@ function LoginForm() {
       return
     }
 
-    // Handle login
-    await signIn(formData.email, formData.password)
+    // Handle login with CAPTCHA token
+    await signIn(formData.email, formData.password, captchaToken || undefined)
+  }
+
+  // Handle CAPTCHA verification
+  const handleCaptchaVerify = (token: string) => {
+    setCaptchaToken(token)
+    setCaptchaError(null)
+  }
+
+  // Handle CAPTCHA expiration
+  const handleCaptchaExpire = () => {
+    setCaptchaToken(null)
+  }
+
+  // Handle CAPTCHA error
+  const handleCaptchaError = () => {
+    setCaptchaToken(null)
+    setCaptchaError("CAPTCHA verification failed. Please try again.")
   }
 
   const togglePasswordReset = () => {
@@ -201,6 +231,18 @@ function LoginForm() {
                           required
                         />
                       </div>
+
+                      {/* CAPTCHA */}
+                      <Captcha
+                        siteKey={CAPTCHA_SITE_KEY}
+                        onVerify={handleCaptchaVerify}
+                        onExpire={handleCaptchaExpire}
+                        onError={handleCaptchaError}
+                      />
+
+                      {captchaError && (
+                        <p className="text-red-500 text-xs mt-1">{captchaError}</p>
+                      )}
 
                       <Button
                         type="submit"

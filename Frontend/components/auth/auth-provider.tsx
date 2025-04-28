@@ -19,8 +19,8 @@ interface AuthState {
 }
 
 interface AuthContextType extends AuthState {
-  signIn: (email: string, password: string) => Promise<void>;
-  signUp: (email: string, password: string, metadata?: Record<string, any>) => Promise<void>;
+  signIn: (email: string, password: string, captchaToken?: string) => Promise<void>;
+  signUp: (email: string, password: string, metadata?: Record<string, any>, captchaToken?: string) => Promise<void>;
   signInWithGoogle: () => Promise<void>;
   signInWithGitHub: () => Promise<void>;
   signOut: () => Promise<void>;
@@ -86,7 +86,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   // Sign in with email and password
-  const signIn = async (email: string, password: string) => {
+  const signIn = async (email: string, password: string, captchaToken?: string) => {
     setAuthState(prev => ({ ...prev, isLoading: true, error: null }));
 
     try {
@@ -98,7 +98,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         email,
         password,
         options: {
-          captchaToken: undefined // Let Supabase handle CAPTCHA internally
+          captchaToken: captchaToken // Use the provided CAPTCHA token
         }
       });
 
@@ -142,7 +142,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   // Sign up with email and password
-  const signUp = async (email: string, password: string, metadata?: Record<string, any>) => {
+  const signUp = async (email: string, password: string, metadata?: Record<string, any>, captchaToken?: string) => {
     setAuthState(prev => ({ ...prev, isLoading: true, error: null }));
 
     try {
@@ -152,7 +152,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         options: {
           data: metadata,
           emailRedirectTo: `${window.location.origin}/auth/callback`,
-          captchaToken: undefined // Let Supabase handle CAPTCHA internally
+          captchaToken: captchaToken // Use the provided CAPTCHA token
         },
       });
 

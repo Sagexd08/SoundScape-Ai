@@ -10,6 +10,7 @@ export const supabase = createSupabaseClient(supabaseUrl, supabaseKey, {
   auth: {
     persistSession: true,
     autoRefreshToken: true,
+    flowType: 'pkce',
   },
 });
 
@@ -19,6 +20,7 @@ export const createBrowserClient = () => {
     auth: {
       persistSession: true,
       autoRefreshToken: true,
+      flowType: 'pkce',
     },
   });
 };
