@@ -4,6 +4,7 @@ import { ThemeProvider } from '@/components/theme-provider'
 import { Toaster } from '@/components/ui/sonner'
 import { NetworkProvider } from '@/components/network-provider'
 import { ErrorBoundary } from '@/components/error-boundary'
+import { GlobalErrorHandler } from '@/components/global-error-handler'
 import { AuthProvider } from '@/components/auth/auth-provider'
 import { useEffect } from 'react'
 
@@ -24,20 +25,22 @@ export default function ClientLayout({
 
   return (
     <ErrorBoundary>
-      <ThemeProvider
-        attribute="class"
-        defaultTheme="dark"
-        enableSystem
-        disableTransitionOnChange
-        storageKey="soundscape-theme"
-      >
-        <NetworkProvider>
-          <AuthProvider>
-            {children}
-            <Toaster position="bottom-right" />
-          </AuthProvider>
-        </NetworkProvider>
-      </ThemeProvider>
+      <GlobalErrorHandler>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="dark"
+          enableSystem
+          disableTransitionOnChange
+          storageKey="soundscape-theme"
+        >
+          <NetworkProvider>
+            <AuthProvider>
+              {children}
+              <Toaster position="bottom-right" />
+            </AuthProvider>
+          </NetworkProvider>
+        </ThemeProvider>
+      </GlobalErrorHandler>
     </ErrorBoundary>
   )
 }

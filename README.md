@@ -120,8 +120,18 @@ During our development process, we encountered a significant technical challenge
 - Used React.useMemo to optimize random particle generation
 - Implemented a static fallback for server-side rendering
 - Carefully managed hook execution order to ensure consistency
+- Added a specialized error boundary that detects React Error #310 specifically
+- Implemented a user-friendly "Try Again" button that automatically reloads the page when this error occurs
 
-This experience demonstrates our team's problem-solving abilities and deep understanding of React's rendering lifecycle. While the error may still occasionally appear on first load (press "Try Again" if encountered), our solution significantly improved stability and showcases our technical expertise in handling complex front-end challenges.
+**If You Encounter This Error:**
+If you see the "React Error #310" message while using our application, simply click the "Try Again" button. This will reload the page and resolve the issue. This is a known limitation with React's strict rules for hooks when using complex animations and 3D elements, especially on first page load.
+
+<div align="center">
+  <img src="https://res.cloudinary.com/dm9h4bawl/image/upload/v1745476391/Screenshot_2025-04-24_120134_ijojnw.png" alt="React Error 310 Solution" width="400"/>
+  <p><i>Our custom error handler with "Try Again" button for React Error #310</i></p>
+</div>
+
+This experience demonstrates our team's problem-solving abilities and deep understanding of React's rendering lifecycle. Our solution significantly improved stability and showcases our technical expertise in handling complex front-end challenges.
 
 ## 📽️ Demo & Deliverables
 
