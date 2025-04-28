@@ -94,12 +94,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       // Instead, we'll handle the error more gracefully
 
       // Proceed with sign in
+      // Prepare options for sign in
+      const options: any = {};
+
+      // Only add captchaToken if it's provided and not a mock token
+      if (captchaToken && !captchaToken.startsWith('mock_')) {
+        options.captchaToken = captchaToken;
+      }
+
       const { data, error } = await supabase.auth.signInWithPassword({
         email,
         password,
-        options: {
-          captchaToken: captchaToken // Use the provided CAPTCHA token
-        }
+        options
       });
 
       if (error) {
@@ -146,14 +152,21 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setAuthState(prev => ({ ...prev, isLoading: true, error: null }));
 
     try {
+      // Prepare options for sign up
+      const options: any = {
+        data: metadata,
+        emailRedirectTo: `${typeof window !== 'undefined' ? window.location.origin : ''}/auth/callback`,
+      };
+
+      // Only add captchaToken if it's provided and not a mock token
+      if (captchaToken && !captchaToken.startsWith('mock_')) {
+        options.captchaToken = captchaToken;
+      }
+
       const { data, error } = await supabase.auth.signUp({
         email,
         password,
-        options: {
-          data: metadata,
-          emailRedirectTo: `${window.location.origin}/auth/callback`,
-          captchaToken: captchaToken // Use the provided CAPTCHA token
-        },
+        options
       });
 
       if (error) {

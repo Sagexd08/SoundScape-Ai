@@ -1,21 +1,7 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
-import dynamic from 'next/dynamic';
+import { useEffect, useState } from 'react';
 import { CaptchaFallback } from './captcha-fallback';
-
-// Dynamically import the Turnstile component with error handling
-const TurnstileComponent = dynamic(
-  () => import('react-turnstile').then((mod) => mod.Turnstile),
-  {
-    ssr: false,
-    loading: () => (
-      <div className="bg-gray-800 rounded p-4 text-center">
-        <p className="text-sm text-gray-400">Loading CAPTCHA verification...</p>
-      </div>
-    ),
-  }
-);
 
 interface CaptchaProps {
   siteKey: string;
@@ -32,17 +18,25 @@ export function Captcha({
   onError,
   className = '',
 }: CaptchaProps) {
-  const turnstileRef = useRef<any>(null);
+  const [isMounted, setIsMounted] = useState(false);
   const [hasError, setHasError] = useState(false);
+  const [Turnstile, setTurnstile] = useState<any>(null);
 
-  // Reset the CAPTCHA when the component unmounts
+  // Load the Turnstile component on the client side only
   useEffect(() => {
-    return () => {
-      if (turnstileRef.current) {
-        turnstileRef.current.reset();
-      }
-    };
-  }, []);
+    setIsMounted(true);
+
+    // Try to import the Turnstile component
+    import('react-turnstile')
+      .then((mod) => {
+        setTurnstile(() => mod.Turnstile);
+      })
+      .catch((error) => {
+        console.error('Failed to load Turnstile:', error);
+        setHasError(true);
+        if (onError) onError();
+      });
+  }, [onError]);
 
   // Handle errors with the Turnstile component
   const handleError = () => {
@@ -51,7 +45,7 @@ export function Captcha({
   };
 
   // If there's an error loading the Turnstile component, use the fallback
-  if (hasError) {
+  if (hasError || !isMounted) {
     return (
       <CaptchaFallback
         siteKey={siteKey}
@@ -63,10 +57,21 @@ export function Captcha({
     );
   }
 
+  // If Turnstile is not loaded yet, show loading state
+  if (!Turnstile) {
+    return (
+      <div className={`w-full flex justify-center my-4 ${className}`}>
+        <div className="bg-gray-800 rounded p-4 text-center">
+          <p className="text-sm text-gray-400">Loading CAPTCHA verification...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Render the Turnstile component
   return (
     <div className={`w-full flex justify-center my-4 ${className}`}>
-      <TurnstileComponent
-        ref={turnstileRef}
+      <Turnstile
         sitekey={siteKey}
         onVerify={onVerify}
         onExpire={onExpire}

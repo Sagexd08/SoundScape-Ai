@@ -23,25 +23,34 @@ export function CaptchaFallback({
 
   // Simulate CAPTCHA verification after a delay
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsLoaded(true);
-    }, 1000);
+    // Only run this effect on the client side
+    if (typeof window !== 'undefined') {
+      const timer = setTimeout(() => {
+        setIsLoaded(true);
+      }, 1000);
 
-    return () => clearTimeout(timer);
+      return () => clearTimeout(timer);
+    }
   }, []);
 
   const handleVerify = () => {
-    // Generate a mock token
-    const mockToken = `mock_${siteKey}_${Date.now()}`;
-    setIsVerified(true);
-    onVerify(mockToken);
+    try {
+      // Generate a mock token
+      const mockToken = `mock_${siteKey}_${Date.now()}`;
+      setIsVerified(true);
+      onVerify(mockToken);
+    } catch (error) {
+      console.error('Error in fallback verification:', error);
+      if (onError) onError();
+    }
   };
 
-  if (!isLoaded) {
+  // If we're in server-side rendering or still loading, show a loading state
+  if (typeof window === 'undefined' || !isLoaded) {
     return (
       <div className={`w-full flex justify-center my-4 ${className}`}>
         <div className="bg-gray-800 rounded p-4 text-center">
-          <p className="text-sm text-gray-400">Loading CAPTCHA verification...</p>
+          <p className="text-sm text-gray-400">Loading verification...</p>
         </div>
       </div>
     );
@@ -58,6 +67,7 @@ export function CaptchaFallback({
               Please verify that you are not a robot
             </p>
             <button
+              type="button"
               onClick={handleVerify}
               className="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded text-sm"
             >
