@@ -23,7 +23,7 @@ interface FormData {
 }
 
 // CAPTCHA site key
-const CAPTCHA_SITE_KEY = "98041460-15a4-4c7e-9b2e-f158b69227a2";
+const CAPTCHA_SITE_KEY = "8afac7a8-ee6a-4d0a-b9f8-a34681da850e";
 
 function RegisterForm() {
   const { user, signUp, error, isLoading } = useAuth()
