@@ -222,6 +222,18 @@ export default function AIStudioPage() {
     return `${minutes}:${seconds.toString().padStart(2, '0')}`;
   };
 
+  // Helper function for smooth scrolling to top
+  const scrollToTop = () => {
+    setTimeout(() => {
+      const mainContent = document.querySelector('.container');
+      if (mainContent) {
+        mainContent.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      } else {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    }, 100);
+  };
+
   // Update progress bar
   useEffect(() => {
     if (isPlaying) {
@@ -639,7 +651,7 @@ export default function AIStudioPage() {
     <ModernBackgroundLayout>
       <div className="min-h-screen">
         <Navbar />
-        <div className="container mx-auto px-4 pt-32 pb-16">
+        <div className="container mx-auto px-3 sm:px-4 pt-24 sm:pt-32 pb-16">
           {/* Environment Scanner Modal */}
           {showEnvironmentScanner && (
             <CameraEnvironmentScanner
@@ -1369,7 +1381,7 @@ export default function AIStudioPage() {
               </motion.p>
             </motion.div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-12 mt-8 auto-rows-fr max-w-6xl mx-auto">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 mt-8 auto-rows-fr max-w-6xl mx-auto">
               {/* Environment-Based Audio */}
               <motion.div
                 id="feature-environment"
@@ -1400,7 +1412,7 @@ export default function AIStudioPage() {
                 {/* Environment Selection */}
                 <div className="bg-black/20 rounded-lg p-4 mb-5 border border-blue-800/30">
                   <h3 className="text-sm font-medium text-blue-300 mb-3">Popular Environments</h3>
-                  <div className="grid grid-cols-3 gap-2 mb-0">
+                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 mb-0">
                     {['Forest', 'Ocean', 'City', 'Cafe', 'Mountains', 'Rain'].map((env) => (
                       <Button
                         key={env}
@@ -1410,7 +1422,7 @@ export default function AIStudioPage() {
                         onClick={() => {
                           handleEnvironmentDetected(env.toLowerCase());
                           toast.success(`Environment set to: ${env}`);
-                          window.scrollTo({ top: 0, behavior: 'smooth' });
+                          scrollToTop();
                         }}
                       >
                         {env}
@@ -1446,7 +1458,7 @@ export default function AIStudioPage() {
                             };
                             setSelectedMusicTrack(track);
                             setActiveTab('music');
-                            window.scrollTo({ top: 0, behavior: 'smooth' });
+                            scrollToTop();
                             toast.success(`Playing "${song.title}" by ${song.artist}`);
                           }}
                         >
@@ -1497,7 +1509,7 @@ export default function AIStudioPage() {
                     className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-500 hover:to-blue-600 font-bold text-sm py-5 shadow-xl transform hover:scale-[1.03] transition-all duration-200 uppercase tracking-wider border-t border-blue-500/30 whitespace-normal h-auto"
                     onClick={() => {
                       setShowEnvironmentScanner(true);
-                      window.scrollTo({ top: 0, behavior: 'smooth' });
+                      scrollToTop();
                     }}
                   >
                     <Camera className="h-5 w-5 mr-2 flex-shrink-0" />
@@ -1508,7 +1520,7 @@ export default function AIStudioPage() {
                       variant="outline"
                       className="w-full border-blue-700/50 hover:bg-blue-800/30 text-blue-300 hover:text-blue-200 font-medium text-sm py-2"
                       onClick={() => {
-                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                        scrollToTop();
                         handleGenerateAudio();
                       }}
                     >
@@ -1549,7 +1561,7 @@ export default function AIStudioPage() {
                 {/* Mood Selection */}
                 <div className="bg-black/20 rounded-lg p-4 mb-5 border border-purple-800/30">
                   <h3 className="text-sm font-medium text-purple-300 mb-3">Select a Mood</h3>
-                  <div className="grid grid-cols-3 gap-2 mb-0">
+                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 mb-0">
                     {['Relaxing', 'Energetic', 'Focused', 'Peaceful', 'Uplifting', 'Melancholic'].map((mood) => (
                       <Button
                         key={mood}
@@ -1677,7 +1689,7 @@ export default function AIStudioPage() {
                         onClick={() => {
                           setSelectedMoodForSuggestions(selectedMood);
                           setShowMoodSuggestions(true);
-                          window.scrollTo({ top: 0, behavior: 'smooth' });
+                          scrollToTop();
                         }}
                       >
                         View All Suggested Tracks
@@ -1711,7 +1723,7 @@ export default function AIStudioPage() {
                     className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 font-bold text-sm py-5 shadow-xl transform hover:scale-[1.03] transition-all duration-200 uppercase tracking-wider border-t border-purple-500/30 whitespace-normal h-auto"
                     onClick={() => {
                       setShowMoodSelector(true);
-                      window.scrollTo({ top: 0, behavior: 'smooth' });
+                      scrollToTop();
                     }}
                   >
                     <Sparkles className="h-5 w-5 mr-2 flex-shrink-0" />
@@ -1722,7 +1734,7 @@ export default function AIStudioPage() {
                       variant="outline"
                       className="w-full border-purple-700/50 hover:bg-purple-800/30 text-purple-300 hover:text-purple-200 font-medium text-sm py-2"
                       onClick={() => {
-                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                        scrollToTop();
                         handleGenerateAudio();
                       }}
                     >
@@ -1767,7 +1779,7 @@ export default function AIStudioPage() {
                     Noise Control Features
                   </h3>
 
-                  <div className="grid grid-cols-2 gap-3 mb-0">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-0">
                     <div className="bg-green-900/20 rounded-lg p-3 border border-green-800/30 hover:bg-green-800/20 transition-all duration-300">
                       <div className="flex items-center mb-2">
                         <Headphones className="h-4 w-4 text-green-400 mr-2 feature-card-list-item-icon" />
@@ -1815,7 +1827,7 @@ export default function AIStudioPage() {
                     className="w-full bg-gradient-to-r from-green-600 to-teal-600 hover:from-green-500 hover:to-teal-500 font-bold text-sm py-5 shadow-xl transform hover:scale-[1.03] transition-all duration-200 uppercase tracking-wider border-t border-green-500/30 whitespace-normal h-auto"
                     onClick={() => {
                       setShowRealTimeAdapter(true);
-                      window.scrollTo({ top: 0, behavior: 'smooth' });
+                      scrollToTop();
                     }}
                   >
                     <Zap className="h-5 w-5 mr-2 flex-shrink-0" />
@@ -1896,7 +1908,7 @@ export default function AIStudioPage() {
                     onClick={() => {
                       // Add a new tab for Screenpipe
                       setActiveTab('screenpipe');
-                      window.scrollTo({ top: 0, behavior: 'smooth' });
+                      scrollToTop();
                     }}
                   >
                     <MonitorSmartphone className="h-5 w-5 mr-2 flex-shrink-0" />
