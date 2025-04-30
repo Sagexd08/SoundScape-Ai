@@ -5,8 +5,15 @@ import { Toaster } from '@/components/ui/sonner'
 import { NetworkProvider } from '@/components/network-provider'
 import { ErrorBoundary } from '@/components/error-boundary'
 import { GlobalErrorHandler } from '@/components/global-error-handler'
-import { AuthProvider } from '@/components/auth/auth-provider'
+// import { AuthProvider } from '@/components/auth/auth-provider' // Remove static import
 import { useEffect } from 'react'
+import dynamic from 'next/dynamic' // Import dynamic
+
+// Dynamically import AuthProvider, disable SSR
+const DynamicAuthProvider = dynamic(
+  () => import('@/components/auth/auth-provider').then((mod) => mod.AuthProvider),
+  { ssr: false } // Ensure it only renders on the client
+)
 
 export default function ClientLayout({
   children,
@@ -34,10 +41,11 @@ export default function ClientLayout({
           storageKey="soundscape-theme"
         >
           <NetworkProvider>
-            <AuthProvider>
+            {/* Use the dynamically imported provider */}
+            <DynamicAuthProvider>
               {children}
               <Toaster position="bottom-right" />
-            </AuthProvider>
+            </DynamicAuthProvider>
           </NetworkProvider>
         </ThemeProvider>
       </GlobalErrorHandler>

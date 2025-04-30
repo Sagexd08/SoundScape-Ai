@@ -5,6 +5,7 @@ import {
   useContext,
   useEffect,
   useState,
+  useRef,
   ReactNode
 } from 'react';
 import { Session, User, AuthError } from '@supabase/supabase-js';
