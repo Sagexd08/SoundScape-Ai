@@ -7,13 +7,23 @@ interface MousePosition {
   y: number
 }
 
+/**
+ * Custom hook for tracking mouse position with performance optimizations
+ * and consistent hook rendering patterns to prevent React Error #310.
+ */
 export function useMouse() {
+  // Always declare all state and refs, regardless of environment
   const [mouse, setMouse] = useState<MousePosition>({ x: 0, y: 0 })
   const frameRef = useRef(0)
   const lastUpdateRef = useRef(0)
   const targetMouseRef = useRef({ x: 0, y: 0 })
+  const animationFrameIdRef = useRef<number | null>(null)
 
+  // Always use the same effect pattern
   useEffect(() => {
+    // Only run mouse tracking in browser environment
+    if (typeof window === 'undefined') return
+    
     // Throttled mouse move handler
     const handleMouseMove = (event: MouseEvent) => {
       // Normalize mouse position to be between -1 and 1
@@ -43,15 +53,17 @@ export function useMouse() {
         lastUpdateRef.current = now
       }
 
-      animationFrameId = requestAnimationFrame(updateMousePosition)
+      animationFrameIdRef.current = requestAnimationFrame(updateMousePosition)
     }
 
     window.addEventListener("mousemove", handleMouseMove)
-    let animationFrameId = requestAnimationFrame(updateMousePosition)
+    animationFrameIdRef.current = requestAnimationFrame(updateMousePosition)
 
     return () => {
       window.removeEventListener("mousemove", handleMouseMove)
-      cancelAnimationFrame(animationFrameId)
+      if (animationFrameIdRef.current !== null) {
+        cancelAnimationFrame(animationFrameIdRef.current)
+      }
     }
   }, [])
 

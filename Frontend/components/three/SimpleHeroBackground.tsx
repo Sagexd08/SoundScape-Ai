@@ -183,8 +183,8 @@ function Scene() {
 
 export default function SimpleHeroBackground() {
   return (
-    <div className="w-full h-full">
-      <Suspense fallback={<div className="w-full h-full bg-black" />}>
+    <div className="w-full h-full absolute inset-0 -z-10">
+      <ClientOnly fallback={<div className="w-full h-full bg-gradient-to-br from-indigo-900/20 via-gray-900/40 to-black" />}>
         <Canvas
           camera={{ position: [0, 0, 5], fov: 75 }}
           dpr={[0.8, 1.5]} // Reduced DPR for better performance
@@ -197,10 +197,11 @@ export default function SimpleHeroBackground() {
             stencil: false,
             depth: true
           }}
+          style={{ pointerEvents: "none" }}
         >
           <Scene />
         </Canvas>
-      </Suspense>
+      </ClientOnly>
     </div>
   )
 }

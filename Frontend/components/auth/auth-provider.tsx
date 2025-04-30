@@ -31,15 +31,27 @@ interface AuthContextType extends AuthState {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
+  // Always initialize router hook regardless of environment
   const router = useRouter();
+  
+  // Always initialize state with consistent structure
   const [authState, setAuthState] = useState<AuthState>({
     session: null,
     user: null,
     isLoading: true,
     error: null,
   });
+  
+  // Use a ref to track initialization status to prevent hook count mismatches
+  const isInitializedRef = useRef(false);
 
   useEffect(() => {
+    // Prevent duplicate initialization which can cause hook count mismatches
+    if (isInitializedRef.current) return;
+    
+    // Mark as initialized immediately to prevent race conditions
+    isInitializedRef.current = true;
+    
     // Get initial session
     supabase.auth.getSession().then(({ data: { session }, error }) => {
       setAuthState(prev => ({
@@ -55,6 +67,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (event, session) => {
         console.log('Auth state changed:', event);
+        
+        // Use functional state updates to ensure we don't miss updates
         setAuthState(prev => ({
           ...prev,
           session,
@@ -82,8 +96,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     return () => {
       subscription.unsubscribe();
+      // Reset initialization flag on unmount
+      isInitializedRef.current = false;
     };
-  }, []);
+  }, [router]); // Add router as dependency
 
   // Sign in with email and password
   const signIn = async (email: string, password: string, captchaToken?: string) => {

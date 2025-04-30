@@ -5,6 +5,7 @@ import { Canvas, useFrame, useThree } from "@react-three/fiber"
 import { MeshDistortMaterial, AdaptiveDpr, Preload } from "@react-three/drei"
 import { Mesh, Color, Points as ThreePoints } from "three"
 import { useMouse } from "@/hooks/use-mouse"
+import { ClientOnly } from "@/components/client-only"
 
 // Simplified AudioWave component without problematic dependencies
 function AudioWave({ position = [0, 0, 0], color = "#4f46e5" }) {
@@ -185,26 +186,22 @@ function Scene() {
 
 export default function HeroBackground() {
   return (
-    <div className="w-full h-full">
-      <Suspense fallback={<div className="w-full h-full bg-black" />}>
+    <div className="w-full h-full absolute inset-0 -z-10">
+      <ClientOnly fallback={<div className="w-full h-full bg-gradient-to-br from-indigo-900/20 via-gray-900/40 to-black" />}>
         <Canvas
-          camera={{ position: [0, 0, 5], fov: 70 }} // Reduced FOV for better performance
-          dpr={[0.6, 1.2]} // Further reduced DPR for better performance
-          frameloop="demand" // Only render when needed for better performance
-          gl={{
-            antialias: false, // Disable antialiasing for performance
-            powerPreference: "high-performance",
-            alpha: false,
-            stencil: false,
-            depth: true,
-            precision: "lowp" // Use low precision for better performance
-          }}
+          camera={{ position: [0, 0, 5], fov: 45 }}
+          dpr={[1, 2]}
+          style={{ pointerEvents: "none" }}
         >
-          <AdaptiveDpr pixelated /> {/* Automatically adjust resolution based on device performance */}
-          <Scene />
-          <Preload all />
+          <Suspense fallback={null}>
+            <AudioWave position={[-2, 0, 0]} color="#4f46e5" />
+            <AudioWave position={[2, 0, 0]} color="#8b5cf6" />
+            <ParticleField />
+            <AdaptiveDpr pixelated />
+            <Preload all />
+          </Suspense>
         </Canvas>
-      </Suspense>
+      </ClientOnly>
     </div>
   )
 }

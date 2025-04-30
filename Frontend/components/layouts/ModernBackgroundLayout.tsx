@@ -1,30 +1,22 @@
 'use client';
 
-import React, { ReactNode, useEffect, useState } from 'react';
+import React, { ReactNode, useEffect, useState, useMemo } from 'react';
+import { ClientOnly } from '@/components/client-only';
 
 interface BackgroundLayoutProps {
   children: ReactNode;
 }
 
-// Create a client-only wrapper component
-function ClientOnly({ children }: { children: React.ReactNode }) {
-  const [isMounted, setIsMounted] = useState(false);
-
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
-
-  if (!isMounted) {
-    return null;
-  }
-
-  return <>{children}</>;
-}
-
 // Create a client-only component for the animated background
 function AnimatedBackground() {
+  // Always declare hooks in the same order
+  const [isInitialized, setIsInitialized] = useState(false);
+
+  // Use useMemo to ensure consistent hook count
+  const memoizedValue = useMemo(() => ({ value: 'consistent' }), []);
+
   // Generate stars once on component mount
-  const stars = React.useMemo(() => {
+  const stars = useMemo(() => {
     return Array.from({ length: 150 }).map((_, i) => ({
       id: i,
       width: Math.random() * 3 + 1,
@@ -38,7 +30,7 @@ function AnimatedBackground() {
   }, []);
 
   // Generate floating particles once on component mount
-  const particles = React.useMemo(() => [
+  const particles = useMemo(() => [
     {
       id: 1,
       className: "absolute w-2 h-2 rounded-full bg-indigo-400/60",
@@ -80,6 +72,20 @@ function AnimatedBackground() {
       animation: 'float 24s ease-in-out infinite 1s'
     }
   ], []);
+
+  // Set initialization state
+  useEffect(() => {
+    setIsInitialized(true);
+
+    return () => {
+      setIsInitialized(false);
+    };
+  }, []);
+
+  // Extra effect to ensure consistent hook count
+  useEffect(() => {
+    // Empty effect for consistency
+  }, [memoizedValue]);
 
   return (
     <>

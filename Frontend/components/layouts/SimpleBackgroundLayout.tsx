@@ -2,6 +2,7 @@
 
 import React, { ReactNode, useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
+import { ClientOnly } from '@/components/client-only';
 
 interface BackgroundLayoutProps {
   children: ReactNode;
@@ -141,20 +142,7 @@ function AnimatedBackground() {
   );
 }
 
-// Create a client-only wrapper component
-function ClientOnly({ children }: { children: React.ReactNode }) {
-  const [isMounted, setIsMounted] = useState(false);
-
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
-
-  if (!isMounted) {
-    return null;
-  }
-
-  return <>{children}</>;
-}
+// Use the shared ClientOnly component for consistent hook rendering
 
 export default function SimpleBackgroundLayout({ children }: BackgroundLayoutProps) {
   return (
