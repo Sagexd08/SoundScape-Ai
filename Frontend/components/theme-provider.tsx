@@ -3,21 +3,11 @@
 import * as React from 'react'
 import { ThemeProvider as NextThemesProvider } from 'next-themes'
 
-// Define the correct types for next-themes
-type Attribute = string | 'class' | 'data-theme' | 'data-mode';
+// Import the correct types from next-themes
+import type { ThemeProviderProps as NextThemesProviderProps } from 'next-themes';
 
-interface ThemeProviderProps {
-  children: React.ReactNode;
-  attribute?: Attribute | Attribute[];
-  defaultTheme?: string;
-  enableSystem?: boolean;
-  disableTransitionOnChange?: boolean;
-  storageKey?: string;
-  themes?: string[];
-  forcedTheme?: string;
-  enableColorScheme?: boolean;
-  value?: { [theme: string]: Record<string, string> };
-}
+// Use the imported type
+type ThemeProviderProps = React.PropsWithChildren<Omit<NextThemesProviderProps, 'children'>>;
 
 export function ThemeProvider({ children, ...props }: ThemeProviderProps) {
   return <NextThemesProvider {...props}>{children}</NextThemesProvider>

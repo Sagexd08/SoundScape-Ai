@@ -161,7 +161,7 @@ export async function getSignedUrl(
       .createSignedUrl(filePath, expiresIn);
 
     if (error) {
-      console.error("Error creating signed URL:", error.message);
+      console.error("Error creating signed URL:", error);
       throw error;
     }
 
@@ -190,7 +190,7 @@ export async function uploadFile(
     });
 
     if (error) {
-      console.error("Error uploading file:", error.message);
+      console.error("Error uploading file:", error);
       throw error;
     }
 
