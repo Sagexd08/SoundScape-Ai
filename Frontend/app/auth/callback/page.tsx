@@ -11,6 +11,11 @@ function AuthCallbackContent() {
   const { session } = useAuth()
 
   useEffect(() => {
+    // If searchParams is null, we can't proceed
+    if (!searchParams) {
+      return;
+    }
+
     // If user is already logged in, redirect to dashboard
     if (session) {
       router.push('/dashboard')
@@ -19,8 +24,8 @@ function AuthCallbackContent() {
     // Process OAuth callback
     const handleCallback = async () => {
       // Check for error in URL - this happens if user cancels OAuth flow
-      const error = searchParams?.get('error')
-      const errorDescription = searchParams?.get('error_description')
+      const error = searchParams.get('error')
+      const errorDescription = searchParams.get('error_description')
 
       if (error) {
         console.error('OAuth error:', error, errorDescription)

@@ -1,17 +1,14 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  swcMinify: true,
   images: {
     domains: ['res.cloudinary.com'],
     unoptimized: true,
   },
-  // This is important for Netlify deployment
+  // Output standalone build for better deployment compatibility
   output: 'standalone',
-  // Ensure compatibility with Netlify's environment
-  experimental: {
-    serverComponentsExternalPackages: ['@netlify/plugin-nextjs'],
-  },
+  // External packages configuration for Next.js 15+
+  serverExternalPackages: [],
 }
 
 module.exports = nextConfig
