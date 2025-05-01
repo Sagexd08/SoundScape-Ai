@@ -1,5 +1,5 @@
 import { createClient } from "@supabase/supabase-js";
-import { Database } from "@/types/supabase";
+import { Database } from "@/types/database.types";
 import { toast } from "sonner";
 
 // Initialize Supabase client with environment variables
@@ -25,7 +25,7 @@ const basicClient = createClient<Database>(supabaseUrl, supabaseKey, {
 const enhancedStorageClient = {
   from: (bucket: string) => {
     const originalBucket = basicClient.storage.from(bucket);
-    
+
     return {
       ...originalBucket,
       // Override upload with retry and better error handling
@@ -35,7 +35,7 @@ const enhancedStorageClient = {
       }) => {
         try {
           const result = await originalBucket.upload(path, fileBody, options);
-          
+
           if (result.error) {
             console.error("Storage upload error:", result.error);
             toast.error("Failed to upload file", {
@@ -43,7 +43,7 @@ const enhancedStorageClient = {
             });
             throw result.error;
           }
-          
+
           return result;
         } catch (error) {
           console.error("Storage upload exception:", error);
@@ -53,24 +53,24 @@ const enhancedStorageClient = {
           throw error;
         }
       },
-      
+
       // Enhanced createSignedUrl with better error handling
       createSignedUrl: async (path: string, expiresIn: number) => {
         try {
           const result = await originalBucket.createSignedUrl(path, expiresIn);
-          
+
           if (result.error) {
             console.error("Signed URL creation error:", result.error);
             throw result.error;
           }
-          
+
           return result;
         } catch (error) {
           console.error("Signed URL creation exception:", error);
           throw error;
         }
       },
-      
+
       // All other methods pass through to the original client
       download: originalBucket.download.bind(originalBucket),
       getPublicUrl: originalBucket.getPublicUrl.bind(originalBucket),
@@ -87,14 +87,14 @@ export const supabase = {
   ...basicClient,
   // Override storage with enhanced version
   storage: enhancedStorageClient,
-  
+
   // Override auth with better error handling
   auth: {
     ...basicClient.auth,
     signUp: async (params) => {
       try {
         const result = await basicClient.auth.signUp(params);
-        
+
         if (result.error) {
           console.error("Sign up error:", result.error);
           toast.error("Failed to sign up", {
@@ -102,7 +102,7 @@ export const supabase = {
           });
           throw result.error;
         }
-        
+
         return result;
       } catch (error) {
         console.error("Sign up exception:", error);
@@ -112,11 +112,11 @@ export const supabase = {
         throw error;
       }
     },
-    
+
     signInWithPassword: async (params) => {
       try {
         const result = await basicClient.auth.signInWithPassword(params);
-        
+
         if (result.error) {
           console.error("Sign in error:", result.error);
           toast.error("Failed to sign in", {
@@ -124,7 +124,7 @@ export const supabase = {
           });
           throw result.error;
         }
-        
+
         return result;
       } catch (error) {
         console.error("Sign in exception:", error);
@@ -134,7 +134,7 @@ export const supabase = {
         throw error;
       }
     },
-    
+
     // Add other auth methods as needed with similar error handling
     signOut: basicClient.auth.signOut.bind(basicClient.auth),
     getSession: basicClient.auth.getSession.bind(basicClient.auth),
