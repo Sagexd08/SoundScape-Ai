@@ -8,23 +8,22 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Slider } from '@/components/ui/slider';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
-import { Wand2 } from 'lucide-react';
-import { Music } from 'lucide-react';
-import { Loader2 } from 'lucide-react';
-import { Save } from 'lucide-react';
-import { Play } from 'lucide-react';
-import { Pause } from 'lucide-react';
-import { Volume2 } from 'lucide-react';
-import { VolumeX } from 'lucide-react';
-import { Clock } from 'lucide-react';
-import { Timer } from 'lucide-react'; // Replaced Metronome with Timer
-import { Guitar } from 'lucide-react';
-import { Smile } from 'lucide-react';
-import { Disc } from 'lucide-react';
-import { Download } from 'lucide-react';
+import {
+  Music,
+  Loader2,
+  Play,
+  Pause,
+  Volume2,
+  VolumeX,
+  Clock,
+  Timer,
+  Guitar,
+  Smile,
+  Disc,
+  Download
+} from 'lucide-react';
 import { post } from '@/lib/fetch-wrapper';
 import { toast } from 'sonner';
-import { Badge } from '@/components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Checkbox } from '@/components/ui/checkbox';
 
@@ -60,7 +59,7 @@ export default function MusicGenerator() {
   const [selectedModel, setSelectedModel] = useState('grok'); // 'grok' or 'gemini'
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
-  
+
   // Music parameters
   const [selectedGenre, setSelectedGenre] = useState<string | undefined>(undefined);
   const [selectedMood, setSelectedMood] = useState<string | undefined>(undefined);
@@ -68,10 +67,10 @@ export default function MusicGenerator() {
   const [musicDuration, setMusicDuration] = useState(60);
   const [selectedInstruments, setSelectedInstruments] = useState<string[]>([]);
   const [saveToLibrary, setSaveToLibrary] = useState(true);
-  
+
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const progressIntervalRef = useRef<NodeJS.Timeout | null>(null);
-  
+
   // Update progress bar
   useEffect(() => {
     if (isPlaying) {
@@ -85,32 +84,32 @@ export default function MusicGenerator() {
         clearInterval(progressIntervalRef.current);
       }
     }
-    
+
     return () => {
       if (progressIntervalRef.current) {
         clearInterval(progressIntervalRef.current);
       }
     };
   }, [isPlaying]);
-  
+
   // Format time in MM:SS
   const formatTime = (time: number) => {
     const minutes = Math.floor(time / 60);
     const seconds = Math.floor(time % 60);
     return `${minutes}:${seconds.toString().padStart(2, '0')}`;
   };
-  
+
   const handleGenerate = async () => {
     if (!prompt.trim()) {
       toast.error('Please enter a prompt');
       return;
     }
-    
+
     try {
       setIsGenerating(true);
       setGeneratedMusicUrl(null);
       setWaveformUrl(null);
-      
+
       const response = await post('/api/music/generate', {
         prompt,
         model: selectedModel,
@@ -121,16 +120,21 @@ export default function MusicGenerator() {
         duration: musicDuration,
         save_to_library: saveToLibrary
       }, { responseType: 'blob' });
-      
+
       // Get metadata from response headers
       const metadataHeader = response.headers.get('X-Music-Metadata');
-      let metadata = {};
-      
+
       if (metadataHeader) {
         try {
-          metadata = JSON.parse(metadataHeader);
+          // Define the type for the metadata
+          interface MusicMetadata {
+            waveform_url?: string;
+            [key: string]: any;
+          }
+
+          const metadata = JSON.parse(metadataHeader) as MusicMetadata;
           console.log('Music metadata:', metadata);
-          
+
           // If there's a waveform image, set it
           if (metadata.waveform_url) {
             setWaveformUrl(metadata.waveform_url);
@@ -139,29 +143,29 @@ export default function MusicGenerator() {
           console.error('Error parsing metadata:', error);
         }
       }
-      
+
       // Create a URL for the blob
       const musicUrl = URL.createObjectURL(response);
       setGeneratedMusicUrl(musicUrl);
-      
+
       toast.success('Music generated successfully!');
-      
+
       // Auto-play the generated music
       if (audioRef.current) {
         audioRef.current.src = musicUrl;
         audioRef.current.volume = volume / 100;
-        
+
         // Set up event listeners
         audioRef.current.onloadedmetadata = () => {
           if (audioRef.current) {
             setDuration(audioRef.current.duration);
           }
         };
-        
+
         audioRef.current.onended = () => {
           setIsPlaying(false);
         };
-        
+
         audioRef.current.play();
         setIsPlaying(true);
       }
@@ -172,7 +176,7 @@ export default function MusicGenerator() {
       setIsGenerating(false);
     }
   };
-  
+
   const togglePlayPause = () => {
     if (audioRef.current) {
       if (isPlaying) {
@@ -183,14 +187,14 @@ export default function MusicGenerator() {
       setIsPlaying(!isPlaying);
     }
   };
-  
+
   const toggleMute = () => {
     if (audioRef.current) {
       audioRef.current.muted = !isMuted;
       setIsMuted(!isMuted);
     }
   };
-  
+
   const handleVolumeChange = (value: number[]) => {
     const newVolume = value[0];
     setVolume(newVolume);
@@ -198,7 +202,7 @@ export default function MusicGenerator() {
       audioRef.current.volume = newVolume / 100;
     }
   };
-  
+
   const handleProgressChange = (value: number[]) => {
     const newTime = value[0];
     setCurrentTime(newTime);
@@ -206,15 +210,15 @@ export default function MusicGenerator() {
       audioRef.current.currentTime = newTime;
     }
   };
-  
+
   const handleInstrumentToggle = (instrument: string) => {
-    setSelectedInstruments(prev => 
+    setSelectedInstruments(prev =>
       prev.includes(instrument)
         ? prev.filter(i => i !== instrument)
         : [...prev, instrument]
     );
   };
-  
+
   const handleDownload = () => {
     if (generatedMusicUrl) {
       const a = document.createElement('a');
@@ -225,7 +229,7 @@ export default function MusicGenerator() {
       document.body.removeChild(a);
     }
   };
-  
+
   return (
     <Card className="w-full bg-gray-900 border-gray-800">
       <CardHeader>
@@ -237,27 +241,27 @@ export default function MusicGenerator() {
           Create custom music using AI with detailed control over genre, mood, and instruments
         </CardDescription>
       </CardHeader>
-      
+
       <CardContent className="space-y-4">
         <Tabs defaultValue="grok" onValueChange={(value) => setSelectedModel(value)}>
           <TabsList className="grid w-full grid-cols-2">
             <TabsTrigger value="grok">Grok AI</TabsTrigger>
             <TabsTrigger value="gemini">Gemini AI</TabsTrigger>
           </TabsList>
-          
+
           <TabsContent value="grok" className="mt-4">
             <p className="text-sm text-gray-400 mb-4">
               Grok specializes in creating music with complex structures and realistic instrument sounds.
             </p>
           </TabsContent>
-          
+
           <TabsContent value="gemini" className="mt-4">
             <p className="text-sm text-gray-400 mb-4">
               Gemini excels at creating unique and experimental musical compositions with innovative sounds.
             </p>
           </TabsContent>
         </Tabs>
-        
+
         <div className="space-y-2">
           <Label htmlFor="prompt">Describe the music you want to generate</Label>
           <Textarea
@@ -268,7 +272,7 @@ export default function MusicGenerator() {
             className="min-h-[100px] bg-gray-950 border-gray-800"
           />
         </div>
-        
+
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
           <div className="space-y-4">
             <div className="space-y-2">
@@ -289,7 +293,7 @@ export default function MusicGenerator() {
                 </SelectContent>
               </Select>
             </div>
-            
+
             <div className="space-y-2">
               <Label className="flex items-center gap-2">
                 <Smile className="h-4 w-4 text-indigo-400" />
@@ -308,7 +312,7 @@ export default function MusicGenerator() {
                 </SelectContent>
               </Select>
             </div>
-            
+
             <div className="space-y-2">
               <Label htmlFor="tempo" className="flex items-center gap-2">
                 <Timer className="h-4 w-4 text-indigo-400" /> {/* Replaced Metronome with Timer */}
@@ -324,7 +328,7 @@ export default function MusicGenerator() {
               />
             </div>
           </div>
-          
+
           <div className="space-y-4">
             <div className="space-y-2">
               <Label htmlFor="duration" className="flex items-center gap-2">
@@ -340,7 +344,7 @@ export default function MusicGenerator() {
                 onValueChange={(value) => setMusicDuration(value[0])}
               />
             </div>
-            
+
             <div className="space-y-2">
               <Label className="flex items-center gap-2">
                 <Guitar className="h-4 w-4 text-indigo-400" />
@@ -349,12 +353,12 @@ export default function MusicGenerator() {
               <div className="grid grid-cols-2 gap-2 max-h-[150px] overflow-y-auto p-2 bg-gray-950 border border-gray-800 rounded-md">
                 {instruments.map(instrument => (
                   <div key={instrument} className="flex items-center space-x-2">
-                    <Checkbox 
-                      id={`instrument-${instrument}`} 
+                    <Checkbox
+                      id={`instrument-${instrument}`}
                       checked={selectedInstruments.includes(instrument)}
                       onCheckedChange={() => handleInstrumentToggle(instrument)}
                     />
-                    <label 
+                    <label
                       htmlFor={`instrument-${instrument}`}
                       className="text-sm text-gray-300 cursor-pointer"
                     >
@@ -366,7 +370,7 @@ export default function MusicGenerator() {
             </div>
           </div>
         </div>
-        
+
         <div className="flex items-center space-x-2 pt-2">
           <Switch
             id="save-library"
@@ -375,7 +379,7 @@ export default function MusicGenerator() {
           />
           <Label htmlFor="save-library">Save to my library</Label>
         </div>
-        
+
         {generatedMusicUrl && (
           <div className="mt-4 p-4 bg-gray-950 rounded-lg border border-gray-800">
             <div className="flex items-center justify-between mb-4">
@@ -390,17 +394,17 @@ export default function MusicGenerator() {
                 </Button>
               </div>
             </div>
-            
+
             {waveformUrl && (
               <div className="mb-4 bg-gray-900 rounded-md overflow-hidden">
-                <img 
-                  src={waveformUrl} 
-                  alt="Audio waveform" 
+                <img
+                  src={waveformUrl}
+                  alt="Audio waveform"
                   className="w-full h-24 object-cover"
                 />
               </div>
             )}
-            
+
             <div className="flex items-center space-x-4 mb-2">
               <Button
                 variant="ghost"
@@ -410,7 +414,7 @@ export default function MusicGenerator() {
               >
                 {isPlaying ? <Pause className="h-5 w-5" /> : <Play className="h-5 w-5" />}
               </Button>
-              
+
               <Button
                 variant="ghost"
                 size="icon"
@@ -419,7 +423,7 @@ export default function MusicGenerator() {
               >
                 {isMuted ? <VolumeX className="h-4 w-4" /> : <Volume2 className="h-4 w-4" />}
               </Button>
-              
+
               <div className="flex-1">
                 <Slider
                   value={[currentTime]}
@@ -435,7 +439,7 @@ export default function MusicGenerator() {
                 </div>
               </div>
             </div>
-            
+
             <div className="flex items-center space-x-2">
               <Volume2 className="h-4 w-4 text-gray-500" />
               <Slider
@@ -447,16 +451,16 @@ export default function MusicGenerator() {
                 className="w-24"
               />
             </div>
-            
+
             <audio ref={audioRef} className="hidden" controls />
           </div>
         )}
       </CardContent>
-      
+
       <CardFooter>
-        <Button 
-          onClick={handleGenerate} 
-          disabled={isGenerating || !prompt.trim()} 
+        <Button
+          onClick={handleGenerate}
+          disabled={isGenerating || !prompt.trim()}
           className="w-full bg-indigo-600 hover:bg-indigo-700"
         >
           {isGenerating ? (
