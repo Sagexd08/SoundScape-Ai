@@ -3,6 +3,13 @@ import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import { RefreshCcw, AlertCircle } from 'lucide-react';
 
+// Declare global gtag function for Google Analytics
+declare global {
+  interface Window {
+    gtag?: (command: string, action: string, params: object) => void;
+  }
+}
+
 interface Props {
   children: React.ReactNode;
 }
