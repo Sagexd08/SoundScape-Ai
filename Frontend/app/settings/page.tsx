@@ -57,24 +57,34 @@ function SettingsPage() {
     }
   }, [user, isLoading, router])
 
-  const handleToggle = (category: string, setting: string) => {
-    setSettings(prev => ({
-      ...prev,
-      [category]: {
-        ...prev[category as keyof typeof prev],
-        [setting]: !(prev[category as keyof typeof prev] as any)[setting]
+  const handleToggle = (category: keyof typeof settings, setting: string) => {
+    setSettings(prev => {
+      const categorySettings = prev[category];
+
+      // Make sure categorySettings is an object before spreading
+      if (typeof categorySettings === 'object' && categorySettings !== null) {
+        return {
+          ...prev,
+          [category]: {
+            ...categorySettings,
+            [setting]: !(categorySettings as Record<string, boolean>)[setting]
+          }
+        };
       }
-    }))
+
+      // If categorySettings is not an object, return prev unchanged
+      return prev;
+    });
   }
 
   const saveSettings = async () => {
     try {
       setSaving(true)
       setError(null)
-      
+
       // Apply theme change
       setTheme(settings.themePreference)
-      
+
       // Here you would save settings to user profile or database
       // For example:
       // await supabase.auth.updateUser({
@@ -82,11 +92,11 @@ function SettingsPage() {
       //     settings: settings
       //   }
       // })
-      
+
       // Show success message
       setSuccess(true)
       setTimeout(() => setSuccess(false), 3000)
-      
+
     } catch (err: any) {
       setError(err.message || "Failed to save settings")
     } finally {
@@ -109,7 +119,7 @@ function SettingsPage() {
       <div className="fixed inset-0 z-0">
         <SimpleHeroBackground />
       </div>
-      
+
       <Navbar />
 
       <div className="container relative z-10 mx-auto px-4 py-16">
@@ -172,10 +182,10 @@ function SettingsPage() {
                       <h3 className="text-lg font-medium mb-4">Theme</h3>
                       <div className="grid grid-cols-3 gap-4">
                         <Button
-                          variant={settings.themePreference === "light" ? "default" : "outline"} 
+                          variant={settings.themePreference === "light" ? "default" : "outline"}
                           className={`flex flex-col items-center justify-center h-24 ${
-                            settings.themePreference === "light" 
-                              ? "bg-indigo-600 hover:bg-indigo-700" 
+                            settings.themePreference === "light"
+                              ? "bg-indigo-600 hover:bg-indigo-700"
                               : "bg-gray-800/50 hover:bg-gray-700/50"
                           }`}
                           onClick={() => setSettings(prev => ({ ...prev, themePreference: "light" }))}
@@ -183,12 +193,12 @@ function SettingsPage() {
                           <Sun className="h-8 w-8 mb-2" />
                           <span>Light</span>
                         </Button>
-                        
+
                         <Button
                           variant={settings.themePreference === "dark" ? "default" : "outline"}
                           className={`flex flex-col items-center justify-center h-24 ${
-                            settings.themePreference === "dark" 
-                              ? "bg-indigo-600 hover:bg-indigo-700" 
+                            settings.themePreference === "dark"
+                              ? "bg-indigo-600 hover:bg-indigo-700"
                               : "bg-gray-800/50 hover:bg-gray-700/50"
                           }`}
                           onClick={() => setSettings(prev => ({ ...prev, themePreference: "dark" }))}
@@ -196,12 +206,12 @@ function SettingsPage() {
                           <Moon className="h-8 w-8 mb-2" />
                           <span>Dark</span>
                         </Button>
-                        
+
                         <Button
                           variant={settings.themePreference === "system" ? "default" : "outline"}
                           className={`flex flex-col items-center justify-center h-24 ${
-                            settings.themePreference === "system" 
-                              ? "bg-indigo-600 hover:bg-indigo-700" 
+                            settings.themePreference === "system"
+                              ? "bg-indigo-600 hover:bg-indigo-700"
                               : "bg-gray-800/50 hover:bg-gray-700/50"
                           }`}
                           onClick={() => setSettings(prev => ({ ...prev, themePreference: "system" }))}
@@ -221,11 +231,11 @@ function SettingsPage() {
                           <button
                             key={color}
                             className={`h-12 rounded-md transition-all ${
-                              settings.themeColor === color 
-                                ? 'ring-2 ring-white ring-offset-2 ring-offset-black scale-105' 
+                              settings.themeColor === color
+                                ? 'ring-2 ring-white ring-offset-2 ring-offset-black scale-105'
                                 : ''
                             }`}
-                            style={{ 
+                            style={{
                               backgroundColor: `var(--${color}-500)`,
                               opacity: settings.themeColor === color ? 1 : 0.7
                             }}
