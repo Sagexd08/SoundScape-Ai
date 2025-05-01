@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import Script from "next/script";
+import { getPayPalClientId, verifyPayPalOrder } from "@/lib/paypal";
 
 interface PayPalCheckoutProps {
   amount: number;
@@ -26,8 +27,8 @@ export default function PayPalCheckout({
   const [scriptLoaded, setScriptLoaded] = useState(false);
   const [paypalButtonRendered, setPaypalButtonRendered] = useState(false);
 
-  // PayPal client ID
-  const clientId = "AXcOdgEGHS4fKTHo8znVCPFPEySB3LViyUad-FdvaOOcdZrWf_W5P5ke5nGka8_OfHeREmLH0iHdyIbF";
+  // Get PayPal client ID from environment variables
+  const clientId = getPayPalClientId();
 
   useEffect(() => {
     // Only render PayPal buttons once the script has loaded and the component has mounted
@@ -51,8 +52,22 @@ export default function PayPalCheckout({
             });
           },
           onApprove: async (data: any, actions: any) => {
-            const details = await actions.order.capture();
-            onSuccess(details);
+            try {
+              // Capture the order
+              const details = await actions.order.capture();
+
+              // Verify the order with our server
+              const isVerified = await verifyPayPalOrder(data.orderID);
+
+              if (isVerified) {
+                onSuccess(details);
+              } else {
+                throw new Error("Failed to verify payment with server");
+              }
+            } catch (error) {
+              console.error("Payment verification failed:", error);
+              if (onError) onError(error);
+            }
           },
           onError: (err: any) => {
             console.error("PayPal Error:", err);
