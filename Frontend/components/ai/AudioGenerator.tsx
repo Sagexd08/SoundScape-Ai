@@ -124,39 +124,33 @@ export default function AudioGenerator() {
       // Reset any previous errors
       setGenerationError(null);
 
-      try {
-        const response = await post('/api/audio/generate', {
-          prompt,
-          options: {
-            model: selectedModel,
-            duration: advancedOptions.duration,
-            quality: advancedOptions.quality,
-            save_to_library: advancedOptions.saveToLibrary,
-            enhanced_model: advancedOptions.useEnhancedModel,
-          }
-        }, { responseType: 'blob' });
-
-        // Add to generation history
-        const newHistoryItem = {
-          id: Date.now().toString(),
-          prompt: prompt,
+      // Generate the audio
+      const audioBlob = await post('/api/audio/generate', {
+        prompt,
+        options: {
           model: selectedModel,
-          timestamp: new Date()
-        };
+          duration: advancedOptions.duration,
+          quality: advancedOptions.quality,
+          save_to_library: advancedOptions.saveToLibrary,
+          enhanced_model: advancedOptions.useEnhancedModel,
+        }
+      }, { responseType: 'blob' });
 
-        setGenerationHistory(prev => [newHistoryItem, ...prev.slice(0, 4)]);
+      // Add to generation history
+      const newHistoryItem = {
+        id: Date.now().toString(),
+        prompt: prompt,
+        model: selectedModel,
+        timestamp: new Date()
+      };
 
-        return response;
-      } catch (error) {
-        console.error('API error:', error);
-        throw error;
-      }
+      setGenerationHistory(prev => [newHistoryItem, ...prev.slice(0, 4)]);
 
       // Complete progress
       setGenerationProgress(100);
 
       // Create a URL for the blob
-      const audioUrl = URL.createObjectURL(response);
+      const audioUrl = URL.createObjectURL(audioBlob);
       setGeneratedAudioUrl(audioUrl);
 
       toast.success('Audio generated successfully!');
