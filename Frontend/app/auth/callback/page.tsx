@@ -13,28 +13,41 @@ function AuthCallbackContent() {
   useEffect(() => {
     // If searchParams is null, we can't proceed
     if (!searchParams) {
-      return;
+      console.error('No search params available')
+      router.push('/login?error=Authentication failed')
+      return
     }
 
     // If user is already logged in, redirect to dashboard
     if (session) {
       router.push('/dashboard')
+      return
     }
 
     // Process OAuth callback
     const handleCallback = async () => {
-      // Check for error in URL - this happens if user cancels OAuth flow
-      const error = searchParams.get('error')
-      const errorDescription = searchParams.get('error_description')
-
-      if (error) {
-        console.error('OAuth error:', error, errorDescription)
-        router.push('/login?error=' + encodeURIComponent(errorDescription || 'Authentication failed'))
-        return
-      }
-
       try {
-        // No error, proceed with callback processing
+        // Check for error in URL - this happens if user cancels OAuth flow
+        const error = searchParams.get('error')
+        const errorDescription = searchParams.get('error_description')
+
+        if (error) {
+          console.error('OAuth error:', error, errorDescription)
+          router.push('/login?error=' + encodeURIComponent(errorDescription || 'Authentication failed'))
+          return
+        }
+
+        // Check for code in URL
+        const code = searchParams.get('code')
+
+        // If there's no code, something went wrong
+        if (!code) {
+          console.error('No code found in callback URL')
+          router.push('/login?error=Authentication failed')
+          return
+        }
+
+        // No error and code exists, proceed with callback processing
         // Authentication is handled by the auth provider, we just need to redirect the user
         router.push('/dashboard')
       } catch (error) {
