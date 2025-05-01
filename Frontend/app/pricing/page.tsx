@@ -9,9 +9,23 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/comp
 import Navbar from "@/components/navbar"
 import { cn } from "@/lib/utils"
 import VibrantBackgroundLayout from "@/components/layouts/VibrantBackgroundLayout"
+import CheckoutModal from "@/components/payment/CheckoutModal"
 
 export default function PricingPage() {
   const [annual, setAnnual] = useState(true)
+  const [checkoutModalOpen, setCheckoutModalOpen] = useState(false)
+  const [selectedPlan, setSelectedPlan] = useState<{
+    name: string;
+    price: number;
+  } | null>(null)
+
+  const handlePlanSelect = (planName: string, price: number) => {
+    setSelectedPlan({
+      name: planName,
+      price: price
+    })
+    setCheckoutModalOpen(true)
+  }
 
   const plans = [
     {
@@ -128,6 +142,17 @@ export default function PricingPage() {
                           ? "bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700"
                           : "bg-gray-800 hover:bg-gray-700",
                       )}
+                      onClick={() => {
+                        if (plan.price.monthly > 0) {
+                          handlePlanSelect(
+                            plan.name,
+                            annual ? plan.price.annual : plan.price.monthly
+                          )
+                        } else {
+                          // For free plan, redirect to signup
+                          window.location.href = "/register"
+                        }
+                      }}
                     >
                       {plan.cta}
                     </Button>
@@ -254,6 +279,17 @@ export default function PricingPage() {
             </div>
           </motion.div>
         </section>
+
+        {/* Checkout Modal */}
+        {selectedPlan && (
+          <CheckoutModal
+            isOpen={checkoutModalOpen}
+            onClose={() => setCheckoutModalOpen(false)}
+            planName={selectedPlan.name}
+            amount={selectedPlan.price}
+            isAnnual={annual}
+          />
+        )}
     </VibrantBackgroundLayout>
   )
 }
