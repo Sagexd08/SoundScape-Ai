@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { MusicTrack, formatDuration } from '@/lib/music-library';
-import { Music, ExternalLink, Volume2, VolumeX, Piano, Guitar, Violin, Drumstick, Mic2, Radio, Headphones, Tag, Download } from 'lucide-react';
+import { Music, ExternalLink, Volume2, VolumeX, Piano, Guitar, Drumstick, Mic2, Radio, Headphones, Tag, Download } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Slider } from '@/components/ui/slider';
 import { Badge } from '@/components/ui/badge';

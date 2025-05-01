@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { MusicTrack, filterMusic } from '@/lib/music-library';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Music, Play, Clock, Piano, Guitar, Violin, Drumstick, Mic2, Radio, Headphones } from 'lucide-react';
+import { Music, Play, Clock, Piano, Guitar, Drumstick, Mic2, Radio, Headphones } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 
 interface MusicSelectionProps {
