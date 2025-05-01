@@ -1,4 +1,4 @@
-import { createClient } from "@supabase/supabase-js";
+import { createClient, AuthSignUpParams, AuthSignInWithPasswordParams } from "@supabase/supabase-js";
 import { Database } from "@/types/database.types";
 import { toast } from "sonner";
 
@@ -91,7 +91,7 @@ export const supabase = {
   // Override auth with better error handling
   auth: {
     ...basicClient.auth,
-    signUp: async (params) => {
+    signUp: async (params: AuthSignUpParams) => {
       try {
         const result = await basicClient.auth.signUp(params);
 
@@ -113,7 +113,7 @@ export const supabase = {
       }
     },
 
-    signInWithPassword: async (params) => {
+    signInWithPassword: async (params: AuthSignInWithPasswordParams) => {
       try {
         const result = await basicClient.auth.signInWithPassword(params);
 
