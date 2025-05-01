@@ -9,39 +9,64 @@ interface FetchOptions extends Omit<RequestInit, 'method' | 'body'> {
   showErrorToast?: boolean;
   showSuccessToast?: boolean;
   successMessage?: string;
+  responseType?: 'json' | 'text' | 'blob' | 'arrayBuffer' | 'formData';
 }
 
-async function handleResponse<T>(response: Response): Promise<T> {
-  const contentType = response.headers.get('content-type');
-  const isJson = contentType?.includes('application/json');
-  
-  // Parse response data based on content type
-  let data;
-  if (isJson) {
-    data = await response.json();
-  } else {
-    data = await response.text();
-  }
-
-  // If response is not ok, throw an error with the data
+async function handleResponse<T>(response: Response, responseType?: string): Promise<T> {
+  // If response is not ok, handle the error
   if (!response.ok) {
+    let errorData;
+    try {
+      // Try to parse error as JSON first
+      errorData = await response.json();
+    } catch {
+      // If not JSON, get as text
+      errorData = await response.text();
+    }
+
     const error = new Error(
-      isJson && data?.message 
-        ? data.message 
+      typeof errorData === 'object' && errorData?.message
+        ? errorData.message
         : `API request failed with status ${response.status}`
     );
-    
+
     // Attach response data and status to the error
     (error as any).status = response.status;
-    (error as any).data = data;
+    (error as any).data = errorData;
     throw error;
   }
 
-  return data as T;
+  // Parse response data based on responseType or content type
+  if (responseType) {
+    switch (responseType) {
+      case 'json':
+        return await response.json() as T;
+      case 'text':
+        return await response.text() as unknown as T;
+      case 'blob':
+        return await response.blob() as unknown as T;
+      case 'arrayBuffer':
+        return await response.arrayBuffer() as unknown as T;
+      case 'formData':
+        return await response.formData() as unknown as T;
+      default:
+        return await response.json() as T;
+    }
+  } else {
+    // Default behavior based on content type
+    const contentType = response.headers.get('content-type');
+    const isJson = contentType?.includes('application/json');
+
+    if (isJson) {
+      return await response.json() as T;
+    } else {
+      return await response.text() as unknown as T;
+    }
+  }
 }
 
 export async function apiFetch<T = any>(
-  url: string, 
+  url: string,
   method: FetchMethod = 'GET',
   options: FetchOptions = {}
 ): Promise<T> {
@@ -51,6 +76,7 @@ export async function apiFetch<T = any>(
     showErrorToast = true,
     showSuccessToast = false,
     successMessage,
+    responseType,
     ...fetchOptions
   } = options;
 
@@ -62,16 +88,16 @@ export async function apiFetch<T = any>(
         searchParams.append(key, String(value));
       }
     });
-    
+
     url = `${url}?${searchParams.toString()}`;
   }
-  
+
   // Prepare headers with defaults
   const headers = new Headers(fetchOptions.headers);
   if (!headers.has('Content-Type') && body && !(body instanceof FormData)) {
     headers.set('Content-Type', 'application/json');
   }
-  
+
   // Prepare request body
   let requestBody: any = undefined;
   if (body) {
@@ -79,7 +105,7 @@ export async function apiFetch<T = any>(
       ? body
       : JSON.stringify(body);
   }
-  
+
   try {
     const response = await fetch(url, {
       ...fetchOptions,
@@ -89,28 +115,28 @@ export async function apiFetch<T = any>(
       // Disable SSR caching for API calls
       next: { revalidate: 0 },
     });
-    
-    const data = await handleResponse<T>(response);
-    
+
+    const data = await handleResponse<T>(response, responseType);
+
     // Show success toast if requested
     if (showSuccessToast && successMessage) {
       toast.success(successMessage);
     }
-    
+
     return data;
   } catch (error) {
     // Log error
     console.error(`API ${method} request failed for ${url}:`, error);
-    
+
     // Show error toast by default
     if (showErrorToast) {
       toast.error('Operation failed', {
-        description: error instanceof Error 
+        description: error instanceof Error
           ? error.message
           : 'An unexpected error occurred',
       });
     }
-    
+
     throw error;
   }
 }
